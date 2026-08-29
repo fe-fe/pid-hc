@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources xmlns="http://www.jboss.org/ironjacamar/schema"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.jboss.org/ironjacamar/schema
+             http://www.jboss.org/ironjacamar/schema/datasources_1_2.xsd">
+
+    <datasource jndi-name="java:/pidhcDS" pool-name="pidhcDS" enabled="true">
+
+        <connection-url>
+            jdbc:postgresql://postgres:5432/pidhc
+        </connection-url>
+
+        <driver>pid-hc.war_org.postgresql.Driver_42_7</driver>
+
+        <security>
+            <user-name>pidhc_user</user-name>
+            <password>pidhc_pass</password>
+        </security>
+
+    </datasource>
+
+</datasources>
