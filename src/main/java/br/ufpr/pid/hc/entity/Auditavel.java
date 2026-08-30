@@ -21,7 +21,7 @@ public class Auditavel {
     private LocalDateTime atualizadoEm;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "criado_por", updatable = false)
+    @JoinColumn(name = "criado_por", updatable = true) // true placeholder
     private Usuario criadoPor;
 
     @ManyToOne(fetch = FetchType.LAZY)

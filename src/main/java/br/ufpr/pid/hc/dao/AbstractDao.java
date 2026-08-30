@@ -4,6 +4,7 @@ import br.ufpr.pid.hc.entity.Auditavel;
 import br.ufpr.pid.hc.entity.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 public abstract class AbstractDao<T extends Auditavel, ID> {
 
@@ -20,6 +21,7 @@ public abstract class AbstractDao<T extends Auditavel, ID> {
         return entityManager.find(tipoEntidade, id);
     }
 
+    @Transactional
     public void salvar(T entidade, Usuario usuario) {
 
         Object id = entityManager.getEntityManagerFactory()

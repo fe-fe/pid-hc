@@ -1,0 +1,10 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html">
+<h:body>
+    <h:form>
+        <h:inputText value="#{cadastroBean.usuario.email}"/>
+        <h:inputSecret value="#{cadastroBean.usuario.senha}"/>
+        <h:commandButton value="Cadastrar" action="#{cadastroBean.cadastrar}"/>
+    </h:form>
+</h:body>
+</html>

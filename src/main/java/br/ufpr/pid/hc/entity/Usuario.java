@@ -1,10 +1,7 @@
 package br.ufpr.pid.hc.entity;
 
 import br.ufpr.pid.hc.enumeration.Perfil;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +10,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Entity
 public class Usuario extends Auditavel {
 
     public Usuario() {}
@@ -21,13 +19,13 @@ public class Usuario extends Auditavel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "nome", nullable = false)
+    @Column(name = "nome")
     private String nome;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "cpf", updatable = false, unique = true, nullable = false, length = 11)
+    @Column(name = "cpf", updatable = false, unique = true, length = 11)
     private String cpf;
 
     @Column(name = "senha", nullable = false)
