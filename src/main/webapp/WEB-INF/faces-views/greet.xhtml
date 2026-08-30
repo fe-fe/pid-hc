@@ -1,0 +1,12 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html">
+
+<h:body>
+    <h:outputText value="Bem vindo(a), #{sessao.usuarioLogado.email}" /><br />
+    <h:outputText value="Seu perfil é: #{sessao.usuarioLogado.perfil}" /> <br />
+    <h:form>
+        <h:commandButton value="Sair" action="#{loginBean.logout}" />
+    </h:form>
+</h:body>
+
+</html>

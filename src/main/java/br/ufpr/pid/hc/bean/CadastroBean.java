@@ -28,7 +28,7 @@ public class CadastroBean {
             log.info("Cadastro realizado");
             return "login?faces-redirect=true";
         } catch (RuntimeException e) {
-            log.error(e.getMessage());
+            log.warn(e.getMessage());
             return null;
         }
     }

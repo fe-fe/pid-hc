@@ -20,4 +20,8 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
 
+    <security-role>
+        <role-name>ADMINISTRADOR</role-name>
+    </security-role>
+
 </web-app>

@@ -1,0 +1,10 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html">
+<h:body>
+    <h:form>
+        <h:inputText value="#{loginBean.email}"/>
+        <h:inputSecret value="#{loginBean.senha}"/>
+        <h:commandButton value="Entrar" action="#{loginBean.login}"/>
+    </h:form>
+</h:body>
+</html>
