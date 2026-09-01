@@ -1,10 +1,26 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html">
+<h:head>
+    <title>LOGIN - PID</title>
+    <h:outputStylesheet library="css" name="global.css"/>
+    <h:outputStylesheet library="css" name="pages/auth/login.css"/>
+</h:head>
 <h:body>
     <h:form>
-        <h:inputText value="#{loginBean.email}"/>
-        <h:inputSecret value="#{loginBean.senha}"/>
-        <h:commandButton value="Entrar" action="#{loginBean.login}"/>
+        <div>
+            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <h1>Bem vindo de volta!</h1>
+            <p>Sua primeira vez aqui? <h:link value="Cadastre-se" outcome="/cadastro"/></p>
+        </div>
+ 
+        <h:outputLabel for="email" value="Email" />
+        <h:inputText styleClass="input" id="email" value="#{loginBean.email}"/>
+
+        <h:outputLabel for="senha" value="Senha" />
+        <h:inputSecret styleClass="input" id="senha" value="#{loginBean.senha}"/>
+
+        <h:commandButton value="Entrar"  styleClass="button" action="#{loginBean.login}"/>
     </h:form>
 </h:body>
 </html>

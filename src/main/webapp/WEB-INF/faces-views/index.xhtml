@@ -1,5 +1,27 @@
-<html>
-<body>
-<h2>Hello World!</h2>
-</body>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html">
+<h:head>
+    <title>PID</title>
+    <h:outputStylesheet library="css" name="global.css"/>
+    <h:outputStylesheet library="css" name="pages/landing/landing.css"/>
+</h:head>
+<h:body>
+    <header>
+        <nav>
+            <div>PID</div>
+             <div>
+                <h:link
+                    value="Entrar"
+                    outcome="login"
+                    styleClass="button"/>
+            </div>
+        </nav>
+    </header>
+
+    <section>
+        <h1>PID - HC</h1>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque aut debitis ut quae officia harum veniam sint id, nostrum error assumenda vel sed magnam accusantium. Blanditiis rerum dignissimos vel veritatis.</p>
+    </section>
+</h:body>
 </html>
