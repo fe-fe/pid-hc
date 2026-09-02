@@ -1,0 +1,18 @@
+services:
+  wildfly:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - type: bind
+        source: ./src/main/webapp/WEB-INF/faces-views
+        target: /opt/jboss/wildfly/standalone/deployments/pid-hc.war/WEB-INF/faces-views
+      - type: bind
+        source: ./src/main/webapp/WEB-INF/templates
+        target: /opt/jboss/wildfly/standalone/deployments/pid-hc.war/WEB-INF/templates
+      - type: bind
+        source: ./src/main/webapp/WEB-INF/components
+        target: /opt/jboss/wildfly/standalone/deployments/pid-hc.war/WEB-INF/components
+      - type: bind
+        source: ./src/main/webapp/resources
+        target: /opt/jboss/wildfly/standalone/deployments/pid-hc.war/resources
