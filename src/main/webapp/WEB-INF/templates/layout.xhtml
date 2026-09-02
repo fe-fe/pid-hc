@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      lang="pt-BR">
+
+<h:head>
+    <title><ui:insert name="title">PID</ui:insert></title>
+
+    <h:outputStylesheet library="css" name="global.css"/>
+    <ui:insert name="head"/>
+</h:head>
+
+<h:body>
+    <div class="layout">
+        <ui:include src="/WEB-INF/components/sidebar.xhtml"/>
+
+        <main class="layout__content">
+            <ui:insert name="content"/>
+        </main>
+    </div>
+
+    <ui:insert name="scripts"/>
+</h:body>
+</html>

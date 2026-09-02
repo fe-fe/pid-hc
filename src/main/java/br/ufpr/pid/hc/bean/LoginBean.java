@@ -60,7 +60,7 @@ public class LoginBean {
         if (status == AuthenticationStatus.SUCCESS) {
             Usuario usuario = usuarioService.buscarPorEmail(email);
             session.setUsuarioLogado(usuario);
-            return "greet?faces-redirect=true";
+            return "/pages/admin/dashboard?faces-redirect=true";
         }
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email ou senha inválidos", null));
@@ -74,7 +74,7 @@ public class LoginBean {
                         .getRequest();
         request.logout();
         session.setUsuarioLogado(null);
-        return "/login?faces-redirect=true";
+        return "/pages/auth/login?faces-redirect=true";
     }
 
 }

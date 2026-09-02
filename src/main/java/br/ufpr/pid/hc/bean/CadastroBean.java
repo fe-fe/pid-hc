@@ -26,7 +26,7 @@ public class CadastroBean {
         try {
             usuarioService.salvar(usuario);
             log.info("Cadastro realizado");
-            return "login?faces-redirect=true";
+            return "/pages/auth/login?faces-redirect=true";
         } catch (RuntimeException e) {
             log.warn(e.getMessage());
             return null;

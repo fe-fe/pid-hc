@@ -1,0 +1,20 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:ui="jakarta.faces.facelets">
+
+    <aside class="sidebar">
+        <h2>PID</h2>
+
+        <nav>
+            <h:link value="Dashboard" outcome="/pages/admin/dashboard"/>
+            
+        </nav>
+
+        <footer class="sidebar__footer">
+            <h:form>
+                <h:commandButton value="Sair" action="#{loginBean.logout}" />
+            </h:form>
+        </footer>
+    </aside>
+</ui:composition>
