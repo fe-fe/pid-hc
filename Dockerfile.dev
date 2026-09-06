@@ -1,0 +1,25 @@
+FROM maven:3.9-eclipse-temurin-11 AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+COPY src ./src
+RUN mvn package -DskipTests && \
+    mkdir /app/deployment && \
+    cd /app/deployment && \
+    jar -xf /app/target/pid-hc.war
+
+FROM quay.io/wildfly/wildfly:27.0.1.Final-jdk11
+
+COPY configure.cli /tmp/configure.cli
+RUN /opt/jboss/wildfly/bin/jboss-cli.sh --file=/tmp/configure.cli && \
+    rm -rf /opt/jboss/wildfly/standalone/configuration/standalone_xml_history
+
+# O WAR explodido permite montar XHTML e recursos estaticos diretamente
+# do host, sem reconstruir a imagem a cada alteracao de tela.
+COPY --from=build /app/deployment/ /opt/jboss/wildfly/standalone/deployments/pid-hc.war/
+RUN touch /opt/jboss/wildfly/standalone/deployments/pid-hc.war.dodeploy
+
+EXPOSE 8080
