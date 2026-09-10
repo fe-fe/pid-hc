@@ -6,7 +6,7 @@
              version="3.0">
 
     <persistence-unit name="pidhcPU" transaction-type="JTA">
-
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:/pidhcDS</jta-data-source>
 
         <properties>
