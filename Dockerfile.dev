@@ -1,4 +1,4 @@
-FROM maven:3.9-eclipse-temurin-11 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN mvn package -DskipTests && \
     cd /app/deployment && \
     jar -xf /app/target/pid-hc.war
 
-FROM quay.io/wildfly/wildfly:27.0.1.Final-jdk11
+FROM quay.io/wildfly/wildfly:39.0.0.Final-jdk21
 
 COPY configure.cli /tmp/configure.cli
 RUN /opt/jboss/wildfly/bin/jboss-cli.sh --file=/tmp/configure.cli && \
