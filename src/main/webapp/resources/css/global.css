@@ -258,8 +258,15 @@ h1 {
 
     &:hover,
     &:focus-visible {
-        color: #b42318;
-        border-color: #f0b7b2;
-        background-color: #fff6f5;
+        color: white;
+        border-color: #b42318;
+        background-color: #b42318;
+        
+    }
+    
+    &:active {
+        color: white;
+        border-color: #7f1d1d;
+        background-color: #7f1d1d;
     }
 }
