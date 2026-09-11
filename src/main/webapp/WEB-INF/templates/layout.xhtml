@@ -5,8 +5,11 @@
       lang="pt-BR">
 
 <h:head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title><ui:insert name="title">PID</ui:insert></title>
-
+    <h:outputStylesheet library="webjars" name="bootstrap/5.3.8/css/bootstrap.min-jsf.css"/>
+    <link rel="stylesheet"
+          href="#{request.contextPath}/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"/>
     <h:outputStylesheet library="css" name="global.css"/>
     <ui:insert name="head"/>
 </h:head>
@@ -15,11 +18,28 @@
     <div class="layout">
         <ui:include src="/WEB-INF/components/sidebar.xhtml"/>
 
-        <main class="layout__content">
-            <ui:insert name="content"/>
-        </main>
+        <div class="layout__main">
+            <header class="layout__mobile-header d-lg-none">
+                <span class="layout__mobile-brand">PID-HC</span>
+
+                <button class="btn layout__menu-button"
+                        type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#mainSidebar"
+                        aria-controls="mainSidebar"
+                        aria-label="Abrir menu principal">
+                    <i class="bi bi-list" aria-hidden="true"></i>
+                </button>
+            </header>
+
+            <main class="layout__content">
+                <ui:insert name="content"/>
+            </main>
+        </div>
     </div>
 
     <ui:insert name="scripts"/>
+
+    <h:outputScript library="webjars" name="bootstrap/5.3.8/js/bootstrap.bundle.min.js" target="body"/>
 </h:body>
 </html>

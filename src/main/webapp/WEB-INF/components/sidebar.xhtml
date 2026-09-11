@@ -3,18 +3,61 @@
     xmlns:h="jakarta.faces.html"
     xmlns:ui="jakarta.faces.facelets">
 
-    <aside class="sidebar">
-        <h2>PID</h2>
+    <aside class="sidebar offcanvas-lg offcanvas-start"
+           tabindex="-1"
+           id="mainSidebar"
+           aria-labelledby="mainSidebarLabel">
 
-        <nav>
-            <h:link value="Dashboard" outcome="/pages/admin/dashboard"/>
-            
-        </nav>
+        <div class="offcanvas-header sidebar__mobile-header d-lg-none">
 
-        <footer class="sidebar__footer">
-            <h:form>
-                <h:commandButton value="Sair" action="#{loginBean.logout}" />
-            </h:form>
-        </footer>
+            <h2 class="offcanvas-title sidebar__mobile-title" id="mainSidebarLabel">PID-HC</h2>
+
+            <button type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas"
+                data-bs-target="#mainSidebar"
+                aria-label="Fechar menu">
+            </button>
+        </div>
+
+        <div class="offcanvas-body sidebar__body">
+            <header class="sidebar__header d-none d-lg-flex">
+                <h:link outcome="/pages/admin/dashboard" styleClass="sidebar__brand">
+                    <span>PID-HC</span>
+                </h:link>
+            </header>
+
+            <nav class="nav nav-pills flex-column sidebar__nav" aria-label="Menu principal">
+                <span class="sidebar__section-title">Menu</span>
+
+                <h:link outcome="/pages/admin/dashboard"
+                        styleClass="btn btn-light link"
+                        aria-current="page">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    Dashboard
+                </h:link>
+            </nav>
+
+            <footer class="sidebar__footer">
+                <div class="sidebar__user">
+                    <span class="sidebar__avatar" aria-hidden="true">
+                        <i class="bi bi-person"></i>
+                    </span>
+                    <span class="sidebar__user-data">
+                        <strong>#{empty sessao.usuarioLogado.nome ? 'Administrador' : sessao.usuarioLogado.nome}</strong>
+                        <small>#{sessao.usuarioLogado.email}</small>
+                    </span>
+                </div>
+
+                <h:form styleClass="sidebar__logout-form">
+                    <h:commandLink action="#{loginBean.logout}"
+                                   styleClass="btn sidebar__logout"
+                                   aria-label="Sair do sistema">
+                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                        <span>Sair</span>
+                    </h:commandLink>
+                </h:form>
+            </footer>
+        </div>
     </aside>
 </ui:composition>
