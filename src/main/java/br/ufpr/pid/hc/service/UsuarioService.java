@@ -41,7 +41,6 @@ public class UsuarioService {
 
         String senhaHash = hashUtil.generate(usuario.getSenha().toCharArray());
         usuario.setSenha(senhaHash);
-        usuario.setPerfil(Perfil.ADMINISTRADOR);
 
         usuarioDao.salvar(usuario, null);
         return usuario;

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html">
+      xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core">
 <h:head>
     <title>CADASTRO - PID</title>
     <h:outputStylesheet library="css" name="global.css"/>
@@ -19,6 +19,12 @@
 
         <h:outputLabel for="senha" value="Senha" />
         <h:inputSecret styleClass="input" id="senha" value="#{cadastroBean.usuario.senha}"/>
+
+        <h:outputLabel for="perfil" value="Perfil" />
+
+        <h:selectOneMenu id="perfil" value="#{cadastroBean.usuario.perfil}">
+            <f:selectItems value="#{cadastroBean.perfis}" />
+        </h:selectOneMenu>
 
         <h:commandButton value="Cadastrar"  styleClass="button" action="#{cadastroBean.cadastrar}"/>
     </h:form>
