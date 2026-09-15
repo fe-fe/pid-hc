@@ -2,15 +2,14 @@ package br.ufpr.pid.hc.service;
 
 import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.dao.UsuarioDao;
-import br.ufpr.pid.hc.enumeration.Perfil;
-import br.ufpr.pid.hc.exception.CamposVaziosException;
-import br.ufpr.pid.hc.exception.EmailJaCadastradoException;
-import br.ufpr.pid.hc.exception.SenhaCurtaException;
-import jakarta.enterprise.context.ApplicationScoped;
+import br.ufpr.pid.hc.exception.MissingRequiredFieldsException;
+import br.ufpr.pid.hc.exception.DuplicateEmailException;
+import br.ufpr.pid.hc.exception.WeakPasswordException;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
-@ApplicationScoped
+@Stateless
 public class UsuarioService {
 
     @Inject
@@ -28,15 +27,15 @@ public class UsuarioService {
         boolean senhaVazio = usuario.getSenha() == null || usuario.getSenha().isBlank();
 
         if (emailVazio || senhaVazio)  {
-            throw new CamposVaziosException();
+            throw new MissingRequiredFieldsException();
         }
 
         if (usuario.getSenha().length() < 6) {
-            throw new SenhaCurtaException();
+            throw new WeakPasswordException();
         }
 
         if (buscarPorEmail(usuario.getEmail()) != null) {
-            throw new EmailJaCadastradoException();
+            throw new DuplicateEmailException();
         }
 
         String senhaHash = hashUtil.generate(usuario.getSenha().toCharArray());
