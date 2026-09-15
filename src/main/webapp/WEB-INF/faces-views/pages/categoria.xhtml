@@ -16,7 +16,7 @@
                 </div>
 
                 <h:panelGroup rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
-                    <button type="button" class="btn btn-dark" style="max-height: 36px;" data-bs-toggle="modal"
+                    <button type="button" class="btn btn-success" style="max-height: 36px;" data-bs-toggle="modal"
                             data-bs-target="#modalCriarCategoria">
                         Nova categoria
                     </button>
@@ -72,6 +72,14 @@
                     </tbody>
                 </table>
             </section>
+            <div class="d-flex gap-2">
+                <h:commandButton styleClass="btn btn-primary" value="Anterior" action="#{categoriaBean.paginaAnterior}" disabled="#{categoriaBean.paginaAtual == 0}">
+                    <f:ajax render=":formLista" />
+                </h:commandButton>
+                <h:commandButton styleClass="btn btn-primary" value="Próxima" action="#{categoriaBean.proximaPagina}" disabled="#{categoriaBean.isUltimaPagina()}">
+                    <f:ajax render=":formLista" />
+                </h:commandButton>
+            </div>
         </h:form>
 
         <!-- Modal Criar Categoria -->

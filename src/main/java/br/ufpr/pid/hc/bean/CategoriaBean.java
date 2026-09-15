@@ -33,19 +33,49 @@ public class CategoriaBean implements Serializable {
     private Categoria categoriaSelecionada;
     private List<Categoria> categorias;
 
+    private int paginaAtual = 0;
+    private int tamanhoPagina = 15;
+    private long totalRegistros;
+
+    private void carregarPagina() {
+        categorias = categoriaService.buscar(paginaAtual, tamanhoPagina);
+    }
+
     @PostConstruct
     public void init() {
-        categorias = categoriaService.buscar();
+        totalRegistros = categoriaService.contarTotal();
+        carregarPagina();
     }
 
     public void cadastrar() {
         Categoria novaCategoria = categoriaService.salvar(categoria);
-        categorias = categoriaService.buscar();
+        categoria = new Categoria();
+        totalRegistros = categoriaService.contarTotal();
+        paginaAtual = 0;
+        carregarPagina();
     }
 
     public void atualizar() {
         categoriaService.salvar(categoriaSelecionada);
-        categorias = categoriaService.buscar();
+        carregarPagina();
+    }
+
+    public void proximaPagina() {
+        if (!isUltimaPagina()) {
+            paginaAtual++;
+            carregarPagina();
+        }
+    }
+
+    public void paginaAnterior() {
+        if (paginaAtual > 0) {
+            paginaAtual--;
+            carregarPagina();
+        }
+    }
+
+    public boolean isUltimaPagina() {
+        return (long) (paginaAtual + 1) * tamanhoPagina >= totalRegistros;
     }
 
 }

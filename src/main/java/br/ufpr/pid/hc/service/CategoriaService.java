@@ -19,9 +19,9 @@ public class CategoriaService {
     private CategoriaDao categoriaDao;
 
     @PermitAll
-    public List<Categoria> buscar() {
+    public List<Categoria> buscar(int pagina, int tamanhoPagina) {
         try {
-            return categoriaDao.buscar();
+            return categoriaDao.buscar(pagina, tamanhoPagina);
         } catch (RuntimeException e) {
             log.error(e.getMessage());
             return List.of();
@@ -32,5 +32,10 @@ public class CategoriaService {
     public Categoria salvar(Categoria cat) {
         categoriaDao.salvar(cat, null);
         return cat;
+    }
+
+    @PermitAll
+    public long contarTotal() {
+        return categoriaDao.contarTotal();
     }
 }
