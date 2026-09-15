@@ -353,3 +353,10 @@ h1 {
         background-color: #7f6d1d;
     }
 }
+
+/* table global style */
+
+.table__actions {
+    width: 2%;
+    white-space: nowrap;
+}
