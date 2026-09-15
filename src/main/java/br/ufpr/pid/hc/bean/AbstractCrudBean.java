@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public abstract class AbstractCrudBean<T extends Auditavel, ID> implements Serializable {
+public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E> & CampoOrdenacao> implements Serializable {
 
     protected T entidade;
     protected T entidadeSelecionada;
@@ -21,11 +21,14 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID> implements Seria
     protected int paginaAtual = 0;
     protected final int tamanhoPagina;
     protected long totalRegistros;
-    protected CampoOrdenacao ordenacaoAtual;
+    protected E ordenacaoAtual;
 
-    protected AbstractCrudBean(int tamanhoPagina, CampoOrdenacao ordenacaoPadrao) {
+    private final Class<E> tipoOrdenacao;
+
+    protected AbstractCrudBean(int tamanhoPagina, E ordenacaoPadrao) {
         this.tamanhoPagina = tamanhoPagina;
         this.ordenacaoAtual = ordenacaoPadrao;
+        this.tipoOrdenacao = ordenacaoPadrao.getDeclaringClass();
     }
 
     protected abstract AbstractService<T, ID> getService();
