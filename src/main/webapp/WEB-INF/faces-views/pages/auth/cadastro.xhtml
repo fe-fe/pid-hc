@@ -5,6 +5,9 @@
     <title>CADASTRO - PID</title>
     <h:outputStylesheet library="css" name="global.css"/>
     <h:outputStylesheet library="css" name="pages/auth/login.css"/>
+    <h:outputStylesheet library="webjars" name="bootstrap/5.3.8/css/bootstrap.min-jsf.css"/>
+    <link rel="stylesheet"
+          href="#{request.contextPath}/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"/>
 </h:head>
 <h:body>
     <h:form>
@@ -12,21 +15,24 @@
             <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             <h1>Bem vindo ao PID!</h1>
             <p>Já tem uma conta? <h:link value="Faça login" outcome="/pages/auth/login"/></p>
+
+            <h:outputLabel for="nome" value="Nome" />
+            <h:inputText styleClass="input" id="nome" value="#{cadastroBean.usuario.nome}"/>
+
+            <h:outputLabel for="email" value="Email" />
+            <h:inputText styleClass="input" id="email" value="#{cadastroBean.usuario.email}"/>
+
+            <h:outputLabel for="senha" value="Senha" />
+            <h:inputSecret styleClass="input" id="senha" value="#{cadastroBean.usuario.senha}"/>
+
+            <h:outputLabel for="perfil" value="Perfil" />
+
+            <h:selectOneMenu id="perfil" value="#{cadastroBean.usuario.perfil}" styleClass="form-select">
+                <f:selectItems value="#{cadastroBean.perfis}" />
+            </h:selectOneMenu>
+
+            <h:commandButton value="Cadastrar"  styleClass="btn btn-primary my-4" action="#{cadastroBean.cadastrar}"/>
         </div>
- 
-        <h:outputLabel for="email" value="Email" />
-        <h:inputText styleClass="input" id="email" value="#{cadastroBean.usuario.email}"/>
-
-        <h:outputLabel for="senha" value="Senha" />
-        <h:inputSecret styleClass="input" id="senha" value="#{cadastroBean.usuario.senha}"/>
-
-        <h:outputLabel for="perfil" value="Perfil" />
-
-        <h:selectOneMenu id="perfil" value="#{cadastroBean.usuario.perfil}">
-            <f:selectItems value="#{cadastroBean.perfis}" />
-        </h:selectOneMenu>
-
-        <h:commandButton value="Cadastrar"  styleClass="button" action="#{cadastroBean.cadastrar}"/>
     </h:form>
 </h:body>
 </html>
