@@ -2,9 +2,12 @@ package br.ufpr.pid.hc.dao;
 
 import br.ufpr.pid.hc.entity.Auditavel;
 import br.ufpr.pid.hc.entity.Usuario;
+import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+
+import java.util.List;
 
 public abstract class AbstractDao<T extends Auditavel, ID> {
 
@@ -47,5 +50,21 @@ public abstract class AbstractDao<T extends Auditavel, ID> {
     public void ativar(T entidade, Usuario usuario) {
         entidade.setAtivo(true);
         salvar(entidade, usuario);
+    }
+
+    public List<T> buscar(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao) {
+        return entityManager.createQuery(
+                        "SELECT e FROM " + tipoEntidade.getSimpleName() + " e ORDER BY e." + campoOrdenacao.getCampoBanco(),
+                        tipoEntidade)
+                .setFirstResult(pagina * tamanhoPagina)
+                .setMaxResults(tamanhoPagina)
+                .getResultList();
+    }
+
+    public long contarTotal() {
+        return entityManager.createQuery(
+                "SELECT count(e) FROM " + tipoEntidade.getSimpleName() + " e",
+                Long.class
+        ).getSingleResult();
     }
 }
