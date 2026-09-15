@@ -29,6 +29,10 @@ h1 {
     color: #181018;
 }
 
+p {
+    margin-bottom: 0;
+}
+
 .none {
     display: none;
 }
