@@ -1,81 +1,37 @@
 package br.ufpr.pid.hc.bean;
 
 import br.ufpr.pid.hc.entity.Setor;
+import br.ufpr.pid.hc.enumeration.SetorOrdenacao;
+import br.ufpr.pid.hc.service.AbstractService;
 import br.ufpr.pid.hc.service.SetorService;
-import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import jakarta.security.enterprise.SecurityContext;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.omnifaces.cdi.ViewScoped;
-
-import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 @Named
 @ViewScoped
-@Slf4j
-@Getter
-@Setter
-public class SetorBean implements Serializable {
+public class SetorBean extends AbstractCrudBean<Setor, UUID, SetorOrdenacao> {
 
     @Inject
     private SetorService setorService;
-    @Inject
-    private SecurityContext securityContext;
-    @Inject
-    private Sessao session;
 
-    private Setor setor = new Setor();
-    private Setor setorSelecionado;
-    private List<Setor> setores;
-
-    private int paginaAtual = 0;
-    private int tamanhoPagina = 15;
-    private long totalRegistros;
-
-    private void carregarPagina() {
-        setores = setorService.buscar(paginaAtual, tamanhoPagina);
+    public SetorBean() {
+        super(15, SetorOrdenacao.CODIGO);
     }
 
-    @PostConstruct
-    public void init() {
-        totalRegistros = setorService.contarTotal();
-        carregarPagina();
-    }
+    @Override
+    protected AbstractService<Setor, UUID> getService() { return setorService; }
 
-    public void cadastrar() {
-        setorService.salvar(setor);
-        setor = new Setor();
-        totalRegistros = setorService.contarTotal();
-        paginaAtual = 0;
-        carregarPagina();
-    }
+    @Override
+    protected Setor criarNovaEntidade() { return new Setor(); }
 
-    public void atualizar() {
-        setorService.salvar(setorSelecionado);
-        carregarPagina();
-    }
+    public SetorOrdenacao[] getOpcoesOrdenacao() { return SetorOrdenacao.values(); }
 
-    public void proximaPagina() {
-        if (!isUltimaPagina()) {
-            paginaAtual++;
-            carregarPagina();
-        }
-    }
-
-    public void paginaAnterior() {
-        if (paginaAtual > 0) {
-            paginaAtual--;
-            carregarPagina();
-        }
-    }
-
-    public boolean isUltimaPagina() {
-        return (long) (paginaAtual + 1) * tamanhoPagina >= totalRegistros;
-    }
-
+    public List<Setor> getSetores() { return getLista(); }
+    public Setor getSetor() { return getEntidade(); }
+    public Setor getSetorSelecionado() { return getEntidadeSelecionada(); }
+    public void setSetorSelecionado(Setor setor) { setEntidadeSelecionada(setor); }
 }

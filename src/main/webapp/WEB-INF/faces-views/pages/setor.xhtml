@@ -23,6 +23,16 @@
                 </h:panelGroup>
             </div>
 
+            <div class="d-flex align-items-center gap-2 mt-2">
+                <h:outputLabel for="ordenacao" value="Ordenar por:" />
+                <h:selectOneMenu id="ordenacao" styleClass="form-select w-auto"
+                                 value="#{setorBean.ordenacaoAtual}">
+                    <f:selectItems value="#{setorBean.opcoesOrdenacao}" var="opcao"
+                                   itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
+                    <f:ajax render="@form" listener="#{setorBean.reordenar}" />
+                </h:selectOneMenu>
+            </div>
+
             <section class="table-responsive mt-3">
                 <table class="table table-striped table-bordered table-hover align-middle">
                     <thead class="table-dark">
@@ -82,14 +92,14 @@
                     </tbody>
                 </table>
             </section>
-            <div class="d-flex gap-2">
-                <h:commandButton styleClass="btn btn-primary" value="Anterior" action="#{setorBean.paginaAnterior}" disabled="#{setorBean.paginaAtual == 0}">
-                    <f:ajax render=":formLista" />
-                </h:commandButton>
-                <h:commandButton styleClass="btn btn-primary" value="Próxima" action="#{setorBean.proximaPagina}" disabled="#{setorBean.isUltimaPagina()}">
-                    <f:ajax render=":formLista" />
-                </h:commandButton>
-            </div>
+
+            <ui:include src="/WEB-INF/components/paginacao.xhtml">
+                <ui:param name="acaoAnterior" value="#{setorBean.paginaAnterior}" />
+                <ui:param name="acaoProxima" value="#{setorBean.proximaPagina}" />
+                <ui:param name="desabilitarAnterior" value="#{setorBean.paginaAtual == 0}" />
+                <ui:param name="desabilitarProxima" value="#{setorBean.isUltimaPagina()}" />
+                <ui:param name="formAlvo" value=":formLista" />
+            </ui:include>
         </h:form>
 
         <!-- Modal Criar Setor -->
