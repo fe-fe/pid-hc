@@ -1,0 +1,225 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/templates/layout.xhtml">
+
+    <ui:define name="title">
+        Setores - PID
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formLista">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column">
+                    <h1>Setores Cadastrados</h1>
+                    <p>Gerencie seus setores</p>
+                </div>
+
+                <h:panelGroup rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                    <button type="button" class="btn btn-success" style="max-height: 36px;" data-bs-toggle="modal"
+                            data-bs-target="#modalCriarSetor">
+                        Novo setor
+                    </button>
+                </h:panelGroup>
+            </div>
+
+            <section class="table-responsive mt-3">
+                <table class="table table-striped table-bordered table-hover align-middle">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Código</th>
+                        <th>Unidade</th>
+                        <th>Unidade Gestora</th>
+                        <th>Centro de Atividades</th>
+                        <th>Prédio</th>
+                        <th>Andar</th>
+                        <th>Responsável</th>
+                        <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                            <th>Ações</th>
+                        </ui:fragment>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{setorBean.setores}" var="setor" varStatus="status">
+                        <tr id="setor-#{status.index}">
+                            <td>#{status.index + 1}</td>
+                            <td><h:outputText value="#{setor.codigo}" /></td>
+                            <td><h:outputText value="#{setor.unidade}" /></td>
+                            <td><h:outputText value="#{setor.unidadeGestora}" /></td>
+                            <td><h:outputText value="#{setor.centroAtividades}" /></td>
+                            <td><h:outputText value="#{setor.predio}" /></td>
+                            <td><h:outputText value="#{setor.andar}" /></td>
+                            <td><h:outputText value="#{setor.chefia}" /></td>
+                            <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                                <td class="d-flex gap-2">
+                                    <h:commandLink styleClass="action__button action__button-warning">
+                                        <f:setPropertyActionListener target="#{setorBean.setorSelecionado}" value="#{setor}" />
+                                        <f:ajax execute="@this" render=":formModal" onevent="abrirModalSeSucesso" />
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                             stroke-linejoin="round" class="lucide lucide-square-pen">
+                                            <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                            <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                                        </svg>
+                                    </h:commandLink>
+                                    <h:commandLink styleClass="action__button action__button-destructive"
+                                                   data-bs-toggle="modal" data-bs-target="#modalExcluirSetor">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                             stroke-linejoin="round" class="lucide lucide-trash">
+                                            <path d="M10 11v6" />
+                                            <path d="M14 11v6" />
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                            <path d="M3 6h18" />
+                                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                        </svg>
+                                    </h:commandLink>
+                                </td>
+                            </ui:fragment>
+                        </tr>
+                    </ui:repeat>
+                    </tbody>
+                </table>
+            </section>
+            <div class="d-flex gap-2">
+                <h:commandButton styleClass="btn btn-primary" value="Anterior" action="#{setorBean.paginaAnterior}" disabled="#{setorBean.paginaAtual == 0}">
+                    <f:ajax render=":formLista" />
+                </h:commandButton>
+                <h:commandButton styleClass="btn btn-primary" value="Próxima" action="#{setorBean.proximaPagina}" disabled="#{setorBean.isUltimaPagina()}">
+                    <f:ajax render=":formLista" />
+                </h:commandButton>
+            </div>
+        </h:form>
+
+        <!-- Modal Criar Setor -->
+        <aside class="modal fade" id="modalCriarSetor" tabindex="-1" aria-labelledby="modalCriarSetorLabel"
+               aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Criar Setor</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <h:form>
+                        <div class="d-flex mt-2 mb-2">
+                            <div class="d-flex flex-column p-2 mt-2 mb-2">
+                                <h:outputLabel for="codigo" value="Codigo do setor" />
+                                <h:inputText styleClass="input" id="codigo" value="#{setorBean.setor.codigo}" />
+                            </div>
+                            <div class="d-flex flex-column p-2 mt-2 mb-2">
+                                <h:outputLabel for="unidade" value="Unidade" />
+                                <h:inputText styleClass="input" id="unidade" value="#{setorBean.setor.unidade}" />
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column p-2 mt-2 mb-2">
+                            <h:outputLabel for="unidadeGestora" value="Unidade Gestora" />
+                            <h:inputText styleClass="input" id="unidadeGestora" value="#{setorBean.setor.unidadeGestora}" />
+                        </div>
+                        <div class="d-flex flex-column p-2 mt-2 mb-2">
+                            <h:outputLabel for="centroAtividades" value="Centro de Atividades" />
+                            <h:inputText styleClass="input" id="centroAtividades" value="#{setorBean.setor.centroAtividades}" />
+                        </div>
+                        <div class="d-flex mt-2 mb-2">
+                            <div class="d-flex flex-column p-2 mt-2 mb-2">
+                                <h:outputLabel for="predio" value="Prédio" />
+                                <h:inputText styleClass="input" id="predio" value="#{setorBean.setor.predio}" />
+                            </div>
+                            <div class="d-flex flex-column p-2 mt-2 mb-2">
+                                <h:outputLabel for="andar" value="Andar" />
+                                <h:inputText styleClass="input" id="andar" value="#{setorBean.setor.andar}" />
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column p-2 mt-2 mb-2">
+                            <h:outputLabel for="chefia" value="Responsável" />
+                            <h:inputText styleClass="input" id="chefia" value="#{setorBean.setor.chefia}" />
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                            <h:commandButton value="Cadastrar" styleClass="btn btn-primary"
+                                             action="#{setorBean.cadastrar}" />
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Modal Editar Setor -->
+        <aside class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Editar Setor</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <h:form id="formModal">
+                        <div class="d-flex mt-2 mb-2">
+                            <div class="d-flex flex-column p-2 mt-2 mb-2">
+                                <h:outputLabel for="codigo" value="Codigo do setor" />
+                                <h:inputText styleClass="input" id="codigo" value="#{setorBean.setorSelecionado.codigo}" />
+                            </div>
+                            <div class="d-flex flex-column p-2 mt-2 mb-2">
+                                <h:outputLabel for="unidade" value="Unidade" />
+                                <h:inputText styleClass="input" id="unidade" value="#{setorBean.setorSelecionado.unidade}" />
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column p-2 mt-2 mb-2">
+                            <h:outputLabel for="unidadeGestora" value="Unidade Gestora" />
+                            <h:inputText styleClass="input" id="unidadeGestora" value="#{setorBean.setorSelecionado.unidadeGestora}" />
+                        </div>
+                        <div class="d-flex flex-column p-2 mt-2 mb-2">
+                            <h:outputLabel for="centroAtividades" value="Centro de Atividades" />
+                            <h:inputText styleClass="input" id="centroAtividades" value="#{setorBean.setorSelecionado.centroAtividades}" />
+                        </div>
+                        <div class="d-flex mt-2 mb-2">
+                            <div class="d-flex flex-column p-2 mt-2 mb-2">
+                                <h:outputLabel for="predio" value="Prédio" />
+                                <h:inputText styleClass="input" id="predio" value="#{setorBean.setorSelecionado.predio}" />
+                            </div>
+                            <div class="d-flex flex-column p-2 mt-2 mb-2">
+                                <h:outputLabel for="andar" value="Andar" />
+                                <h:inputText styleClass="input" id="andar" value="#{setorBean.setorSelecionado.andar}" />
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column p-2 mt-2 mb-2">
+                            <h:outputLabel for="chefia" value="Responsável" />
+                            <h:inputText styleClass="input" id="chefia" value="#{setorBean.setorSelecionado.chefia}" />
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                            <h:commandButton value="Salvar" styleClass="btn btn-primary"
+                                             action="#{setorBean.atualizar}">
+                                <f:ajax execute="@form" render=":formLista" onevent="fecharModalSeSucesso" />
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </aside>
+
+        <h:outputScript target="body">
+            let modalEditar;
+
+            document.addEventListener("DOMContentLoaded", function () {
+                modalEditar = new bootstrap.Modal(document.getElementById("modalEditar"));
+            });
+
+            function abrirModalSeSucesso(data) {
+                if (data.status === "success") {
+                    modalEditar.show();
+                }
+            }
+
+            function fecharModalSeSucesso(data) {
+                if (data.status === "success") {
+                    modalEditar.hide();
+                }
+            }
+        </h:outputScript>
+    </ui:define>
+
+</ui:composition>
