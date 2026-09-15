@@ -28,7 +28,7 @@ public class CategoriaService {
         }
     }
 
-    @RolesAllowed("ADMINISTRADOR")
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Categoria salvar(Categoria cat) {
         categoriaDao.salvar(cat, null);
         return cat;
