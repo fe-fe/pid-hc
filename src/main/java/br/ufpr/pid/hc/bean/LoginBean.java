@@ -2,7 +2,9 @@ package br.ufpr.pid.hc.bean;
 
 import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.service.UsuarioService;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.FacesException;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -19,6 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
 
 
 @Named
@@ -43,11 +47,25 @@ public class LoginBean {
     @Inject
     private UsuarioService usuarioService;
 
-    public String login() {
-
+    @PostConstruct
+    public void init() {
         if (session.isAutenticado()) {
-            return "greet?faces-redirect=true";
+            try {
+                FacesContext.getCurrentInstance()
+                        .getExternalContext()
+                        .redirect(
+                                FacesContext.getCurrentInstance()
+                                        .getExternalContext()
+                                        .getRequestContextPath()
+                                        + "/pages/admin/dashboard.xhtml"
+                        );
+            } catch (IOException e) {
+                throw new FacesException(e);
+            }
         }
+    }
+
+    public String login() {
 
         Credential credenciais = new UsernamePasswordCredential(email, senha);
 
