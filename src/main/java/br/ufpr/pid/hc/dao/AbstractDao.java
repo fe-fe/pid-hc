@@ -22,7 +22,7 @@ public abstract class AbstractDao<T extends Auditavel, ID> {
     }
 
     @Transactional
-    public void salvar(T entidade, Usuario usuario) {
+    public T salvar(T entidade, Usuario usuario) {
 
         Object id = entityManager.getEntityManagerFactory()
                 .getPersistenceUnitUtil()
@@ -32,9 +32,10 @@ public abstract class AbstractDao<T extends Auditavel, ID> {
         if (id == null) {
             entidade.setCriadoPor(usuario);
             entityManager.persist(entidade);
+            return entidade;
         } else {
             entidade.setAtualizadoPor(usuario);
-            entityManager.merge(entidade);
+            return entityManager.merge(entidade);
         }
     }
 
