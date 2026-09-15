@@ -37,11 +37,6 @@ public class CategoriaBean {
 
     public String cadastrar() {
         Categoria novaCategoria = categoriaService.salvar(categoria);
-        log.info("categoria cadastrada, id: " + novaCategoria.getId().toString());
-        log.info("usuario sessão: {}", session.getUsuarioLogado());
-        log.info("principal: {}", securityContext.getCallerPrincipal());
-        log.info("is ADMIN: {}", securityContext.isCallerInRole("ADMINISTRADOR"));
-        log.info("is ANALISTA: {}", securityContext.isCallerInRole("ANALISTA"));
         return "/pages/categoria?faces-redirect=true";
     }
 
