@@ -1,10 +1,9 @@
+<!-- categoria.xhtml -->
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
-                xmlns:f="jakarta.faces.core"
+                xmlns:f="jakarta.faces.core" xmlns:comp="jakarta.faces.composite/components"
                 template="/WEB-INF/templates/layout.xhtml">
 
-    <ui:define name="title">
-        Categorias - PID
-    </ui:define>
+    <ui:define name="title">Categorias - PID</ui:define>
 
     <ui:define name="content">
         <h:form id="formLista">
@@ -14,7 +13,6 @@
                     <h1>Categorias Cadastradas</h1>
                     <p>Gerencie suas categorias</p>
                 </div>
-
                 <h:panelGroup rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
                     <button type="button" class="btn btn-success" style="max-height: 36px;" data-bs-toggle="modal"
                             data-bs-target="#modalCriarCategoria">
@@ -23,113 +21,107 @@
                 </h:panelGroup>
             </div>
 
+            <div class="d-flex align-items-center gap-2 mt-2">
+                <h:outputLabel for="ordenacao" value="Ordenar por:" />
+                <h:selectOneMenu id="ordenacao" styleClass="form-select w-auto"
+                                 value="#{categoriaBean.ordenacaoAtual}">
+                    <f:selectItems value="#{categoriaBean.opcoesOrdenacao}" var="opcao"
+                                   itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
+                    <f:ajax render="@form" listener="#{categoriaBean.reordenar}" />
+                </h:selectOneMenu>
+            </div>
+
             <section class="table-responsive mt-3">
                 <table class="table table-striped table-bordered table-hover align-middle">
                     <thead class="table-dark">
-                        <tr>
-                            <th class="table__actions text-center">#</th>
-                            <th>Categoria</th>
-                            <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
-                                <th class="table__actions text-center">Ações</th>
-                            </ui:fragment>
-                        </tr>
+                    <tr>
+                        <th class="table__actions text-center">#</th>
+                        <th>Categoria</th>
+                        <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                            <th class="table__actions text-center">Ações</th>
+                        </ui:fragment>
+                    </tr>
                     </thead>
                     <tbody>
-                        <ui:repeat value="#{categoriaBean.categorias}" var="categoria" varStatus="status">
-                            <tr id="categoria-#{status.index}">
-                                <td class="table__actions text-center">#{status.index + 1}</td>
-                                <td>
-                                    <h:outputText value="#{categoria.nome}" />
+                    <ui:repeat value="#{categoriaBean.categorias}" var="categoria" varStatus="status">
+                        <tr id="categoria-#{status.index}">
+                            <td class="table__actions text-center">#{status.index + 1}</td>
+                            <td><h:outputText value="#{categoria.nome}" /></td>
+                            <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                                <td class="table__actions">
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <h:commandLink styleClass="action__button action__button-warning">
+                                            <f:setPropertyActionListener target="#{categoriaBean.categoriaSelecionada}" value="#{categoria}" />
+                                            <f:ajax execute="@this" render=":formModal" onevent="abrirModalSeSucesso" />
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen">
+                                                <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                                            </svg>
+                                        </h:commandLink>
+                                        <h:commandLink styleClass="action__button action__button-destructive"
+                                                       data-bs-toggle="modal" data-bs-target="#modalExcluirCategoria">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash">
+                                                <path d="M10 11v6" /><path d="M14 11v6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M3 6h18" />
+                                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            </svg>
+                                        </h:commandLink>
+                                    </div>
                                 </td>
-                                <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
-                                    <td class="table__actions">
-                                        <div class="d-flex gap-2 justify-content-center">
-                                            <h:commandLink styleClass="action__button action__button-warning">
-                                                <f:setPropertyActionListener target="#{categoriaBean.categoriaSelecionada}" value="#{categoria}" />
-                                                <f:ajax execute="@this" render=":formModal" onevent="abrirModalSeSucesso" />
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                     stroke-linejoin="round" class="lucide lucide-square-pen">
-                                                    <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                    <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-                                                </svg>
-                                            </h:commandLink>
-                                            <h:commandLink styleClass="action__button action__button-destructive"
-                                                           data-bs-toggle="modal" data-bs-target="#modalExcluirCategoria">
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                     stroke-linejoin="round" class="lucide lucide-trash">
-                                                    <path d="M10 11v6" />
-                                                    <path d="M14 11v6" />
-                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                                                    <path d="M3 6h18" />
-                                                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                                </svg>
-                                            </h:commandLink>
-                                        </div>
-                                    </td>
-                                </ui:fragment>
-                            </tr>
-                        </ui:repeat>
+                            </ui:fragment>
+                        </tr>
+                    </ui:repeat>
                     </tbody>
                 </table>
             </section>
-            <div class="d-flex gap-2">
-                <h:commandButton styleClass="btn btn-primary" value="Anterior" action="#{categoriaBean.paginaAnterior}" disabled="#{categoriaBean.paginaAtual == 0}">
-                    <f:ajax render=":formLista" />
-                </h:commandButton>
-                <h:commandButton styleClass="btn btn-primary" value="Próxima" action="#{categoriaBean.proximaPagina}" disabled="#{categoriaBean.isUltimaPagina()}">
-                    <f:ajax render=":formLista" />
-                </h:commandButton>
-            </div>
+
+            <ui:include src="/WEB-INF/components/paginacao.xhtml">
+                <ui:param name="acaoAnterior" value="#{categoriaBean.paginaAnterior}" />
+                <ui:param name="acaoProxima" value="#{categoriaBean.proximaPagina}" />
+                <ui:param name="desabilitarAnterior" value="#{categoriaBean.paginaAtual == 0}" />
+                <ui:param name="desabilitarProxima" value="#{categoriaBean.isUltimaPagina()}" />
+                <ui:param name="formAlvo" value=":formLista" />
+            </ui:include>
         </h:form>
 
-        <!-- Modal Criar Categoria -->
-        <aside class="modal fade" id="modalCriarCategoria" tabindex="-1" aria-labelledby="modalCriarCategoriaLabel"
-               aria-hidden="true">
+        <aside class="modal fade" id="modalCriarCategoria" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5">Criar Categoria</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-
                     <h:form>
                         <div class="d-flex flex-column p-2 mt-2 mb-2">
                             <h:outputLabel for="nome" value="Nome da categoria" />
                             <h:inputText styleClass="input" id="nome" value="#{categoriaBean.categoria.nome}" />
                         </div>
-
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-                            <h:commandButton value="Cadastrar" styleClass="btn btn-primary"
-                                             action="#{categoriaBean.cadastrar}" />
+                            <h:commandButton value="Cadastrar" styleClass="btn btn-primary" action="#{categoriaBean.cadastrar}" />
                         </div>
                     </h:form>
                 </div>
             </div>
         </aside>
 
-        <!-- Modal Editar Categoria -->
-        <aside class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+        <aside class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5">Editar Categoria</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-
                     <h:form id="formModal">
                         <div class="d-flex flex-column p-2 mt-2 mb-2">
                             <h:outputLabel for="nomeEdicao" value="Nome da categoria" />
-                            <h:inputText styleClass="input" id="nomeEdicao"
-                                         value="#{categoriaBean.categoriaSelecionada.nome}" />
+                            <h:inputText styleClass="input" id="nomeEdicao" value="#{categoriaBean.categoriaSelecionada.nome}" />
                         </div>
-
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-                            <h:commandButton value="Salvar" styleClass="btn btn-primary"
-                                             action="#{categoriaBean.atualizar}">
+                            <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{categoriaBean.atualizar}">
                                 <f:ajax execute="@form" render=":formLista" onevent="fecharModalSeSucesso" />
                             </h:commandButton>
                         </div>
@@ -140,23 +132,11 @@
 
         <h:outputScript target="body">
             let modalEditar;
-
             document.addEventListener("DOMContentLoaded", function () {
-                modalEditar = new bootstrap.Modal(document.getElementById("modalEditar"));
+            modalEditar = new bootstrap.Modal(document.getElementById("modalEditar"));
             });
-
-            function abrirModalSeSucesso(data) {
-                if (data.status === "success") {
-                    modalEditar.show();
-                }
-            }
-
-            function fecharModalSeSucesso(data) {
-                if (data.status === "success") {
-                    modalEditar.hide();
-                }
-            }
+            function abrirModalSeSucesso(data) { if (data.status === "success") modalEditar.show(); }
+            function fecharModalSeSucesso(data) { if (data.status === "success") modalEditar.hide(); }
         </h:outputScript>
     </ui:define>
-
 </ui:composition>

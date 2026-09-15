@@ -1,41 +1,18 @@
 package br.ufpr.pid.hc.service;
 
+import br.ufpr.pid.hc.dao.AbstractDao;
 import br.ufpr.pid.hc.dao.CategoriaDao;
 import br.ufpr.pid.hc.entity.Categoria;
-import jakarta.annotation.security.PermitAll;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.Stateless;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
+import java.util.UUID;
 
-@Slf4j
 @Stateless
-public class CategoriaService {
-
+public class CategoriaService extends AbstractService<Categoria, UUID> {
     @Inject
     private CategoriaDao categoriaDao;
 
-    @PermitAll
-    public List<Categoria> buscar(int pagina, int tamanhoPagina) {
-        try {
-            return categoriaDao.buscar(pagina, tamanhoPagina);
-        } catch (RuntimeException e) {
-            log.error(e.getMessage());
-            return List.of();
-        }
-    }
-
-    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
-    public Categoria salvar(Categoria cat) {
-        categoriaDao.salvar(cat, null);
-        return cat;
-    }
-
-    @PermitAll
-    public long contarTotal() {
-        return categoriaDao.contarTotal();
-    }
+    @Override
+    protected AbstractDao<Categoria, UUID> getDao() { return categoriaDao; }
 }

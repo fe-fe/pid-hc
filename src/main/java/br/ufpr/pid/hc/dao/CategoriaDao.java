@@ -10,23 +10,5 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class CategoriaDao extends AbstractDao<Categoria, UUID> {
-
     public CategoriaDao() { super(Categoria.class); }
-
-    public List<Categoria> buscar(int pagina, int tamanhoPagina) {
-        return entityManager.createQuery(
-                "SELECT c FROM Categoria c ORDER BY c.nome",
-                Categoria.class
-                )
-                .setFirstResult(pagina * tamanhoPagina)
-                .setMaxResults(tamanhoPagina)
-                .getResultList();
-    }
-
-    public long contarTotal() {
-        return entityManager.createQuery(
-                "SELECT count(c) FROM Categoria c",
-                Long.class
-        ).getSingleResult();
-    }
 }
