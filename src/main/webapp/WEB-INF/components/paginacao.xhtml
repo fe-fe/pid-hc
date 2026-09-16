@@ -1,14 +1,26 @@
-<!-- /WEB-INF/components/paginacao.xhtml -->
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html"
-                xmlns:ui="jakarta.faces.facelets" xmlns:f="jakarta.faces.core">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core">
+
     <div class="d-flex gap-2">
-        <h:commandButton styleClass="btn btn-primary" value="Anterior"
-                         actionListener="#{acaoAnterior}" disabled="#{desabilitarAnterior}">
+
+        <h:commandButton
+                styleClass="btn btn-primary"
+                value="Anterior"
+                action="#{bean.paginaAnterior}"
+                disabled="#{desabilitarAnterior}">
             <f:ajax render="#{formAlvo}" />
         </h:commandButton>
-        <h:commandButton styleClass="btn btn-primary" value="Próxima"
-                         actionListener="#{acaoProxima}" disabled="#{desabilitarProxima}">
+
+        <h:commandButton
+                styleClass="btn btn-primary"
+                value="Próxima"
+                action="#{bean.proximaPagina}"
+                disabled="#{desabilitarProxima}">
             <f:ajax render="#{formAlvo}" />
         </h:commandButton>
+
     </div>
+
 </ui:composition>

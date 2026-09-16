@@ -94,8 +94,7 @@
             </section>
 
             <ui:include src="/WEB-INF/components/paginacao.xhtml">
-                <ui:param name="acaoAnterior" value="#{setorBean.paginaAnterior}" />
-                <ui:param name="acaoProxima" value="#{setorBean.proximaPagina}" />
+                <ui:param name="bean" value="#{setorBean}" />
                 <ui:param name="desabilitarAnterior" value="#{setorBean.paginaAtual == 0}" />
                 <ui:param name="desabilitarProxima" value="#{setorBean.isUltimaPagina()}" />
                 <ui:param name="formAlvo" value=":formLista" />
