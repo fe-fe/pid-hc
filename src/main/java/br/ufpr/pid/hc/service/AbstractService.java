@@ -8,6 +8,7 @@ import jakarta.annotation.security.RolesAllowed;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public abstract class AbstractService<T extends Auditavel, ID> {
@@ -32,6 +33,11 @@ public abstract class AbstractService<T extends Auditavel, ID> {
     @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public T salvar(T entidade) {
         return getDao().salvar(entidade, null);
+    }
+
+    @PermitAll
+    public T buscarPorId(ID id) {
+        return getDao().buscarPorId(id);
     }
 
 }
