@@ -38,13 +38,6 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E
         lista = getService().buscar(paginaAtual, tamanhoPagina, ordenacaoAtual);
     }
 
-    @PostConstruct
-    public void init() {
-        entidade = criarNovaEntidade();
-        totalRegistros = getService().contarTotal();
-        carregarPagina();
-    }
-
     public void cadastrar() {
         getService().salvar(entidade);
         entidade = criarNovaEntidade();
@@ -80,4 +73,14 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E
         paginaAtual = 0;
         carregarPagina();
     }
+
+    @PostConstruct
+    public void init() {
+        entidade = criarNovaEntidade();
+        totalRegistros = getService().contarTotal();
+        carregarPagina();
+        posInit();
+    }
+
+    protected void posInit() {}
 }
