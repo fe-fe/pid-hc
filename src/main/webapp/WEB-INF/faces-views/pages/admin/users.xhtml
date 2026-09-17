@@ -1,21 +1,259 @@
-<ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="jakarta.faces.html"
-    xmlns:ui="jakarta.faces.facelets"
-    template="/WEB-INF/templates/layout.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/templates/layout.xhtml">
 
-    <ui:define name="title">
-        Gestão de Usuarios.
-    </ui:define>
+    <ui:define name="title">Usuários - PID</ui:define>
 
     <ui:define name="content">
+        <h:messages id="mensagens" globalOnly="true" showDetail="true" styleClass="mb-3" />
 
-        <h1>Gestão de Usuarios</h1>
+        <h:form id="formLista">
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                <div class="d-flex flex-column">
+                    <h1>Usuários cadastrados</h1>
+                    <p>Gerencie os dados e os perfis de acesso dos usuários</p>
+                </div>
 
-        <p>
-            CRUD de Usuarios.
-        </p>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        data-bs-target="#modalCriarUsuario">
+                    Novo usuário
+                </button>
+            </div>
 
+            <!-- ordenação -->
+            <div class="d-flex align-items-center gap-2 mt-3">
+                <h:outputLabel for="ordenacao" value="Ordenar por:" />
+                <h:selectOneMenu id="ordenacao" styleClass="form-select w-auto"
+                                 value="#{usuarioBean.ordenacaoAtual}">
+                    <f:selectItems value="#{usuarioBean.opcoesOrdenacao}" var="opcao"
+                                   itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
+                    <f:ajax render="@form" listener="#{usuarioBean.reordenar}" />
+                </h:selectOneMenu>
+            </div>
+
+            <section class="table-responsive mt-3">
+                <table class="table table-striped table-bordered table-hover align-middle">
+                    <thead class="table-dark">
+                    <tr>
+                        <th class="table__actions text-center">#</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>CPF</th>
+                        <th>Setor</th>
+                        <th>Perfil</th>
+                        <th class="table__actions text-center">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{usuarioBean.usuarios}" var="usuario" varStatus="status">
+                        <tr>
+                            <td class="table__actions text-center">#{status.index + 1}</td>
+                            <td><h:outputText value="#{usuario.nome}" /></td>
+                            <td><h:outputText value="#{usuario.email}" /></td>
+                            <td><h:outputText value="#{empty usuario.cpf ? '-' : usuario.cpf}" /></td>
+                            <td><h:outputText value="#{empty usuario.setor ? '-' : usuario.setor.codigo}" /></td>
+                            <td><span class="badge text-bg-primary">#{usuario.perfil}</span></td>
+                            <td class="table__actions">
+                                <div class="d-flex justify-content-center">
+                                    <h:commandLink styleClass="action__button action__button-warning"
+                                                   title="Editar usuário">
+                                        <f:setPropertyActionListener target="#{usuarioBean.usuarioSelecionado}"
+                                                                     value="#{usuario}" />
+                                        <f:ajax execute="@this" render=":formEditarUsuario"
+                                                onevent="abrirModalEdicao" />
+                                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                                    </h:commandLink>
+                                </div>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- empty state -->
+            <h:panelGroup rendered="#{empty usuarioBean.usuarios}" layout="block"
+                          styleClass="alert alert-secondary">
+                Nenhum usuário cadastrado.
+            </h:panelGroup>
+
+            <!-- paginação -->
+            <ui:include src="/WEB-INF/components/paginacao.xhtml">
+                <ui:param name="bean" value="#{usuarioBean}" />
+                <ui:param name="desabilitarAnterior" value="#{usuarioBean.paginaAtual == 0}" />
+                <ui:param name="desabilitarProxima" value="#{usuarioBean.isUltimaPagina()}" />
+                <ui:param name="formAlvo" value=":formLista" />
+            </ui:include>
+        </h:form>
+
+        <!-- modal criar -->
+        <aside class="modal fade" id="modalCriarUsuario" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Cadastrar usuário</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Fechar"></button>
+                    </div>
+
+                    <h:form id="formCriarUsuario">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <h:outputLabel for="nome" value="Nome" styleClass="form-label" />
+                                    <h:inputText id="nome" value="#{usuarioBean.usuario.nome}"
+                                                 styleClass="form-control" required="true"
+                                                 requiredMessage="Informe o nome" />
+                                    <h:message for="nome" styleClass="text-danger small" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h:outputLabel for="email" value="E-mail" styleClass="form-label" />
+                                    <h:inputText id="email" value="#{usuarioBean.usuario.email}"
+                                                 styleClass="form-control" required="true"
+                                                 requiredMessage="Informe o e-mail" />
+                                    <h:message for="email" styleClass="text-danger small" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h:outputLabel for="cpf" value="CPF" styleClass="form-label" />
+                                    <h:inputText id="cpf" value="#{usuarioBean.usuario.cpf}"
+                                                 styleClass="form-control" maxlength="11" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h:outputLabel for="senha" value="Senha" styleClass="form-label" />
+                                    <h:inputSecret id="senha" value="#{usuarioBean.usuario.senha}"
+                                                   styleClass="form-control" required="true"
+                                                   requiredMessage="Informe a senha" />
+                                    <h:message for="senha" styleClass="text-danger small" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h:outputLabel for="perfil" value="Perfil de acesso" styleClass="form-label" />
+                                    <h:selectOneMenu id="perfil" value="#{usuarioBean.usuario.perfil}"
+                                                     styleClass="form-select" required="true"
+                                                     requiredMessage="Selecione o perfil">
+                                        <f:selectItem itemLabel="Selecione" itemValue="#{null}"
+                                                      noSelectionOption="true" />
+                                        <f:selectItems value="#{usuarioBean.perfis}" var="perfil"
+                                                       itemValue="#{perfil}" itemLabel="#{perfil}" />
+                                    </h:selectOneMenu>
+                                    <h:message for="perfil" styleClass="text-danger small" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h:outputLabel for="setor" value="Setor" styleClass="form-label" />
+                                    <h:selectOneMenu id="setor"
+                                                     value="#{usuarioBean.setorSelecionadoCadastrarId}"
+                                                     styleClass="form-select">
+                                        <f:selectItem itemLabel="Sem setor" itemValue="#{null}"
+                                                      noSelectionOption="true" />
+                                        <f:selectItems value="#{usuarioBean.setores}" var="setor"
+                                                       itemValue="#{setor.id}"
+                                                       itemLabel="#{setor.codigo} - #{setor.unidade}" />
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                            <h:commandButton value="Cadastrar" styleClass="btn btn-primary"
+                                             action="#{usuarioBean.cadastrar}" />
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </aside>
+
+        <!-- modal editar -->
+        <aside class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Editar usuário</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Fechar"></button>
+                    </div>
+
+                    <h:form id="formEditarUsuario">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <h:outputLabel for="nome" value="Nome" styleClass="form-label" />
+                                    <h:inputText id="nome" value="#{usuarioBean.usuarioSelecionado.nome}"
+                                                 styleClass="form-control" required="true"
+                                                 requiredMessage="Informe o nome" />
+                                    <h:message for="nome" styleClass="text-danger small" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h:outputLabel for="email" value="E-mail" styleClass="form-label" />
+                                    <h:inputText id="email" value="#{usuarioBean.usuarioSelecionado.email}"
+                                                 styleClass="form-control" required="true"
+                                                 requiredMessage="Informe o e-mail" />
+                                    <h:message for="email" styleClass="text-danger small" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h:outputLabel for="cpf" value="CPF" styleClass="form-label" />
+                                    <h:inputText id="cpf" value="#{usuarioBean.usuarioSelecionado.cpf}"
+                                                 styleClass="form-control" readonly="true" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h:outputLabel for="perfil" value="Perfil de acesso" styleClass="form-label" />
+                                    <h:selectOneMenu id="perfil" value="#{usuarioBean.usuarioSelecionado.perfil}"
+                                                     styleClass="form-select" required="true"
+                                                     requiredMessage="Selecione o perfil">
+                                        <f:selectItems value="#{usuarioBean.perfis}" var="perfil"
+                                                       itemValue="#{perfil}" itemLabel="#{perfil}" />
+                                    </h:selectOneMenu>
+                                    <h:message for="perfil" styleClass="text-danger small" />
+                                </div>
+
+                                <div class="col-12">
+                                    <h:outputLabel for="setor" value="Setor" styleClass="form-label" />
+                                    <h:selectOneMenu id="setor"
+                                                     value="#{usuarioBean.setorSelecionadoAtualizarId}"
+                                                     styleClass="form-select">
+                                        <f:selectItem itemLabel="Sem setor" itemValue="#{null}"
+                                                      noSelectionOption="true" />
+                                        <f:selectItems value="#{usuarioBean.setores}" var="setor"
+                                                       itemValue="#{setor.id}"
+                                                       itemLabel="#{setor.codigo} - #{setor.unidade}" />
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                            <h:commandButton value="Salvar" styleClass="btn btn-primary"
+                                             action="#{usuarioBean.atualizar}" />
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </aside>
+
+        <h:outputScript target="body">
+            let modalEditarUsuario;
+
+            document.addEventListener("DOMContentLoaded", function () {
+                modalEditarUsuario = new bootstrap.Modal(document.getElementById("modalEditarUsuario"));
+            });
+
+            function abrirModalEdicao(data) {
+                if (data.status === "success") {
+                    modalEditarUsuario.show();
+                }
+            }
+        </h:outputScript>
     </ui:define>
-
 </ui:composition>
