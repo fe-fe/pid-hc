@@ -10,18 +10,33 @@
           href="#{request.contextPath}/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"/>
 </h:head>
 <h:body>
-    <h:form>
-        <div>
-            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <h:form id="authForm" styleClass="auth-form">
+        <div class="auth-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             <h1>Bem vindo de volta!</h1>
             <p>Sua primeira vez aqui? <h:link value="Cadastre-se" outcome="/pages/auth/cadastro"/></p>
-            <h:outputLabel for="email" value="Email" />
-            <h:inputText styleClass="input" id="email" value="#{loginBean.email}"/>
 
-            <h:outputLabel for="senha" value="Senha" />
-            <h:inputSecret styleClass="input" id="senha" value="#{loginBean.senha}"/>
+            <div class="auth-field">
+                <h:outputLabel for="email" value="Email"/>
+                <h:inputText id="email"
+                             value="#{loginBean.email}"
+                             styleClass="input"
+                             required="true"
+                             requiredMessage="Informe o email"/>
+                <h:message for="email" styleClass="auth-field__message"/>
+            </div>
 
-            <h:commandButton value="Entrar"  styleClass="btn btn-primary my-4" action="#{loginBean.login}"/>
+            <div class="auth-field">
+                <h:outputLabel for="senha" value="Senha"/>
+                <h:inputSecret id="senha"
+                               value="#{loginBean.senha}"
+                               styleClass="input"
+                               required="true"
+                               requiredMessage="Informe a senha"/>
+                <h:message for="senha" styleClass="auth-field__message"/>
+            </div>
+
+            <h:commandButton value="Entrar" styleClass="btn btn-primary my-4" action="#{loginBean.login}"/>
         </div>
     </h:form>
 </h:body>

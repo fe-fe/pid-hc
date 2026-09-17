@@ -80,7 +80,7 @@ public class LoginBean {
             session.setUsuarioLogado(usuario);
             return "/pages/admin/dashboard?faces-redirect=true";
         }
-        FacesContext.getCurrentInstance().addMessage(null,
+        FacesContext.getCurrentInstance().addMessage("authForm:senha",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email ou senha inválidos", null));
         return null;
     }

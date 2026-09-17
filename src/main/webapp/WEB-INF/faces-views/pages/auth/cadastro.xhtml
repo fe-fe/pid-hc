@@ -10,28 +10,58 @@
           href="#{request.contextPath}/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"/>
 </h:head>
 <h:body>
-    <h:form>
-        <div>
-            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <h:form id="authForm" styleClass="auth-form">
+        <div class="auth-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             <h1>Bem vindo ao PID!</h1>
             <p>Já tem uma conta? <h:link value="Faça login" outcome="/pages/auth/login"/></p>
 
-            <h:outputLabel for="nome" value="Nome" />
-            <h:inputText styleClass="input" id="nome" value="#{cadastroBean.usuario.nome}"/>
+            <div class="auth-field">
+                <h:outputLabel for="nome" value="Nome"/>
+                <h:inputText id="nome"
+                             value="#{cadastroBean.usuario.nome}"
+                             styleClass="input"
+                             required="true"
+                             requiredMessage="Informe o nome"/>
+                <h:message for="nome" styleClass="auth-field__message"/>
+            </div>
 
-            <h:outputLabel for="email" value="Email" />
-            <h:inputText styleClass="input" id="email" value="#{cadastroBean.usuario.email}"/>
+            <div class="auth-field">
+                <h:outputLabel for="email" value="Email"/>
+                <h:inputText id="email"
+                             value="#{cadastroBean.usuario.email}"
+                             styleClass="input"
+                             required="true"
+                             requiredMessage="Informe o email"/>
+                <h:message for="email" styleClass="auth-field__message"/>
+            </div>
 
-            <h:outputLabel for="senha" value="Senha" />
-            <h:inputSecret styleClass="input" id="senha" value="#{cadastroBean.usuario.senha}"/>
+            <div class="auth-field">
+                <h:outputLabel for="senha" value="Senha"/>
+                <h:inputSecret id="senha"
+                               value="#{cadastroBean.usuario.senha}"
+                               styleClass="input"
+                               required="true"
+                               requiredMessage="Informe a senha"/>
+                <h:message for="senha" styleClass="auth-field__message"/>
+            </div>
 
-            <h:outputLabel for="perfil" value="Perfil" />
+            <div class="auth-field">
+                <h:outputLabel for="perfil" value="Perfil"/>
+                <h:selectOneMenu id="perfil"
+                                 value="#{cadastroBean.usuario.perfil}"
+                                 styleClass="form-select"
+                                 required="true"
+                                 requiredMessage="Selecione o perfil">
+                    <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{cadastroBean.perfis}"/>
+                </h:selectOneMenu>
+                <h:message for="perfil" styleClass="auth-field__message"/>
+            </div>
 
-            <h:selectOneMenu id="perfil" value="#{cadastroBean.usuario.perfil}" styleClass="form-select">
-                <f:selectItems value="#{cadastroBean.perfis}" />
-            </h:selectOneMenu>
+            <h:messages globalOnly="true" styleClass="auth-form__message"/>
 
-            <h:commandButton value="Cadastrar"  styleClass="btn btn-primary my-4" action="#{cadastroBean.cadastrar}"/>
+            <h:commandButton value="Cadastrar" styleClass="btn btn-primary my-4" action="#{cadastroBean.cadastrar}"/>
         </div>
     </h:form>
 </h:body>
