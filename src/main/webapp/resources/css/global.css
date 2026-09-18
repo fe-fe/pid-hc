@@ -241,6 +241,7 @@ p {
 .sidebar__user-data small {
     color: #667085;
     font-size: 12px;
+    text-transform: lowercase;
 }
 
 .sidebar__logout-form {

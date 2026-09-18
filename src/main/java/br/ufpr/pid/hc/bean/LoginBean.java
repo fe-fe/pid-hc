@@ -75,14 +75,24 @@ public class LoginBean {
                 AuthenticationParameters.withParams().credential(credenciais)
         );
 
-        if (status == AuthenticationStatus.SUCCESS) {
-            Usuario usuario = usuarioService.buscarPorEmail(email);
-            session.setUsuarioLogado(usuario);
-            return "/pages/admin/dashboard?faces-redirect=true";
+        if (status != AuthenticationStatus.SUCCESS) {
+            FacesContext.getCurrentInstance().addMessage("authForm:senha",
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email ou senha inválidos", null));
+            return null;
         }
-        FacesContext.getCurrentInstance().addMessage("authForm:senha",
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email ou senha inválidos", null));
-        return null;
+
+        Usuario usuario = usuarioService.buscarPorEmail(email);
+        session.setUsuarioLogado(usuario);  
+
+        return switch (usuario.getPerfil()) {
+            case ADMINISTRADOR -> "/pages/admin/dashboard?faces-redirect=true";
+
+            case ANALISTA -> "/pages/analista/dashboard?faces-redirect=true";
+
+            case AVALIADOR -> "/pages/avaliador/dashboard?faces-redirect=true";
+
+            case CONSULTOR -> "/pages/consultor/dashboard?faces-redirect=true";
+        };
     }
 
     public String logout() throws ServletException {

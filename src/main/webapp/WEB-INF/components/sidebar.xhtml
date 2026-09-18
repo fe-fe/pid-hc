@@ -30,40 +30,54 @@
             <nav class="nav nav-pills flex-column sidebar__nav" aria-label="Menu principal">
                 <span class="sidebar__section-title">Menu</span>
 
-                <h:link outcome="/pages/admin/dashboard"
-                        styleClass="btn btn-light link"
-                        aria-current="page">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-                    Dashboard
-                </h:link>
+                <!--administrador -->
+                <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR')}">
+                    
+                    <h:link outcome="/pages/admin/dashboard"
+                            styleClass="btn btn-light link"
+                            aria-current="page">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                        Dashboard
+                    </h:link>
 
-                <h:link outcome="/pages/admin/users"
-                        styleClass="btn btn-light link"
-                        aria-current="page">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round"><path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/></svg>
-                    Usuários
-                </h:link>
+                    <h:link outcome="/pages/admin/users"
+                            styleClass="btn btn-light link"
+                            aria-current="page">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round"><path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/></svg>
+                        Usuários
+                    </h:link>
 
-                <h:link outcome="/pages/categoria"
-                        styleClass="btn btn-light link"
-                        aria-current="page">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-bar-stacked"><path d="M11 13v4"/><path d="M15 5v4"/><path d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="7" y="13" width="9" height="4" rx="1"/><rect x="7" y="5" width="12" height="4" rx="1"/></svg>
-                    Categorias
-                </h:link>
+                    <h:link outcome="/pages/categoria"
+                            styleClass="btn btn-light link"
+                            aria-current="page">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-bar-stacked"><path d="M11 13v4"/><path d="M15 5v4"/><path d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="7" y="13" width="9" height="4" rx="1"/><rect x="7" y="5" width="12" height="4" rx="1"/></svg>
+                        Categorias
+                    </h:link>
 
-                <h:link outcome="/pages/setor"
-                        styleClass="btn btn-light link"
-                        aria-current="page">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-bar-stacked"><path d="M11 13v4"/><path d="M15 5v4"/><path d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="7" y="13" width="9" height="4" rx="1"/><rect x="7" y="5" width="12" height="4" rx="1"/></svg>
-                    Setores
-                </h:link>
+                    <h:link outcome="/pages/setor"
+                            styleClass="btn btn-light link"
+                            aria-current="page">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-bar-stacked"><path d="M11 13v4"/><path d="M15 5v4"/><path d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="7" y="13" width="9" height="4" rx="1"/><rect x="7" y="5" width="12" height="4" rx="1"/></svg>
+                        Setores
+                    </h:link>
 
-                <h:link outcome="/pages/material"
-                        styleClass="btn btn-light link"
-                        aria-current="page">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-bar-stacked"><path d="M11 13v4"/><path d="M15 5v4"/><path d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="7" y="13" width="9" height="4" rx="1"/><rect x="7" y="5" width="12" height="4" rx="1"/></svg>
-                    Materiais
-                </h:link>
+                    <h:link outcome="/pages/material"
+                            styleClass="btn btn-light link"
+                            aria-current="page">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-bar-stacked"><path d="M11 13v4"/><path d="M15 5v4"/><path d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="7" y="13" width="9" height="4" rx="1"/><rect x="7" y="5" width="12" height="4" rx="1"/></svg>
+                        Materiais
+                    </h:link>
+                </ui:fragment>
+
+                <!--analista -->
+                <ui:fragment rendered="#{sessao.contemPerfil('ANALISTA')}">
+                    <h:link outcome="/pages/analista/dashboard"
+                            styleClass="btn btn-light link"
+                            aria-current="page">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                        Dashboard
+                    </h:link>
+                </ui:fragment>
             </nav>
 
             <footer class="sidebar__footer">
@@ -72,8 +86,9 @@
                         <i class="bi bi-person"></i>
                     </span>
                     <span class="sidebar__user-data">
-                        <strong>#{empty sessao.usuarioLogado.nome ? 'Administrador' : sessao.usuarioLogado.nome}</strong>
-                        <small>#{sessao.usuarioLogado.email}</small>
+                        <small>#{sessao.usuarioLogado.perfil}</small>
+                        <strong>#{empty sessao.usuarioLogado.nome ? 'Usuário' : sessao.usuarioLogado.nome}</strong>
+                        <!-- <small>#{sessao.usuarioLogado.email}</small> -->
                     </span>
                 </div>
 
