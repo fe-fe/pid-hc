@@ -48,34 +48,25 @@
                     </h:link>
                 </ui:fragment>
 
-                <!--analista -->
-                <ui:fragment rendered="#{sessao.contemPerfil('ANALISTA')}">
+                <!--analista, avaliador e consultor -->
+                <ui:fragment rendered="#{sessao.contemPerfil('ANALISTA', 'AVALIADOR', 'CONSULTOR')}">
                     <h:link outcome="/pages/analista/dashboard"
                             styleClass="btn btn-light link"
                             aria-current="page">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
                         Dashboard
                     </h:link>
+                </ui:fragment>
 
+                <!--todos -->
+                <ui:fragment rendered="#{sessao.autenticado}">
                     <h:link outcome="/pages/analista/processoAvaliativo"
                             styleClass="btn btn-light link"
                             aria-current="page">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
                         Processos
                     </h:link>
-                </ui:fragment>
 
-                <!--avaliador e consultor -->
-                <ui:fragment rendered="#{sessao.contemPerfil('AVALIADOR', 'CONSULTOR')}">
-                    <h:link outcome="/pages/admin/dashboard"
-                            styleClass="btn btn-light link"
-                            aria-current="page">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-                        Dashboard
-                    </h:link>
-                </ui:fragment>
-
-                <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'AVALIADOR', 'CONSULTOR')}">
                     <h:link outcome="/pages/categoria"
                             styleClass="btn btn-light link"
                             aria-current="page">
@@ -95,6 +86,13 @@
                             aria-current="page">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-bar-stacked"><path d="M11 13v4"/><path d="M15 5v4"/><path d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="7" y="13" width="9" height="4" rx="1"/><rect x="7" y="5" width="12" height="4" rx="1"/></svg>
                         Materiais
+                    </h:link>
+
+                    <h:link outcome="/pages/marca"
+                            styleClass="btn btn-light link"
+                            aria-current="page">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tag"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        Marcas
                     </h:link>
                 </ui:fragment>
             </nav>

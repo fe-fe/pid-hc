@@ -12,7 +12,7 @@
                     <h1>Processos Avaliativos</h1>
                     <p>Gerencie processos avaliativos de marcas!</p>
                 </div>
-                <h:panelGroup rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                <h:panelGroup rendered="#{sessao.autenticado}">
                     <button type="button" class="btn btn-success" style="max-height: 36px;" data-bs-toggle="modal"
                         data-bs-target="#modalCriarCategoria">
                         Iniciar processo avaliativo

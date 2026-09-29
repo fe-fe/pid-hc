@@ -31,10 +31,9 @@ public class Sessao implements Serializable {
             return "/pages/auth/login";
         }
 
-        // avaliador e consultor ainda não têm dashboard própria, usam a do admin (liberada no web.xml)
         return switch (usuarioLogado.getPerfil()) {
-            case ANALISTA -> "/pages/analista/dashboard";
-            case ADMINISTRADOR, AVALIADOR, CONSULTOR -> "/pages/admin/dashboard";
+            case ADMINISTRADOR -> "/pages/admin/dashboard";
+            case ANALISTA, AVALIADOR, CONSULTOR -> "/pages/analista/dashboard";
         };
     }
 }

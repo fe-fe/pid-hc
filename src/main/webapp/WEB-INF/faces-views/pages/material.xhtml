@@ -12,7 +12,7 @@
                     <h1>Materiais Cadastrados</h1>
                     <p>Gerencie seus materiais</p>
                 </div>
-                <h:panelGroup rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                <h:panelGroup rendered="#{sessao.autenticado}">
                     <button type="button" class="btn btn-success" style="max-height: 36px;" data-bs-toggle="modal"
                             data-bs-target="#modalCriarMaterial">
                         Novo material
@@ -48,7 +48,7 @@
                         <th>Descrição</th>
                         <th>Categoria</th>
                         <th>Status</th>
-                        <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                        <ui:fragment rendered="#{sessao.autenticado}">
                             <th class="table__actions text-center">Ações</th>
                         </ui:fragment>
                     </tr>
@@ -66,7 +66,7 @@
                                     #{material.inativo ? 'Inativo' : 'Ativo'}
                                 </span>
                             </td>
-                            <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                            <ui:fragment rendered="#{sessao.autenticado}">
                                 <td class="table__actions">
                                     <div class="d-flex gap-2 justify-content-center">
                                         <h:commandLink styleClass="action__button action__button-warning">

@@ -15,7 +15,7 @@
                     <p>Gerencie seus setores</p>
                 </div>
 
-                <h:panelGroup rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                <h:panelGroup rendered="#{sessao.autenticado}">
                     <button type="button" class="btn btn-success" style="max-height: 36px;" data-bs-toggle="modal"
                             data-bs-target="#modalCriarSetor">
                         Novo setor
@@ -54,7 +54,7 @@
                         <th>Andar</th>
                         <th>Responsável</th>
                         <th>Status</th>
-                        <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                        <ui:fragment rendered="#{sessao.autenticado}">
                             <th>Ações</th>
                         </ui:fragment>
                     </tr>
@@ -75,7 +75,7 @@
                                     #{setor.inativo ? 'Inativo' : 'Ativo'}
                                 </span>
                             </td>
-                            <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
+                            <ui:fragment rendered="#{sessao.autenticado}">
                                 <td class="d-flex gap-2">
                                     <h:commandLink styleClass="action__button action__button-warning">
                                         <f:setPropertyActionListener target="#{setorBean.setorSelecionado}" value="#{setor}" />
