@@ -17,8 +17,13 @@ public abstract class AbstractService<T extends Auditavel, ID> {
 
     @PermitAll
     public List<T> buscar(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao) {
+        return buscar(pagina, tamanhoPagina, campoOrdenacao, true);
+    }
+
+    @PermitAll
+    public List<T> buscar(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao, boolean incluirInativos) {
         try {
-            return getDao().buscar(pagina, tamanhoPagina, campoOrdenacao);
+            return getDao().buscar(pagina, tamanhoPagina, campoOrdenacao, incluirInativos);
         } catch (RuntimeException e) {
             log.error(e.getClass().getName() + ": " + e.getMessage());
             return List.of();
@@ -27,7 +32,12 @@ public abstract class AbstractService<T extends Auditavel, ID> {
 
     @PermitAll
     public long contarTotal() {
-        return getDao().contarTotal();
+        return contarTotal(true);
+    }
+
+    @PermitAll
+    public long contarTotal(boolean incluirInativos) {
+        return getDao().contarTotal(incluirInativos);
     }
 
     @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})

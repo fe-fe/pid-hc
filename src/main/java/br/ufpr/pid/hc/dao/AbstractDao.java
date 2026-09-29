@@ -53,8 +53,14 @@ public abstract class AbstractDao<T extends Auditavel, ID> {
     }
 
     public List<T> buscar(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao) {
+        return buscar(pagina, tamanhoPagina, campoOrdenacao, true);
+    }
+
+    public List<T> buscar(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao, boolean incluirInativos) {
         return entityManager.createQuery(
-                        "SELECT e FROM " + tipoEntidade.getSimpleName() + " e ORDER BY e." + campoOrdenacao.getCampoBanco(),
+                        "SELECT e FROM " + tipoEntidade.getSimpleName() + " e " +
+                                filtroAtivo("e", incluirInativos) +
+                                "ORDER BY e." + campoOrdenacao.getCampoBanco(),
                         tipoEntidade)
                 .setFirstResult(pagina * tamanhoPagina)
                 .setMaxResults(tamanhoPagina)
@@ -62,9 +68,21 @@ public abstract class AbstractDao<T extends Auditavel, ID> {
     }
 
     public long contarTotal() {
+        return contarTotal(true);
+    }
+
+    public long contarTotal(boolean incluirInativos) {
         return entityManager.createQuery(
-                "SELECT count(e) FROM " + tipoEntidade.getSimpleName() + " e",
+                "SELECT count(e) FROM " + tipoEntidade.getSimpleName() + " e " + filtroAtivo("e", incluirInativos),
                 Long.class
         ).getSingleResult();
+    }
+
+    protected String filtroAtivo(String alias, boolean incluirInativos) {
+        if (incluirInativos) {
+            return "";
+        }
+
+        return "WHERE (" + alias + ".ativo IS NULL OR " + alias + ".ativo = true) ";
     }
 }

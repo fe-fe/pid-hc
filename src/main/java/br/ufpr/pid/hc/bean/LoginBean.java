@@ -2,9 +2,7 @@ package br.ufpr.pid.hc.bean;
 
 import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.service.UsuarioService;
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.FacesException;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -21,8 +19,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
 
 
 @Named
@@ -47,22 +43,9 @@ public class LoginBean {
     @Inject
     private UsuarioService usuarioService;
 
-    @PostConstruct
-    public void init() {
-        if (session.isAutenticado()) {
-            try {
-                FacesContext.getCurrentInstance()
-                        .getExternalContext()
-                        .redirect(
-                                FacesContext.getCurrentInstance()
-                                        .getExternalContext()
-                                        .getRequestContextPath()
-                                        + "/pages/admin/dashboard.xhtml"
-                        );
-            } catch (IOException e) {
-                throw new FacesException(e);
-            }
-        }
+    // chamado via f:viewAction na tela de login (só em GET); num @PostConstruct o redirect disparava também no logout
+    public String redirecionarSeAutenticado() {
+        return session.isAutenticado() ? session.getPaginaInicial() + "?faces-redirect=true" : null;
     }
 
     public String login() {
@@ -75,24 +58,31 @@ public class LoginBean {
                 AuthenticationParameters.withParams().credential(credenciais)
         );
 
+        if (status == AuthenticationStatus.SEND_CONTINUE) {
+            session.setUsuarioLogado(usuarioService.buscarPorEmail(email));
+            FacesContext.getCurrentInstance().responseComplete();
+            return null;
+        }
+
         if (status != AuthenticationStatus.SUCCESS) {
+            String mensagem = isUsuarioDesativado()
+                    ? "Usuário desativado. Procure um administrador"
+                    : "Email ou senha inválidos";
             FacesContext.getCurrentInstance().addMessage("authForm:senha",
-            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email ou senha inválidos", null));
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, mensagem, null));
             return null;
         }
 
         Usuario usuario = usuarioService.buscarPorEmail(email);
-        session.setUsuarioLogado(usuario);  
+        session.setUsuarioLogado(usuario);
 
-        return switch (usuario.getPerfil()) {
-            case ADMINISTRADOR -> "/pages/admin/dashboard?faces-redirect=true";
+        return session.getPaginaInicial() + "?faces-redirect=true";
+    }
 
-            case ANALISTA -> "/pages/analista/dashboard?faces-redirect=true";
-
-            case AVALIADOR -> "/pages/avaliador/dashboard?faces-redirect=true";
-
-            case CONSULTOR -> "/pages/consultor/dashboard?faces-redirect=true";
-        };
+    // só informa que a conta está desativada se a senha estiver correta, para não expor quais emails existem
+    private boolean isUsuarioDesativado() {
+        Usuario usuario = usuarioService.buscarPorEmail(email);
+        return usuario != null && usuario.isInativo() && hashUtil.verify(senha.toCharArray(), usuario.getSenha());
     }
 
     public String logout() throws ServletException {

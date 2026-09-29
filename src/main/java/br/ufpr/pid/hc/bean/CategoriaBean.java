@@ -33,7 +33,7 @@ public class CategoriaBean extends AbstractCrudBean<Categoria, UUID, CategoriaOr
     public List<Categoria> getCategorias() { return lista; }
     public Categoria getCategoria() { return entidade; }
     public Categoria getCategoriaSelecionada() { return entidadeSelecionada; }
-    public void setCategoriaSelecionada(Categoria c) { this.entidadeSelecionada = c; }
+    public void setCategoriaSelecionada(Categoria c) { setEntidadeSelecionada(c); }
 
     public CategoriaOrdenacao[] getOpcoesOrdenacao() { return CategoriaOrdenacao.values(); }
 }

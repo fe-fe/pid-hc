@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html">
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<f:metadata>
+    <f:viewAction action="#{loginBean.redirecionarSeAutenticado}"/>
+</f:metadata>
 <h:head>
     <title>LOGIN - PID</title>
     <h:outputStylesheet library="css" name="global.css"/>

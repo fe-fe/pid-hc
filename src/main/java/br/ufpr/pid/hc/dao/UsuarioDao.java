@@ -2,6 +2,7 @@ package br.ufpr.pid.hc.dao;
 
 import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
+import br.ufpr.pid.hc.enumeration.Perfil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.NoResultException;
 
@@ -26,11 +27,19 @@ public class UsuarioDao extends AbstractDao<Usuario, UUID> {
         }
     }
 
+    public long contarAtivosPorPerfil(Perfil perfil) {
+        return entityManager.createQuery(
+                "SELECT count(u) FROM Usuario u WHERE u.perfil = :perfil AND (u.ativo IS NULL OR u.ativo = true)",
+                Long.class
+        ).setParameter("perfil", perfil).getSingleResult();
+    }
+
     @Override
-    public List<Usuario> buscar(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao) {
+    public List<Usuario> buscar(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao, boolean incluirInativos) {
         return entityManager.createQuery(
                         "SELECT u FROM Usuario u " +
                                 "LEFT JOIN FETCH u.setor " +
+                                filtroAtivo("u", incluirInativos) +
                                 "ORDER BY u." + campoOrdenacao.getCampoBanco(),
                         Usuario.class
                 )

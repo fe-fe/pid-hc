@@ -31,6 +31,14 @@
                                    itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
                     <f:ajax render="@form" listener="#{usuarioBean.reordenar}" />
                 </h:selectOneMenu>
+
+                <div class="form-check ms-3">
+                    <h:selectBooleanCheckbox id="mostrarInativos" styleClass="form-check-input"
+                                             value="#{usuarioBean.mostrarInativos}">
+                        <f:ajax render="@form" listener="#{usuarioBean.alternarInativos}" />
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="mostrarInativos" value="Mostrar inativos" styleClass="form-check-label" />
+                </div>
             </div>
 
             <section class="table-responsive mt-3">
@@ -43,6 +51,7 @@
                         <th>CPF</th>
                         <th>Setor</th>
                         <th>Perfil</th>
+                        <th>Status</th>
                         <th class="table__actions text-center">Ações</th>
                     </tr>
                     </thead>
@@ -55,6 +64,11 @@
                             <td><h:outputText value="#{empty usuario.cpf ? '-' : usuario.cpf}" /></td>
                             <td><h:outputText value="#{empty usuario.setor ? '-' : usuario.setor.codigo}" /></td>
                             <td><span class="badge text-bg-primary">#{usuario.perfil}</span></td>
+                            <td>
+                                <span class="badge #{usuario.inativo ? 'text-bg-secondary' : 'text-bg-success'}">
+                                    #{usuario.inativo ? 'Inativo' : 'Ativo'}
+                                </span>
+                            </td>
                             <td class="table__actions">
                                 <div class="d-flex justify-content-center">
                                     <h:commandLink styleClass="action__button action__button-warning"
@@ -156,6 +170,14 @@
                                                        itemLabel="#{setor.codigo} - #{setor.unidade}" />
                                     </h:selectOneMenu>
                                 </div>
+
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input"
+                                                                 value="#{usuarioBean.usuario.ativo}" />
+                                        <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -227,6 +249,14 @@
                                                        itemValue="#{setor.id}"
                                                        itemLabel="#{setor.codigo} - #{setor.unidade}" />
                                     </h:selectOneMenu>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input"
+                                                                 value="#{usuarioBean.usuarioSelecionado.ativo}" />
+                                        <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

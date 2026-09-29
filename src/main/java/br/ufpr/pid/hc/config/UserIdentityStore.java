@@ -23,7 +23,7 @@ public class UserIdentityStore implements IdentityStore {
     public CredentialValidationResult validate(UsernamePasswordCredential credencial) {
         Usuario usuario = usuarioService.buscarPorEmail(credencial.getCaller());
 
-        if (usuario == null) {
+        if (usuario == null || usuario.isInativo()) {
             return CredentialValidationResult.INVALID_RESULT;
         }
 
