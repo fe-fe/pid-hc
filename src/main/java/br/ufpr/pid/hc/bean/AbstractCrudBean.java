@@ -22,6 +22,7 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E
     protected final int tamanhoPagina;
     protected long totalRegistros;
     protected E ordenacaoAtual;
+    protected boolean mostrarInativos = false;
 
     private final Class<E> tipoOrdenacao;
 
@@ -34,14 +35,32 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E
     protected abstract AbstractService<T, ID> getService();
     protected abstract T criarNovaEntidade();
 
+    private T novaEntidade() {
+        T nova = criarNovaEntidade();
+        nova.setAtivo(true);
+        return nova;
+    }
+
+    public void setEntidadeSelecionada(T entidade) {
+        if (entidade != null && entidade.getAtivo() == null) {
+            entidade.setAtivo(true);
+        }
+        this.entidadeSelecionada = entidade;
+    }
+
     protected void carregarPagina() {
-        lista = getService().buscar(paginaAtual, tamanhoPagina, ordenacaoAtual);
+        totalRegistros = getService().contarTotal(mostrarInativos);
+        lista = getService().buscar(paginaAtual, tamanhoPagina, ordenacaoAtual, mostrarInativos);
+
+        if (lista.isEmpty() && paginaAtual > 0) {
+            paginaAtual--;
+            carregarPagina();
+        }
     }
 
     public void cadastrar() {
         getService().salvar(entidade);
-        entidade = criarNovaEntidade();
-        totalRegistros = getService().contarTotal();
+        entidade = novaEntidade();
         paginaAtual = 0;
         carregarPagina();
     }
@@ -74,10 +93,14 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E
         carregarPagina();
     }
 
+    public void alternarInativos() {
+        paginaAtual = 0;
+        carregarPagina();
+    }
+
     @PostConstruct
     public void init() {
-        entidade = criarNovaEntidade();
-        totalRegistros = getService().contarTotal();
+        entidade = novaEntidade();
         carregarPagina();
         posInit();
     }

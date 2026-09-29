@@ -74,6 +74,8 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
             super.atualizar();
             adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuário atualizado com sucesso");
         } catch (DomainException | IllegalArgumentException e) {
+            // descarta as alterações feitas em memória na linha editada
+            carregarPagina();
             adicionarMensagem(FacesMessage.SEVERITY_ERROR, e.getMessage());
         }
     }

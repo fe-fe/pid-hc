@@ -33,10 +33,18 @@ public class Auditavel {
         LocalDateTime tempo = LocalDateTime.now();
         this.criadoEm = tempo;
         this.atualizadoEm = tempo;
+        if (this.ativo == null) {
+            this.ativo = true;
+        }
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.atualizadoEm = LocalDateTime.now();
+    }
+
+    // registros antigos podem ter ativo = null; só conta como inativo se foi desativado explicitamente
+    public boolean isInativo() {
+        return Boolean.FALSE.equals(ativo);
     }
 }

@@ -28,6 +28,14 @@
                                    itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
                     <f:ajax render="@form" listener="#{materialBean.reordenar}" />
                 </h:selectOneMenu>
+
+                <div class="form-check ms-3">
+                    <h:selectBooleanCheckbox id="mostrarInativos" styleClass="form-check-input"
+                                             value="#{materialBean.mostrarInativos}">
+                        <f:ajax render="@form" listener="#{materialBean.alternarInativos}" />
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="mostrarInativos" value="Mostrar inativos" styleClass="form-check-label" />
+                </div>
             </div>
 
             <section class="table-responsive mt-3">
@@ -39,6 +47,7 @@
                         <th>Nome</th>
                         <th>Descrição</th>
                         <th>Categoria</th>
+                        <th>Status</th>
                         <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
                             <th class="table__actions text-center">Ações</th>
                         </ui:fragment>
@@ -52,6 +61,11 @@
                             <td><h:outputText value="#{material.nome}" /></td>
                             <td><h:outputText value="#{material.descricao}" /></td>
                             <td><h:outputText value="#{material.categoria.nome}" /></td>
+                            <td>
+                                <span class="badge #{material.inativo ? 'text-bg-secondary' : 'text-bg-success'}">
+                                    #{material.inativo ? 'Inativo' : 'Ativo'}
+                                </span>
+                            </td>
                             <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
                                 <td class="table__actions">
                                     <div class="d-flex gap-2 justify-content-center">
@@ -121,6 +135,11 @@
                                                 itemLabel="#{categoria.nome}"/>
                             </h:selectOneMenu>
                         </div>
+                        <div class="form-check mx-2 my-3">
+                            <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input" value="#{materialBean.material.ativo}" />
+                            <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
+                        </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
                             <h:commandButton value="Cadastrar" styleClass="btn btn-primary" action="#{materialBean.cadastrar}" />
@@ -161,6 +180,11 @@
                                                 itemLabel="#{categoria.nome}"/>
                             </h:selectOneMenu>
                         </div>
+                        <div class="form-check mx-2 my-3">
+                            <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input" value="#{materialBean.materialSelecionado.ativo}" />
+                            <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
+                        </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
                             <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{materialBean.atualizar}">

@@ -29,6 +29,14 @@
                                    itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
                     <f:ajax render="@form" listener="#{categoriaBean.reordenar}" />
                 </h:selectOneMenu>
+
+                <div class="form-check ms-3">
+                    <h:selectBooleanCheckbox id="mostrarInativos" styleClass="form-check-input"
+                                             value="#{categoriaBean.mostrarInativos}">
+                        <f:ajax render="@form" listener="#{categoriaBean.alternarInativos}" />
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="mostrarInativos" value="Mostrar inativos" styleClass="form-check-label" />
+                </div>
             </div>
 
             <section class="table-responsive mt-3">
@@ -37,6 +45,7 @@
                     <tr>
                         <th class="table__actions text-center">#</th>
                         <th>Categoria</th>
+                        <th>Status</th>
                         <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
                             <th class="table__actions text-center">Ações</th>
                         </ui:fragment>
@@ -47,6 +56,11 @@
                         <tr id="categoria-#{status.index}">
                             <td class="table__actions text-center">#{status.index + 1}</td>
                             <td><h:outputText value="#{categoria.nome}" /></td>
+                            <td>
+                                <span class="badge #{categoria.inativo ? 'text-bg-secondary' : 'text-bg-success'}">
+                                    #{categoria.inativo ? 'Inativo' : 'Ativo'}
+                                </span>
+                            </td>
                             <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
                                 <td class="table__actions">
                                     <div class="d-flex gap-2 justify-content-center">
@@ -97,6 +111,11 @@
                             <h:outputLabel for="nome" value="Nome da categoria" />
                             <h:inputText styleClass="input" id="nome" value="#{categoriaBean.categoria.nome}" />
                         </div>
+                        <div class="form-check mx-2 my-3">
+                            <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input" value="#{categoriaBean.categoria.ativo}" />
+                            <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
+                        </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
                             <h:commandButton value="Cadastrar" styleClass="btn btn-primary" action="#{categoriaBean.cadastrar}" />
@@ -118,6 +137,11 @@
                             <h:outputLabel for="nomeEdicao" value="Nome da categoria" />
                             <h:inputText styleClass="input" id="nomeEdicao" value="#{categoriaBean.categoriaSelecionada.nome}" />
                         </div>
+                        <div class="form-check mx-2 my-3">
+                            <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input" value="#{categoriaBean.categoriaSelecionada.ativo}" />
+                            <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
+                        </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
                             <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{categoriaBean.atualizar}">

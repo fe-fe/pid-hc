@@ -25,4 +25,16 @@ public class Sessao implements Serializable {
     public boolean contemPerfil(Perfil ... perfis) {
         return isAutenticado() && Set.of(perfis).contains(usuarioLogado.getPerfil());
     }
+
+    public String getPaginaInicial() {
+        if (!isAutenticado()) {
+            return "/pages/auth/login";
+        }
+
+        // avaliador e consultor ainda não têm dashboard própria, usam a do admin (liberada no web.xml)
+        return switch (usuarioLogado.getPerfil()) {
+            case ANALISTA -> "/pages/analista/dashboard";
+            case ADMINISTRADOR, AVALIADOR, CONSULTOR -> "/pages/admin/dashboard";
+        };
+    }
 }

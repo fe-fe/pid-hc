@@ -26,9 +26,43 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
+    <!-- sem cache nas páginas: o "voltar" do navegador busca a página de novo em vez de reenviar um ViewState velho -->
+    <filter>
+        <filter-name>noCache</filter-name>
+        <filter-class>org.omnifaces.filter.CacheControlFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>noCache</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
     <welcome-file-list>
         <welcome-file>index</welcome-file>
     </welcome-file-list>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Dashboard</web-resource-name>
+            <url-pattern>/pages/admin/dashboard</url-pattern>
+            <url-pattern>/pages/admin/dashboard.xhtml</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>**</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Área do administrador</web-resource-name>
+            <url-pattern>/pages/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMINISTRADOR</role-name>
+        </auth-constraint>
+    </security-constraint>
 
     <security-role>
         <role-name>ADMINISTRADOR</role-name>

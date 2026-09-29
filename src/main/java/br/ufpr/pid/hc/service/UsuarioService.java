@@ -3,7 +3,9 @@ package br.ufpr.pid.hc.service;
 import br.ufpr.pid.hc.dao.AbstractDao;
 import br.ufpr.pid.hc.dao.UsuarioDao;
 import br.ufpr.pid.hc.entity.Usuario;
+import br.ufpr.pid.hc.enumeration.Perfil;
 import br.ufpr.pid.hc.exception.DuplicateEmailException;
+import br.ufpr.pid.hc.exception.LastActiveAdminException;
 import br.ufpr.pid.hc.exception.MissingRequiredFieldsException;
 import br.ufpr.pid.hc.exception.WeakPasswordException;
 import jakarta.annotation.security.PermitAll;
@@ -69,10 +71,13 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
             throw new IllegalArgumentException("Usuário não encontrado");
         }
 
+        validarUltimoAdministradorAtivo(usuario, dadosAtualizados);
+
         usuario.setNome(dadosAtualizados.getNome());
         usuario.setEmail(dadosAtualizados.getEmail());
         usuario.setPerfil(dadosAtualizados.getPerfil());
         usuario.setSetor(dadosAtualizados.getSetor());
+        usuario.setAtivo(dadosAtualizados.getAtivo());
 
         return usuarioDao.salvar(usuario, null);
     }
@@ -85,6 +90,16 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
 
         if (nomeVazio || emailVazio || perfilVazio || senhaVazia) {
             throw new MissingRequiredFieldsException();
+        }
+    }
+
+    private void validarUltimoAdministradorAtivo(Usuario atual, Usuario dadosAtualizados) {
+        boolean eraAdminAtivo = atual.getPerfil() == Perfil.ADMINISTRADOR && !atual.isInativo();
+        boolean continuaAdminAtivo = dadosAtualizados.getPerfil() == Perfil.ADMINISTRADOR && !dadosAtualizados.isInativo();
+
+        if (eraAdminAtivo && !continuaAdminAtivo
+                && usuarioDao.contarAtivosPorPerfil(Perfil.ADMINISTRADOR) <= 1) {
+            throw new LastActiveAdminException();
         }
     }
 

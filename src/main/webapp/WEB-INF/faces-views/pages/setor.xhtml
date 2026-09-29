@@ -31,6 +31,14 @@
                                    itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
                     <f:ajax render="@form" listener="#{setorBean.reordenar}" />
                 </h:selectOneMenu>
+
+                <div class="form-check ms-3">
+                    <h:selectBooleanCheckbox id="mostrarInativos" styleClass="form-check-input"
+                                             value="#{setorBean.mostrarInativos}">
+                        <f:ajax render="@form" listener="#{setorBean.alternarInativos}" />
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="mostrarInativos" value="Mostrar inativos" styleClass="form-check-label" />
+                </div>
             </div>
 
             <section class="table-responsive mt-3">
@@ -45,6 +53,7 @@
                         <th>Prédio</th>
                         <th>Andar</th>
                         <th>Responsável</th>
+                        <th>Status</th>
                         <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
                             <th>Ações</th>
                         </ui:fragment>
@@ -61,6 +70,11 @@
                             <td><h:outputText value="#{setor.predio}" /></td>
                             <td><h:outputText value="#{setor.andar}" /></td>
                             <td><h:outputText value="#{setor.chefia}" /></td>
+                            <td>
+                                <span class="badge #{setor.inativo ? 'text-bg-secondary' : 'text-bg-success'}">
+                                    #{setor.inativo ? 'Inativo' : 'Ativo'}
+                                </span>
+                            </td>
                             <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR', 'ANALISTA')}">
                                 <td class="d-flex gap-2">
                                     <h:commandLink styleClass="action__button action__button-warning">
@@ -145,6 +159,11 @@
                             <h:inputText styleClass="input" id="chefia" value="#{setorBean.setor.chefia}" />
                         </div>
 
+                        <div class="form-check mx-2 my-3">
+                            <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input" value="#{setorBean.setor.ativo}" />
+                            <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
+                        </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
                             <h:commandButton value="Cadastrar" styleClass="btn btn-primary"
@@ -196,6 +215,11 @@
                         <div class="d-flex flex-column p-2 mt-2 mb-2">
                             <h:outputLabel for="chefia" value="Responsável" />
                             <h:inputText styleClass="input" id="chefia" value="#{setorBean.setorSelecionado.chefia}" />
+                        </div>
+
+                        <div class="form-check mx-2 my-3">
+                            <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input" value="#{setorBean.setorSelecionado.ativo}" />
+                            <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
                         </div>
 
                         <div class="modal-footer">
