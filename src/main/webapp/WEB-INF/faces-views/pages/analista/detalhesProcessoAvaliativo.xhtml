@@ -1,0 +1,328 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    template="/WEB-INF/templates/layout.xhtml">
+
+    <ui:define name="title">Detalhes do processo avaliativo - PID</ui:define>
+
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="pages/analista/detalhes-processo-avaliativo.css" />
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="avaliacao-detalhe container-fluid px-0">
+            <header
+                class="avaliacao-detalhe__cabecalho d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3">
+                <div>
+                    <h:link outcome="/pages/analista/processoAvaliativo"
+                        styleClass="avaliacao-detalhe__voltar d-inline-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                        <span>Voltar para processos</span>
+                    </h:link>
+                    <h1>Detalhes do processo avaliativo</h1>
+                    <p>Acompanhe o parecer técnico e as avaliações realizadas pelos setores.</p>
+                </div>
+
+                <button type="button"
+                    class="btn avaliacao-detalhe__botao-reteste d-inline-flex align-items-center justify-content-center gap-2"
+                    data-bs-toggle="modal" data-bs-target="#modalSolicitarReteste">
+                    <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+                    Solicitar reteste
+                </button>
+            </header>
+
+            <main class="d-flex flex-column gap-4 mt-4">
+                <section class="card avaliacao-detalhe__resumo" aria-labelledby="tituloMercadoria">
+                    <div class="avaliacao-detalhe__card-topo p-4">
+                        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+                            <div>
+                                <span class="avaliacao-detalhe__rotulo">Mercadoria avaliada</span>
+                                <h2 id="tituloMercadoria" class="avaliacao-detalhe__titulo-mercadoria mt-1">
+                                    Dorflex 1 g — caixa com 10 comprimidos
+                                </h2>
+                            </div>
+
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <span class="avaliacao-detalhe__codigo d-inline-flex align-items-center gap-2">
+                                    <i class="bi bi-hash" aria-hidden="true"></i>
+                                    7891058001151
+                                </span>
+                                <span
+                                    class="avaliacao-detalhe__status avaliacao-detalhe__status--ressalva d-inline-flex align-items-center gap-2">
+                                    <span class="avaliacao-detalhe__status-ponto" aria-hidden="true"></span>
+                                    Concluído com ressalvas
+                                </span>
+                            </div>
+                        </div>
+
+                        <dl class="avaliacao-detalhe__metadados d-flex flex-wrap align-items-center mt-3 mb-0">
+                            <div class="avaliacao-detalhe__metadado-inline d-flex align-items-center gap-2">
+                                <i class="bi bi-calendar-plus" aria-hidden="true"></i>
+                                <dt>Abertura:</dt>
+                                <dd>18/09/2026 às 09:42</dd>
+                            </div>
+                            <div class="avaliacao-detalhe__metadado-inline d-flex align-items-center gap-2">
+                                <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                                <dt>Validade:</dt>
+                                <dd>18/09/2028</dd>
+                            </div>
+                            <div class="avaliacao-detalhe__metadado-inline d-flex align-items-center gap-2">
+                                <i class="bi bi-person" aria-hidden="true"></i>
+                                <dt>Criado por:</dt>
+                                <dd>Mariana Costa</dd>
+                            </div>
+                        </dl>
+
+                        <div
+                            class="avaliacao-detalhe__destaque d-flex flex-column flex-md-row align-items-md-center gap-3 mt-3">
+                            <span class="avaliacao-detalhe__destaque-icone" aria-hidden="true">
+                                <i class="bi bi-clipboard2-check"></i>
+                            </span>
+                            <div class="flex-grow-1">
+                                <strong>Processo avaliativo finalizado</strong>
+                                <p>Todos os setores responderam. O parecer consolidado está disponível abaixo.</p>
+                            </div>
+                            <span class="avaliacao-detalhe__progresso d-inline-flex align-items-center gap-2">
+                                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                                3 de 3 recebidas
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="avaliacao-detalhe__card-rodape p-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+                            <h3 class="avaliacao-detalhe__subtitulo">Setores enviados para avaliação</h3>
+                            <span class="avaliacao-detalhe__contador">3 setores</span>
+                        </div>
+
+                        <div class="row g-3 mt-1" aria-label="Setores avaliadores">
+                            <div class="col-12 col-md-4">
+                                <div class="avaliacao-detalhe__setor-card h-100 d-flex justify-content-between gap-3">
+                                    <div>
+                                        <span>Setor avaliador</span>
+                                        <strong>Farmácia Hospitalar</strong>
+                                    </div>
+                                    <i class="bi bi-check-circle-fill avaliacao-detalhe__icone-aprovado"
+                                        aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="avaliacao-detalhe__setor-card h-100 d-flex justify-content-between gap-3">
+                                    <div>
+                                        <span>Setor avaliador</span>
+                                        <strong>Enfermagem</strong>
+                                    </div>
+                                    <i class="bi bi-check-circle-fill avaliacao-detalhe__icone-aprovado"
+                                        aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="avaliacao-detalhe__setor-card h-100 d-flex justify-content-between gap-3">
+                                    <div>
+                                        <span>Setor avaliador</span>
+                                        <strong>Núcleo de Segurança</strong>
+                                    </div>
+                                    <i class="bi bi-x-circle-fill avaliacao-detalhe__icone-reprovado"
+                                        aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card avaliacao-detalhe__parecer" aria-labelledby="tituloParecer">
+                    <div class="avaliacao-detalhe__card-topo p-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+                            <div>
+                                <span class="avaliacao-detalhe__rotulo">Análise consolidada</span>
+                                <h2 id="tituloParecer" class="avaliacao-detalhe__titulo-secao mt-1">
+                                    Parecer técnico do analista
+                                </h2>
+                            </div>
+                            <span
+                                class="avaliacao-detalhe__resultado avaliacao-detalhe__resultado--reprovado align-self-md-start">
+                                Desfavorável
+                            </span>
+                        </div>
+
+                    </div>
+                    <div class="avaliacao-detalhe__card-rodape p-4">
+                        <blockquote class="avaliacao-detalhe__parecer-texto mb-3">
+                            A mercadoria atende aos requisitos de identificação e acondicionamento. Entretanto, a
+                            divergência apontada pelo Núcleo de Segurança impede a aprovação definitiva deste lote.
+                            Recomenda-se novo ensaio após a apresentação do laudo complementar do fabricante.
+                        </blockquote>
+
+                        <div
+                            class="d-flex flex-wrap align-items-center column-gap-4 row-gap-2 avaliacao-detalhe__assinatura">
+                            <span><i class="bi bi-person-check me-2" aria-hidden="true"></i>Ricardo Almeida</span>
+                            <span><i class="bi bi-clock me-2" aria-hidden="true"></i>22/09/2026 às 16:20</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section aria-labelledby="tituloAvaliacoes">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-3">
+                        <div>
+                            <span class="avaliacao-detalhe__rotulo">Retornos recebidos</span>
+                            <h2 id="tituloAvaliacoes" class="avaliacao-detalhe__titulo-secao mt-1">Avaliações dos
+                                setores</h2>
+                        </div>
+                        <span class="avaliacao-detalhe__contador">3 avaliações</span>
+                    </div>
+
+                    <div class="d-flex flex-column gap-3">
+                        <article class="card avaliacao-detalhe__avaliacao">
+                            <div class="avaliacao-detalhe__card-topo p-4">
+                                <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+                                    <div>
+                                        <h3 class="avaliacao-detalhe__titulo-avaliacao">Farmácia Hospitalar</h3>
+                                        <div
+                                            class="avaliacao-detalhe__avaliacao-meta d-flex flex-wrap align-items-center mt-2">
+                                            <span><i class="bi bi-person me-1" aria-hidden="true"></i>Avaliadora: Ana
+                                                Paula Martins</span>
+                                            <span><i class="bi bi-calendar3 me-1"
+                                                    aria-hidden="true"></i>20/09/2026</span>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="avaliacao-detalhe__resultado avaliacao-detalhe__resultado--aprovado align-self-lg-start">Aprovado</span>
+                                </div>
+                                <div class="avaliacao-detalhe__observacao mt-3">
+                                    <i class="bi bi-chat-left-text" aria-hidden="true"></i>
+                                    <div>
+                                        <strong>Observações</strong>
+                                        <p>Embalagem íntegra, lote legível e documentação farmacêutica em conformidade.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="avaliacao-detalhe__card-rodape d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 p-4">
+                                <strong class="avaliacao-detalhe__subtitulo">Evidências da avaliação</strong>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a class="btn btn-sm avaliacao-detalhe__evidencia" href="#"
+                                        aria-label="Visualizar laudo farmacêutico em PDF">
+                                        <i class="bi bi-file-earmark-pdf" aria-hidden="true"></i>
+                                        Laudo farmacêutico
+                                    </a>
+                                    <a class="btn btn-sm avaliacao-detalhe__evidencia" href="#"
+                                        aria-label="Visualizar foto da embalagem">
+                                        <i class="bi bi-image" aria-hidden="true"></i>
+                                        Foto da embalagem
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card avaliacao-detalhe__avaliacao">
+                            <div class="avaliacao-detalhe__card-topo p-4">
+                                <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+                                    <div>
+                                        <h3 class="avaliacao-detalhe__titulo-avaliacao">Enfermagem</h3>
+                                        <div
+                                            class="avaliacao-detalhe__avaliacao-meta d-flex flex-wrap align-items-center mt-2">
+                                            <span><i class="bi bi-person me-1" aria-hidden="true"></i>Avaliador: Lucas
+                                                Nascimento</span>
+                                            <span><i class="bi bi-calendar3 me-1"
+                                                    aria-hidden="true"></i>21/09/2026</span>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="avaliacao-detalhe__resultado avaliacao-detalhe__resultado--aprovado align-self-lg-start">Aprovado</span>
+                                </div>
+                                <div class="avaliacao-detalhe__observacao mt-3">
+                                    <i class="bi bi-chat-left-text" aria-hidden="true"></i>
+                                    <div>
+                                        <strong>Observações</strong>
+                                        <p>Apresentação e instruções de uso adequadas à rotina assistencial da unidade.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="avaliacao-detalhe__card-rodape d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 p-4">
+                                <strong class="avaliacao-detalhe__subtitulo">Evidências da avaliação</strong>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a class="btn btn-sm avaliacao-detalhe__evidencia" href="#"
+                                        aria-label="Visualizar checklist assistencial">
+                                        <i class="bi bi-file-earmark-check" aria-hidden="true"></i>
+                                        Checklist assistencial
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="card avaliacao-detalhe__avaliacao">
+                            <div class="avaliacao-detalhe__card-topo p-4">
+                                <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+                                    <div>
+                                        <h3 class="avaliacao-detalhe__titulo-avaliacao">Núcleo de Segurança</h3>
+                                        <div
+                                            class="avaliacao-detalhe__avaliacao-meta d-flex flex-wrap align-items-center mt-2">
+                                            <span><i class="bi bi-person me-1" aria-hidden="true"></i>Avaliadora: Camila
+                                                Ferreira</span>
+                                            <span><i class="bi bi-calendar3 me-1"
+                                                    aria-hidden="true"></i>22/09/2026</span>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="avaliacao-detalhe__resultado avaliacao-detalhe__resultado--reprovado align-self-lg-start">Reprovado</span>
+                                </div>
+                                <div
+                                    class="avaliacao-detalhe__observacao avaliacao-detalhe__observacao--reprovada mt-3">
+                                    <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                                    <div>
+                                        <strong>Observações</strong>
+                                        <p>Laudo apresentado não contempla o ensaio de estabilidade exigido para o lote
+                                            avaliado.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="avaliacao-detalhe__card-rodape d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 p-4">
+                                <strong class="avaliacao-detalhe__subtitulo">Evidências da avaliação</strong>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a class="btn btn-sm avaliacao-detalhe__evidencia" href="#"
+                                        aria-label="Visualizar relatório de não conformidade">
+                                        <i class="bi bi-file-earmark-x" aria-hidden="true"></i>
+                                        Não conformidade
+                                    </a>
+                                    <a class="btn btn-sm avaliacao-detalhe__evidencia" href="#"
+                                        aria-label="Visualizar evidência fotográfica">
+                                        <i class="bi bi-image" aria-hidden="true"></i>
+                                        Evidência fotográfica
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </main>
+
+            <aside class="modal fade" id="modalSolicitarReteste" tabindex="-1" aria-labelledby="tituloModalReteste"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content avaliacao-detalhe__modal">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5" id="tituloModalReteste">Solicitar reteste</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Fechar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Confirma a solicitação de um novo teste para a mercadoria <strong>Dorflex 1 g</strong>?
+                            </p>
+                            <p class="text-secondary small mt-2">Os setores avaliadores serão notificados para iniciar
+                                uma nova rodada.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn avaliacao-detalhe__botao-reteste" data-bs-dismiss="modal">
+                                Confirmar solicitação
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </ui:define>
+</ui:composition>

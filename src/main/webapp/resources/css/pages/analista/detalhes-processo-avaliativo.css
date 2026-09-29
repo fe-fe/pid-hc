@@ -1,0 +1,299 @@
+.avaliacao-detalhe,
+.avaliacao-detalhe__modal {
+    --detalhe-primaria: #1e2d9b;
+    --detalhe-primaria-escura: #172477;
+    --detalhe-primaria-suave: #eef0ff;
+    --detalhe-texto: #101828;
+    --detalhe-texto-suave: #667085;
+    --detalhe-borda: #d1d5dc;
+    --detalhe-fundo: #f9fafb;
+    --detalhe-sucesso: #257031;
+    --detalhe-perigo: #b42318;
+    --detalhe-perigo-suave: #fee4e2;
+    --detalhe-alerta: #946200;
+    --detalhe-alerta-suave: #fff4cc;
+    font-family: "Outfit", sans-serif;
+}
+
+.avaliacao-detalhe {
+    width: 100%;
+    max-width: 1190px;
+    margin: 0 auto;
+    color: var(--detalhe-texto);
+
+    button,
+    a {
+        font-family: inherit;
+    }
+
+    .avaliacao-detalhe__cabecalho {
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--detalhe-borda);
+
+        h1 {
+            margin: 0;
+            color: var(--detalhe-texto);
+            font: 600 24px/1.1 "Outfit", sans-serif;
+        }
+
+        p {
+            margin-top: 6px;
+            color: var(--detalhe-texto-suave);
+            font-size: 14px;
+        }
+    }
+
+    .avaliacao-detalhe__voltar {
+        color: var(--detalhe-primaria);
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: var(--detalhe-primaria-escura);
+            text-decoration: underline;
+        }
+    }
+
+    .avaliacao-detalhe__botao-reteste {
+        min-height: 36px;
+        padding: 7px 13px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid var(--detalhe-primaria);
+        border-radius: 8px;
+        background: var(--detalhe-primaria);
+        box-shadow: 0 1px 2px #0000000d;
+
+        &:hover,
+        &:focus-visible,
+        &:active {
+            color: #fff;
+            border-color: var(--detalhe-primaria-escura);
+            background: var(--detalhe-primaria-escura);
+        }
+    }
+
+    .avaliacao-detalhe__resumo,
+    .avaliacao-detalhe__parecer,
+    .avaliacao-detalhe__avaliacao {
+        overflow: hidden;
+        border: 1px solid var(--detalhe-borda);
+        border-radius: 16px;
+        box-shadow: 0 1px 2px #0000000d;
+    }
+
+    .avaliacao-detalhe__card-topo { background: var(--detalhe-fundo); }
+
+    .avaliacao-detalhe__card-rodape {
+        background: #fff;
+        border-top: 1px solid var(--detalhe-borda);
+    }
+
+    .avaliacao-detalhe__rotulo {
+        color: var(--detalhe-texto-suave);
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .avaliacao-detalhe__titulo-mercadoria,
+    .avaliacao-detalhe__titulo-avaliacao {
+        margin-bottom: 0;
+        color: var(--detalhe-texto);
+        font: 600 20px/1.1 "Outfit", sans-serif;
+    }
+
+    .avaliacao-detalhe__codigo,
+    .avaliacao-detalhe__status,
+    .avaliacao-detalhe__resultado,
+    .avaliacao-detalhe__progresso,
+    .avaliacao-detalhe__contador {
+        min-height: 24px;
+        padding: 3px 8px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.5;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    .avaliacao-detalhe__codigo {
+        color: #6a7282;
+        border: 1px solid var(--detalhe-borda);
+        background: #fff;
+    }
+
+    .avaliacao-detalhe__status--ressalva {
+        color: var(--detalhe-alerta);
+        background: var(--detalhe-alerta-suave);
+    }
+
+    .avaliacao-detalhe__status-ponto {
+        width: 6px;
+        height: 6px;
+        background: currentColor;
+        border-radius: 50%;
+    }
+
+    .avaliacao-detalhe__metadados,
+    .avaliacao-detalhe__avaliacao-meta { gap: 8px 0; }
+
+    .avaliacao-detalhe__metadado-inline,
+    .avaliacao-detalhe__avaliacao-meta span {
+        min-height: 21px;
+        margin-right: 10px;
+        padding-right: 10px;
+        color: var(--detalhe-texto-suave);
+        font-size: 14px;
+        border-right: 1px solid var(--detalhe-borda);
+
+        &:last-child {
+            margin-right: 0;
+            padding-right: 0;
+            border-right: 0;
+        }
+    }
+
+    .avaliacao-detalhe__metadado-inline {
+        dt { font-weight: 500; }
+        dd { margin: 0; font-weight: 400; }
+    }
+
+    .avaliacao-detalhe__destaque {
+        padding: 16px;
+        color: #fff;
+        border-radius: 12px;
+        background: linear-gradient(90deg, var(--detalhe-primaria), var(--detalhe-primaria-escura));
+
+        strong { font-size: 14px; font-weight: 600; }
+        p { margin-top: 4px; font-size: 13px; line-height: 1.5; }
+    }
+
+    .avaliacao-detalhe__destaque-icone {
+        display: inline-grid;
+        flex: 0 0 36px;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+        background: #ffffff24;
+        border-radius: 9px;
+    }
+
+    .avaliacao-detalhe__progresso {
+        color: var(--detalhe-primaria-escura);
+        background: #fff;
+    }
+
+    .avaliacao-detalhe__subtitulo,
+    .avaliacao-detalhe__titulo-secao {
+        margin: 0;
+        color: var(--detalhe-texto);
+        font-family: "Outfit", sans-serif;
+        font-weight: 600;
+    }
+
+    .avaliacao-detalhe__subtitulo { font-size: 14px; }
+    .avaliacao-detalhe__titulo-secao { font-size: 20px; line-height: 1.1; }
+
+    .avaliacao-detalhe__contador {
+        align-self: flex-start;
+        color: var(--detalhe-primaria);
+        background: var(--detalhe-primaria-suave);
+    }
+
+    .avaliacao-detalhe__setor-card {
+        padding: 16px;
+        border: 1px solid var(--detalhe-borda);
+        border-radius: 12px;
+
+        span { display: block; color: var(--detalhe-texto-suave); font-size: 13px; }
+        strong { display: block; margin-top: 8px; font-size: 16px; font-weight: 500; }
+        > i { font-size: 20px; }
+    }
+
+    .avaliacao-detalhe__icone-aprovado { color: var(--detalhe-sucesso); }
+    .avaliacao-detalhe__icone-reprovado { color: var(--detalhe-perigo); }
+    .avaliacao-detalhe__resultado--aprovado { color: #fff; background: var(--detalhe-sucesso); }
+    .avaliacao-detalhe__resultado--reprovado { color: #fff; background: var(--detalhe-perigo); }
+
+    .avaliacao-detalhe__parecer-texto {
+        margin: 0;
+        color: #344054;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .avaliacao-detalhe__assinatura,
+    .avaliacao-detalhe__avaliacao-meta { color: var(--detalhe-texto-suave); font-size: 13px; }
+
+    .avaliacao-detalhe__observacao {
+        display: flex;
+        gap: 10px;
+        padding: 14px 16px;
+        color: #344054;
+        border: 1px solid var(--detalhe-borda);
+        border-radius: 12px;
+        background: #fff;
+
+        > i { flex: 0 0 auto; color: var(--detalhe-primaria); font-size: 18px; }
+        strong { font-size: 13px; font-weight: 600; }
+        p { margin-top: 4px; color: var(--detalhe-texto-suave); font-size: 13px; line-height: 1.5; }
+
+    }
+
+    .avaliacao-detalhe__observacao--reprovada {
+        color: var(--detalhe-perigo);
+        border-color: #f4c7c3;
+        background: var(--detalhe-perigo-suave);
+
+        > i { color: var(--detalhe-perigo); }
+    }
+
+    .avaliacao-detalhe__evidencia {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        gap: 7px;
+        padding: 6px 11px;
+        color: var(--detalhe-texto);
+        font-size: 13px;
+        font-weight: 500;
+        border: 1px solid var(--detalhe-borda);
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 1px 2px #0000000d;
+
+        &:hover,
+        &:focus-visible {
+            color: var(--detalhe-primaria);
+            border-color: var(--detalhe-primaria);
+            background: var(--detalhe-primaria-suave);
+        }
+    }
+}
+
+.avaliacao-detalhe__modal {
+    border: 1px solid var(--detalhe-borda);
+    border-radius: 16px;
+}
+
+@media (max-width: 767.98px) {
+    .avaliacao-detalhe {
+        .avaliacao-detalhe__botao-reteste { width: 100%; }
+
+        .avaliacao-detalhe__metadado-inline,
+        .avaliacao-detalhe__avaliacao-meta span {
+            width: 100%;
+            margin-right: 0;
+            padding-right: 0;
+            border-right: 0;
+        }
+
+        .avaliacao-detalhe__status,
+        .avaliacao-detalhe__progresso { white-space: normal; }
+    }
+}
+
