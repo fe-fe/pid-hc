@@ -19,6 +19,8 @@
                                 <th scope="col">Descrição</th>
                                 <th scope="col">Categoria</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Parecer</th>
+                                <th scope="col">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,12 +43,27 @@
                                             #{material.inativo ? 'Inativo' : 'Ativo'}
                                         </span>
                                     </td>
+                                    <td>
+                                        <span class="text-secondary">Sem parecer</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2 text-nowrap">
+                                            <button class="btn btn-sm btn-outline-primary" type="button"
+                                                aria-label="Editar #{material.codigo}">
+                                                Editar
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" type="button"
+                                                aria-label="Excluir #{material.codigo}">
+                                                Excluir
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             </ui:repeat>
 
                             <ui:fragment rendered="#{empty bean.materiais}">
                                 <tr>
-                                    <td class="text-center text-secondary py-5" colspan="5">
+                                    <td class="text-center text-secondary py-5" colspan="7">
                                         Nenhum material encontrado com os filtros informados.
                                     </td>
                                 </tr>
@@ -55,31 +72,38 @@
                     </table>
                 </div>
 
-                <footer class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 px-3 py-2 border-top bg-white">
-                    <small class="text-secondary">
-                        #{bean.totalRegistros}
-                        #{bean.totalRegistros == 1 ? 'material encontrado' : 'materiais encontrados'}
-                    </small>
+                <footer class="row align-items-center gx-2 gy-0 m-0 px-3 py-2 border-top bg-white">
+                    <div class="col-12 col-sm-4 text-center text-sm-start">
+                        <small class="text-secondary">
+                            #{bean.totalRegistros}
+                            #{bean.totalRegistros == 1 ? 'material encontrado' : 'materiais encontrados'}
+                        </small>
+                    </div>
 
-                    <nav class="btn-group btn-group-sm" aria-label="Paginação da tabela de materiais">
-                        <h:commandButton styleClass="btn btn-outline-secondary" value="&#8249;"
-                            action="#{bean.paginaAnterior}"
-                            disabled="#{bean.paginaAtual == 0}"
-                            title="Página anterior">
-                            <f:ajax render="@form" />
-                        </h:commandButton>
+                    <nav class="col-12 col-sm-4 d-flex justify-content-center"
+                        aria-label="Paginação da tabela de materiais">
+                        <div class="btn-group btn-group-sm">
+                            <h:commandButton styleClass="btn btn-outline-secondary" value="&#8249;"
+                                action="#{bean.paginaAnterior}"
+                                disabled="#{bean.paginaAtual == 0}"
+                                title="Página anterior">
+                                <f:ajax render="@form" />
+                            </h:commandButton>
 
-                        <span class="btn btn-primary disabled" aria-current="page">
-                            #{bean.paginaAtual + 1}
-                        </span>
+                            <span class="btn btn-primary disabled" aria-current="page">
+                                #{bean.paginaAtual + 1}
+                            </span>
 
-                        <h:commandButton styleClass="btn btn-outline-secondary" value="&#8250;"
-                            action="#{bean.proximaPagina}"
-                            disabled="#{bean.ultimaPagina}"
-                            title="Próxima página">
-                            <f:ajax render="@form" />
-                        </h:commandButton>
+                            <h:commandButton styleClass="btn btn-outline-secondary" value="&#8250;"
+                                action="#{bean.proximaPagina}"
+                                disabled="#{bean.ultimaPagina}"
+                                title="Próxima página">
+                                <f:ajax render="@form" />
+                            </h:commandButton>
+                        </div>
                     </nav>
+
+                    <div class="d-none d-sm-block col-sm-4" aria-hidden="true"></div>
                 </footer>
             </h:form>
     </section>
