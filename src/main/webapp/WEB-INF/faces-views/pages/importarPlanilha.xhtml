@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:f="jakarta.faces.core" template="/WEB-INF/templates/layout.xhtml">
+
+    <ui:define name="title">
+        Importar Planilha - PID
+    </ui:define>
+
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="pages/importarPlanilha.css" />
+    </ui:define>
+
+    <ui:define name="content">
+
+        <header>
+            <h1>Importar Tecnovigilância</h1>
+        </header>   
+
+
+        <section>
+            <h2>Envie sua planilha</h2>
+            <p>Selecione a planilha da tecnovigilância.</p>
+
+            <div class="dragDrop">
+                <div class="dragDrop__icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folders preview-icon"><path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z"/><path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1"/></svg></div>
+                <h3>Arraste e solte a planilha aqui</h3>
+                <small>ou selecione um arquivo do seu computador</small>
+                <button class="bt__selecionar btn btn-light">Selecionar o arquivo</button>
+            </div>
+            <div class="infos">
+                <small>
+                    Formatos aceitos: XLSX, XLS e CSV 
+                </small>
+
+                <small>Tamanho máximo: 10 MB</small>
+            </div>
+
+            <button class="bt__importar btn btn-success">Importar Planilha</button>
+        </section>
+        
+        <!-- <h:outputScript target="body"></h:outputScript> -->
+    </ui:define>
+
+</ui:composition>
