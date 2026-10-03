@@ -1,0 +1,137 @@
+.layout__content {
+    padding: 0;
+}
+
+.materials-page__header {
+    display: flex;
+    align-items: center;
+    height: 76px;
+    padding: 0 24px;
+    border-bottom: 1px solid #e4e7ec;
+}
+
+.materials-page__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 68px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e4e7ec;
+}
+
+.materials-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 280px;
+    height: 36px;
+    padding: 0 10px;
+    background-color: #fff;
+    border: 1px solid #d1d5dc;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px #0000000d;
+}
+
+.materials-search:focus-within {
+    border-color: #6674d8;
+    box-shadow: 0 0 0 3px #3346c41f;
+}
+
+.materials-search__icon {
+    flex-shrink: 0;
+    color: #667085;
+}
+
+.materials-search__input {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    color: #101828;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    font-size: 13px;
+}
+
+.materials-search__input::placeholder {
+    color: #98a2b3;
+}
+
+.materials-search__input::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+.action__buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action__filtrar,
+.action__criar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px #0000000d;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.action__filtrar {
+    color: #101828;
+    background: #fff;
+    border: 1px solid #d1d5dc;
+}
+
+.action__criar {
+    color: #fff;
+    background-color: #3346c4;
+    border: 1px solid #3346c4;
+    white-space: nowrap;
+}
+
+.materials-table {
+    border-radius: 0.625rem;
+}
+
+.materials-table__table {
+    min-width: 760px;
+    color: #344054;
+    font-size: 0.8125rem;
+}
+
+.materials-table__table > :not(caption) > * > * {
+    padding: 0.75rem 0.875rem;
+}
+
+.materials-table__table thead th {
+    color: #667085;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+.materials-table__description {
+    min-width: 260px;
+}
+
+@media (max-width: 575.98px) {
+    .materials-page__actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .materials-search {
+        width: 100%;
+    }
+
+    .action__buttons {
+        justify-content: flex-end;
+    }
+}
