@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="jakarta.faces.facelets">
+    <article class="card material-history__material overflow-hidden" aria-labelledby="historyMaterial-#{material.codigo}">
+        <header class="card-header material-history__material-header p-3 p-sm-4">
+            <div class="d-flex flex-column flex-md-row align-items-md-start justify-content-between gap-3">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <h3 class="material-history__material-title mb-0" id="historyMaterial-#{material.codigo}">#{material.nome}</h3>
+                    <span class="material-history__code badge rounded-pill d-inline-flex align-items-center gap-1">
+                        <i class="bi bi-hash" aria-hidden="true"></i> #{material.codigo}
+                    </span>
+                </div>
+                <button class="btn material-history__button material-history__button--primary align-self-start flex-shrink-0" type="button"
+                    data-bs-toggle="modal" data-bs-target="#historyMaterialModal" data-mode="history"
+                    data-code="#{material.codigo}" data-name="#{material.nome}" data-location="#{material.local}"
+                    aria-label="Adicionar novo histórico para #{material.nome}">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Novo histórico
+                </button>
+            </div>
+            <div class="material-history__metadata d-flex flex-wrap align-items-center gap-2 gap-sm-3 mt-3">
+                <span class="d-inline-flex align-items-center gap-1">
+                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                    <span><strong>Local:</strong> #{material.local}</span>
+                </span>
+                <span class="material-history__count d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-calendar3" aria-hidden="true"></i> 2 marcas analisadas
+                </span>
+            </div>
+        </header>
+        <div class="card-body p-3 p-sm-4">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-1 mb-3">
+                <h4 class="material-history__section-title mb-0">Histórico de marcas</h4>
+                <span class="material-history__order">Da análise mais recente para a mais antiga</span>
+            </div>
+            <div class="row row-cols-1 row-cols-xl-2 g-3">
+                <ui:repeat value="#{material.historicos}" var="historico">
+                    <div class="col">
+                        <article class="card material-history__entry h-100">
+                            <div class="card-body d-flex flex-column gap-3 p-3">
+                                <header class="d-flex align-items-start justify-content-between gap-2">
+                                    <div>
+                                        <span class="material-history__label">Marca analisada</span>
+                                        <h5 class="material-history__brand mt-1 mb-0">#{historico.marca}</h5>
+                                    </div>
+                                    <span class="badge rounded-pill material-history__status material-history__status--#{historico.aprovado ? 'approved' : 'rejected'} d-inline-flex align-items-center gap-1">
+                                        <span class="material-history__status-dot" aria-hidden="true"></span>
+                                        #{historico.aprovado ? 'Aprovado' : 'Reprovado'}
+                                    </span>
+                                </header>
+                                <dl class="row g-3 mb-0">
+                                    <div class="col-12 col-sm-6">
+                                        <dt class="material-history__label">Fabricante</dt>
+                                        <dd class="material-history__detail mb-0 mt-1">#{historico.fabricante}</dd>
+                                    </div>
+                                    <div class="col-12 col-sm-6">
+                                        <dt class="material-history__label">Data da análise</dt>
+                                        <dd class="material-history__detail mb-0 mt-1"><time datetime="#{historico.dataIso}">#{historico.data}</time></dd>
+                                    </div>
+                                </dl>
+                                <div class="material-history__opinion material-history__opinion--#{historico.aprovado ? 'approved' : 'rejected'} d-flex align-items-start gap-2 p-3 flex-grow-1">
+                                    <i class="bi #{historico.aprovado ? 'bi-check-circle' : 'bi-x-circle'}" aria-hidden="true"></i>
+                                    <div>
+                                        <strong class="d-block mb-1">Parecer da análise</strong>
+                                        <p>#{historico.parecer}</p>
+                                    </div>
+                                </div>
+                                <footer class="d-flex justify-content-end gap-2">
+                                    <button class="btn btn-sm material-history__edit" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#historyMaterialModal" data-mode="edit"
+                                        data-code="#{material.codigo}" data-name="#{material.nome}" data-location="#{material.local}"
+                                        data-brand="#{historico.marca}" data-manufacturer="#{historico.fabricante}"
+                                        data-date="#{historico.dataIso}" data-status="#{historico.aprovado ? 'aprovado' : 'reprovado'}"
+                                        data-opinion="#{historico.parecer}" aria-label="Editar histórico de #{historico.marca}">Editar</button>
+                                    <button class="btn btn-sm material-history__delete" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#historyDeleteModal"
+                                        data-brand="#{historico.marca}" data-name="#{material.nome}"
+                                        aria-label="Excluir histórico de #{historico.marca}">Excluir</button>
+                                </footer>
+                            </div>
+                        </article>
+                    </div>
+                </ui:repeat>
+            </div>
+        </div>
+    </article>
+</ui:composition>

@@ -70,6 +70,13 @@
                     </h:link>
                 </ui:fragment>
 
+                <ui:fragment rendered="#{sessao.autenticado}">
+                    <h:link outcome="/pages/historicoMateriais" styleClass="btn btn-light link">
+                        <i class="bi bi-clock-history" aria-hidden="true"></i>
+                        Histórico de materiais
+                    </h:link>
+                </ui:fragment>
+
                 <!-- todos
                 <ui:fragment rendered="#{sessao.autenticado}">
                     <h:link outcome="/pages/analista/processoAvaliativo"
