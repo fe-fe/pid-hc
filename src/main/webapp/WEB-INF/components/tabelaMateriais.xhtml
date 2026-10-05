@@ -12,7 +12,7 @@
                         <caption class="visually-hidden">
                             Materiais cadastrados, sua identificação, categoria e status.
                         </caption>
-                        <thead class="table-light">
+                        <thead class="materials-table__head">
                             <tr>
                                 <th scope="col">Código</th>
                                 <th scope="col">Nome</th>
@@ -44,7 +44,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="text-secondary">Sem parecer</span>
+                                        <span class="text-body-secondary">Sem parecer</span>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2 text-nowrap">
@@ -63,7 +63,7 @@
 
                             <ui:fragment rendered="#{empty bean.materiais}">
                                 <tr>
-                                    <td class="text-center text-secondary py-5" colspan="7">
+                                    <td class="text-center text-body-secondary py-5" colspan="7">
                                         Nenhum material encontrado com os filtros informados.
                                     </td>
                                 </tr>
@@ -72,9 +72,9 @@
                     </table>
                 </div>
 
-                <footer class="row align-items-center gx-2 gy-0 m-0 px-3 py-2 border-top bg-white">
+                <footer class="row align-items-center gx-2 gy-0 m-0 px-3 py-2 border-top bg-body">
                     <div class="col-12 col-sm-4 text-center text-sm-start">
-                        <small class="text-secondary">
+                        <small class="text-body-secondary">
                             #{bean.totalRegistros}
                             #{bean.totalRegistros == 1 ? 'material encontrado' : 'materiais encontrados'}
                         </small>

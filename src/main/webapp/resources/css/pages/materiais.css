@@ -7,7 +7,7 @@
     align-items: center;
     height: 76px;
     padding: 0 24px;
-    border-bottom: 1px solid #e4e7ec;
+    border-bottom: 1px solid var(--pid-border);
 }
 
 .materials-page__actions {
@@ -17,7 +17,7 @@
     gap: 16px;
     min-height: 68px;
     padding: 16px 24px;
-    border-bottom: 1px solid #e4e7ec;
+    border-bottom: 1px solid var(--pid-border);
 }
 
 .materials-search {
@@ -27,8 +27,8 @@
     width: 280px;
     height: 36px;
     padding: 0 10px;
-    background-color: #fff;
-    border: 1px solid #d1d5dc;
+    background-color: var(--pid-surface);
+    border: 1px solid var(--pid-control-border);
     border-radius: 8px;
     box-shadow: 0 1px 2px #0000000d;
 }
@@ -40,14 +40,14 @@
 
 .materials-search__icon {
     flex-shrink: 0;
-    color: #667085;
+    color: var(--pid-muted);
 }
 
 .materials-search__input {
     width: 100%;
     min-width: 0;
     padding: 0;
-    color: #101828;
+    color: var(--pid-text);
     background: transparent;
     border: 0;
     outline: 0;
@@ -55,7 +55,7 @@
 }
 
 .materials-search__input::placeholder {
-    color: #98a2b3;
+    color: var(--pid-placeholder);
 }
 
 .materials-search__input::-webkit-search-cancel-button {
@@ -83,9 +83,9 @@
 }
 
 .action__filtrar {
-    color: #101828;
-    background: #fff;
-    border: 1px solid #d1d5dc;
+    color: var(--pid-text);
+    background: var(--pid-surface);
+    border: 1px solid var(--pid-control-border);
 }
 
 .action__criar {
@@ -101,7 +101,7 @@
 
 .materials-table__table {
     min-width: 760px;
-    color: #344054;
+    color: var(--pid-text-secondary);
     font-size: 0.8125rem;
 }
 
@@ -109,8 +109,14 @@
     padding: 0.75rem 0.875rem;
 }
 
+.materials-table__head {
+    --bs-table-bg: var(--pid-surface-subtle);
+    --bs-table-color: var(--pid-muted);
+    --bs-table-border-color: var(--pid-border);
+}
+
 .materials-table__table thead th {
-    color: #667085;
+    color: var(--pid-muted);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.01em;

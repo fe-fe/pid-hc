@@ -3,10 +3,10 @@
     --detalhe-primaria: #1e2d9b;
     --detalhe-primaria-escura: #172477;
     --detalhe-primaria-suave: #eef0ff;
-    --detalhe-texto: #101828;
-    --detalhe-texto-suave: #667085;
-    --detalhe-borda: #d1d5dc;
-    --detalhe-fundo: #f9fafb;
+    --detalhe-texto: var(--pid-text);
+    --detalhe-texto-suave: var(--pid-muted);
+    --detalhe-borda: var(--pid-control-border);
+    --detalhe-fundo: var(--pid-surface-subtle);
     --detalhe-sucesso: #257031;
     --detalhe-perigo: #b42318;
     --detalhe-perigo-suave: #fee4e2;
@@ -44,14 +44,14 @@
     }
 
     .avaliacao-detalhe__voltar {
-        color: var(--detalhe-primaria);
+        color: var(--pid-link);
         font-size: 13px;
         font-weight: 600;
         text-decoration: none;
 
         &:hover,
         &:focus-visible {
-            color: var(--detalhe-primaria-escura);
+            color: var(--pid-link-hover);
             text-decoration: underline;
         }
     }
@@ -88,7 +88,7 @@
     .avaliacao-detalhe__card-topo { background: var(--detalhe-fundo); }
 
     .avaliacao-detalhe__card-rodape {
-        background: #fff;
+        background: var(--pid-surface);
         border-top: 1px solid var(--detalhe-borda);
     }
 
@@ -120,9 +120,9 @@
     }
 
     .avaliacao-detalhe__codigo {
-        color: #6a7282;
+        color: var(--pid-muted);
         border: 1px solid var(--detalhe-borda);
-        background: #fff;
+        background: var(--pid-surface);
     }
 
     .avaliacao-detalhe__status--ressalva {
@@ -183,8 +183,8 @@
     }
 
     .avaliacao-detalhe__progresso {
-        color: var(--detalhe-primaria-escura);
-        background: #fff;
+        color: var(--pid-link);
+        background: var(--pid-surface);
     }
 
     .avaliacao-detalhe__subtitulo,
@@ -200,7 +200,7 @@
 
     .avaliacao-detalhe__contador {
         align-self: flex-start;
-        color: var(--detalhe-primaria);
+        color: var(--pid-link);
         background: var(--detalhe-primaria-suave);
     }
 
@@ -221,7 +221,7 @@
 
     .avaliacao-detalhe__parecer-texto {
         margin: 0;
-        color: #344054;
+        color: var(--pid-text-secondary);
         font-size: 14px;
         line-height: 1.6;
     }
@@ -233,12 +233,12 @@
         display: flex;
         gap: 10px;
         padding: 14px 16px;
-        color: #344054;
+        color: var(--pid-text-secondary);
         border: 1px solid var(--detalhe-borda);
         border-radius: 12px;
-        background: #fff;
+        background: var(--pid-surface);
 
-        > i { flex: 0 0 auto; color: var(--detalhe-primaria); font-size: 18px; }
+        > i { flex: 0 0 auto; color: var(--pid-link); font-size: 18px; }
         strong { font-size: 13px; font-weight: 600; }
         p { margin-top: 4px; color: var(--detalhe-texto-suave); font-size: 13px; line-height: 1.5; }
 
@@ -263,13 +263,13 @@
         font-weight: 500;
         border: 1px solid var(--detalhe-borda);
         border-radius: 8px;
-        background: #fff;
+        background: var(--pid-surface);
         box-shadow: 0 1px 2px #0000000d;
 
         &:hover,
         &:focus-visible {
-            color: var(--detalhe-primaria);
-            border-color: var(--detalhe-primaria);
+            color: var(--pid-link);
+            border-color: var(--pid-link);
             background: var(--detalhe-primaria-suave);
         }
     }
@@ -278,6 +278,29 @@
 .avaliacao-detalhe__modal {
     border: 1px solid var(--detalhe-borda);
     border-radius: 16px;
+}
+
+:root[data-bs-theme="dark"] .avaliacao-detalhe,
+:root[data-bs-theme="dark"] .avaliacao-detalhe__modal {
+    --detalhe-primaria-suave: var(--pid-hover);
+    --detalhe-perigo-suave: #432824;
+    --detalhe-alerta: #f5cf75;
+    --detalhe-alerta-suave: #3e321c;
+}
+
+:root[data-bs-theme="dark"] .avaliacao-detalhe__observacao--reprovada {
+    color: #ffada5;
+    border-color: #79433d;
+
+    > i { color: #ffada5; }
+}
+
+:root[data-bs-theme="dark"] .avaliacao-detalhe__icone-aprovado {
+    color: #85d69a;
+}
+
+:root[data-bs-theme="dark"] .avaliacao-detalhe__icone-reprovado {
+    color: #ffada5;
 }
 
 @media (max-width: 767.98px) {
