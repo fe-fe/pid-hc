@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:ui="jakarta.faces.facelets"
+    template="/WEB-INF/templates/layout.xhtml">
+
+    <!-- A listagem permanece vazia até a integração com os dados de tecnovigilância. -->
+    <ui:param name="registrosTecnovigilancia" value="#{[]}" />
+
+    <ui:define name="title">
+        Tecnovigilância - PID
+    </ui:define>
+
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="pages/materiais.css" />
+    </ui:define>
+
+    <ui:define name="content">
+
+        <header class="materials-page__header">
+            <h1>Tecnovigilância</h1>
+        </header>
+
+        <section class="materials-page__actions">
+            <div class="action__areaInput">
+                <label class="materials-search">
+                    <span class="visually-hidden">Pesquisa livre</span>
+                    <svg class="materials-search__icon" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.3-4.3" />
+                    </svg>
+                    <input class="materials-search__input" type="search" name="tecnovigilanciaSearch"
+                        placeholder="Pesquisar por código ou produto" autocomplete="off" />
+                </label>
+            </div>
+
+            <div class="action__buttons">
+                <button class="action__filtrar" type="button">
+                    Filtrar
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M10 5H3" />
+                        <path d="M12 19H3" />
+                        <path d="M14 3v4" />
+                        <path d="M16 17v4" />
+                        <path d="M21 12h-9" />
+                        <path d="M21 19h-5" />
+                        <path d="M21 5h-7" />
+                        <path d="M8 10v4" />
+                        <path d="M8 12H3" />
+                    </svg>
+                </button>
+                <h:link outcome="/pages/importarPlanilha" styleClass="action__criar text-decoration-none">
+                    Importar Planilha
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <path d="m17 8-5-5-5 5" />
+                        <path d="M12 3v12" />
+                    </svg>
+                </h:link>
+            </div>
+        </section>
+
+        <div class="p-4">
+            <ui:include src="/WEB-INF/components/tabelaTecnovigilancia.xhtml">
+                <ui:param name="registros" value="#{registrosTecnovigilancia}" />
+            </ui:include>
+        </div>
+    </ui:define>
+
+</ui:composition>
