@@ -112,8 +112,7 @@
     --bs-btn-active-border-color: var(--pid-hover-border);
 }
 
-.material-history__material,
-.material-history__entry {
+.material-history__material {
     --bs-card-bg: var(--pid-surface);
     --bs-card-border-color: var(--pid-border);
     --bs-card-color: var(--pid-text);
@@ -150,8 +149,7 @@
     border-left: 1px solid var(--pid-border);
 }
 
-.material-history__section-title,
-.material-history__brand {
+.material-history__section-title {
     color: var(--pid-heading);
     font-family: "Outfit", sans-serif;
     font-size: 1rem;
@@ -163,22 +161,72 @@
     font-size: 0.6875rem;
 }
 
-.material-history__entry {
-    border-radius: 12px;
+.material-history__table-wrapper {
+    overflow-y: hidden;
+    border: 1px solid var(--pid-border);
+    border-radius: 10px;
 }
 
-.material-history__label {
-    color: var(--pid-muted);
-    font-size: 0.625rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+.material-history__table-wrapper:focus-visible {
+    outline: 2px solid var(--pid-link);
+    outline-offset: 3px;
 }
 
-.material-history__detail {
-    color: var(--pid-text-secondary);
+.material-history__table {
+    --bs-table-bg: var(--pid-surface);
+    --bs-table-color: var(--pid-text-secondary);
+    --bs-table-border-color: var(--pid-border);
+    --bs-table-hover-bg: var(--pid-hover);
+    --bs-table-hover-color: var(--pid-text);
+    width: 100%;
+    min-width: 820px;
+    table-layout: fixed;
     font-size: 0.75rem;
+}
+
+.material-history__table > :not(caption) > * > * {
+    padding: 12px;
     overflow-wrap: anywhere;
+}
+
+.material-history__table thead {
+    --bs-table-bg: var(--pid-surface-subtle);
+    --bs-table-color: var(--pid-muted);
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+.material-history__table tbody tr:last-child > * {
+    border-bottom: 0;
+}
+
+.material-history__column-brand {
+    width: 145px;
+}
+
+.material-history__column-manufacturer {
+    width: 130px;
+}
+
+.material-history__column-date {
+    width: 112px;
+}
+
+.material-history__column-status {
+    width: 108px;
+}
+
+.material-history__column-actions {
+    width: 116px;
+}
+
+.material-history__table-brand {
+    color: var(--pid-heading);
+    font-weight: 600;
+}
+
+.material-history__table-opinion {
+    line-height: 1.6;
 }
 
 .material-history__status {
@@ -196,36 +244,16 @@
     border-radius: 50%;
 }
 
-.material-history__status--approved,
-.material-history__opinion--approved {
+.material-history__status--approved {
     color: var(--history-success-text);
     background-color: var(--history-success-bg);
     border-color: var(--history-success-border);
 }
 
-.material-history__status--rejected,
-.material-history__opinion--rejected {
+.material-history__status--rejected {
     color: var(--history-danger-text);
     background-color: var(--history-danger-bg);
     border-color: var(--history-danger-border);
-}
-
-.material-history__opinion {
-    min-height: 90px;
-    border-radius: 9px;
-    font-size: 0.75rem;
-    line-height: 1.6;
-    overflow-wrap: anywhere;
-}
-
-.material-history__opinion > .bi {
-    flex-shrink: 0;
-    font-size: 1rem;
-    line-height: 1.3;
-}
-
-.material-history__opinion p {
-    color: var(--pid-text-secondary);
 }
 
 .material-history__edit,
