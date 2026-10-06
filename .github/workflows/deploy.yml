@@ -1,0 +1,41 @@
+name: Deploy
+
+on:
+  push:
+    branches: [release]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vm
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prototipo-oci
+    timeout-minutes: 30
+    steps:
+      - name: Atualizar código e subir containers
+        uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1.2.5
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          fingerprint: ${{ secrets.VM_FINGERPRINT }}
+          command_timeout: 25m
+          script: |
+            set -euo pipefail
+            cd ${{ vars.DEPLOY_PATH || '/home/ubuntu/pid-hc' }}
+            git fetch --prune origin release
+            git checkout -B release ${{ github.sha }}
+            docker compose -f docker-compose.yml -f docker-compose.caddy.yml up -d --build --remove-orphans
+            docker image prune -f
+
+            for i in $(seq 1 30); do
+              code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/pid-hc/ || true)
+              if [ "$code" = "200" ]; then echo "Aplicação respondendo (200)"; exit 0; fi
+              sleep 5
+            done
+            echo "Aplicação não respondeu após o deploy (último status: $code)"
+            docker compose -f docker-compose.yml -f docker-compose.caddy.yml logs --tail=80 wildfly || true
+            exit 1
