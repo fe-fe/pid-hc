@@ -32,7 +32,7 @@ jobs:
             docker image prune -f
 
             for i in $(seq 1 30); do
-              code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/pid-hc/ || true)
+              code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/ || true)
               if [ "$code" = "200" ]; then echo "Aplicação respondendo (200)"; exit 0; fi
               sleep 5
             done

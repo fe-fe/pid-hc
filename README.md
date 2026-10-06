@@ -71,8 +71,8 @@ no volume `caddy_data`.
 
 ## Acesso
 
-- Local: http://localhost:8080/pid-hc/
-- Com Caddy: https://$DOMAIN/pid-hc/
+- Local: http://localhost:8080/
+- Com Caddy: https://$DOMAIN/
 
 ## Derrubar
 
