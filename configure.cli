@@ -1,3 +1,5 @@
 embed-server --std-out=echo --server-config=standalone.xml
 /subsystem=undertow/application-security-domain=other:write-attribute(name=integrated-jaspi,value=false)
+/subsystem=undertow/server=default-server/http-listener=default:write-attribute(name=proxy-address-forwarding,value=true)
+data-source add --name=pidhcDS --jndi-name=java:/pidhcDS --driver-name=pid-hc.war_org.postgresql.Driver_42_7 --connection-url=jdbc:postgresql://${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME} --user-name=${env.DB_USER} --password=${env.DB_PASSWORD}
 stop-embedded-server

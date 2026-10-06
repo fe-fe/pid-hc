@@ -1,15 +1,14 @@
-version: "3.8"
-
 services:
 
   postgres:
     image: postgres:16
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 5s
@@ -18,14 +17,21 @@ services:
 
   wildfly:
     build: .
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
-    ports:
-      - "8080:8080"
     environment:
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
+      DB_HOST: postgres
+      DB_PORT: 5432
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - indices:/srv/indices
+
+volumes:
+  pgdata:
+  indices:

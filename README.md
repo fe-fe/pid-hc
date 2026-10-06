@@ -43,6 +43,16 @@ deployments, e monta por bind `faces-views`, `templates`, `components` e `resour
 Com isso XHTML e estáticos são refletidos sem rebuild (basta recarregar a página —
 `FACELETS_REFRESH_PERIOD` está em 0). Mudança em código Java continua exigindo rebuild.
 
+## Subir com Caddy (HTTPS)
+
+Para servidor sem proxy reverso próprio (ex.: VM na OCI). Requer `DOMAIN` no `.env` apontando para o IP da máquina.
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.caddy.yml up -d --build
+```
+
+Em servidor que já tem Nginx/Apache, use só o `docker-compose.yml` e aponte o proxy para `127.0.0.1:8080`.
+
 ## Acesso
 
 - App: http://localhost:8080/pid-hc/
