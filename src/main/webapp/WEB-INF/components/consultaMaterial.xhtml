@@ -71,13 +71,7 @@
                         <h:link outcome="/pages/historicoMateriais" styleClass="material-lookup__link">Abrir histórico de materiais <i class="bi bi-arrow-up-right" aria-hidden="true"></i></h:link>
                     </div>
                     <p data-field="noEvaluations" hidden="hidden">Este material ainda não possui avaliações registradas.</p>
-                    <div class="material-lookup__table-wrap" tabindex="0" role="region" aria-label="Avaliações por marca; role horizontalmente para ver todas as colunas">
-                        <table class="table align-middle mb-0">
-                            <caption class="visually-hidden">Marca, data, resultado e parecer de cada avaliação do material.</caption>
-                            <thead><tr><th scope="col">Marca</th><th scope="col">Data</th><th scope="col">Resultado</th><th scope="col">Parecer</th></tr></thead>
-                            <tbody data-field="evaluations"></tbody>
-                        </table>
-                    </div>
+                    <ui:include src="/WEB-INF/components/tabelas/consultaMaterial.xhtml" />
                 </section>
 
                 <section class="material-lookup__section" aria-label="Incidentes de tecnovigilância">

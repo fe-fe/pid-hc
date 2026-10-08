@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="jakarta.faces.facelets">
+            <div class="pid-table pid-table__responsive table-responsive" tabindex="0"
+                role="region" aria-label="Histórico de marcas de #{material.nome}">
+                <table class="pid-table__table pid-table__table--history table table-hover align-middle mb-0">
+                    <caption class="visually-hidden">Marcas avaliadas de #{material.nome}, da análise mais recente para a mais antiga.</caption>
+                    <thead class="pid-table__head">
+                        <tr>
+                            <th scope="col" class="material-history__column-brand">Marca analisada</th>
+                            <th scope="col" class="material-history__column-manufacturer">Fabricante</th>
+                            <th scope="col" class="material-history__column-date">Data da análise</th>
+                            <th scope="col" class="material-history__column-status">Status</th>
+                            <th scope="col">Parecer da análise</th>
+                            <th scope="col" class="material-history__column-actions text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{material.historicos}" var="historico">
+                            <tr>
+                                <th scope="row" class="material-history__table-brand">#{historico.marca}</th>
+                                <td>#{historico.fabricante}</td>
+                                <td class="text-nowrap"><time datetime="#{historico.dataIso}">#{historico.data}</time></td>
+                                <td>
+                                    <span class="badge rounded-pill material-history__status material-history__status--#{historico.aprovado ? 'approved' : 'rejected'} d-inline-flex align-items-center gap-1">
+                                        <span class="material-history__status-dot" aria-hidden="true"></span>
+                                        #{historico.aprovado ? 'Aprovado' : 'Reprovado'}
+                                    </span>
+                                </td>
+                                <td class="material-history__table-opinion">#{historico.parecer}</td>
+                                <td>
+                                    <div class="d-flex justify-content-end gap-2 text-nowrap">
+                                        <button class="btn btn-sm material-history__edit" type="button"
+                                            data-bs-toggle="modal" data-bs-target="#historyMaterialModal" data-mode="edit"
+                                            data-code="#{material.codigo}" data-name="#{material.nome}" data-location="#{material.local}"
+                                            data-brand="#{historico.marca}" data-manufacturer="#{historico.fabricante}"
+                                            data-date="#{historico.dataIso}" data-status="#{historico.aprovado ? 'aprovado' : 'reprovado'}"
+                                            data-opinion="#{historico.parecer}" aria-label="Editar histórico de #{historico.marca}">Editar</button>
+                                        <button class="btn btn-sm material-history__delete" type="button"
+                                            data-bs-toggle="modal" data-bs-target="#historyDeleteModal"
+                                            data-brand="#{historico.marca}" data-name="#{material.nome}"
+                                            aria-label="Excluir histórico de #{historico.marca}">Excluir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                    </tbody>
+                </table>
+            </div>
+</ui:composition>

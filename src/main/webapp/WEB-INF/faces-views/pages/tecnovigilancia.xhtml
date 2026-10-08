@@ -7,9 +7,6 @@
         Tecnovigilância - PID
     </ui:define>
 
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="pages/materiais.css" />
-    </ui:define>
 
     <ui:define name="pageTitle">Tecnovigilância</ui:define>
 
@@ -45,7 +42,7 @@
     </ui:define>
 
     <ui:define name="pageContent">
-        <ui:include src="/WEB-INF/components/tabelaTecnovigilancia.xhtml">
+        <ui:include src="/WEB-INF/components/tabelas/tecnovigilancia.xhtml">
             <ui:param name="bean" value="#{desvioBean}" />
         </ui:include>
     </ui:define>

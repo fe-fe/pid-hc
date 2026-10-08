@@ -693,10 +693,3 @@ p {
         background-color: #145c3e;
     }
 }
-
-/* table global style */
-
-.table__actions {
-    width: 2%;
-    white-space: nowrap;
-}

@@ -1,0 +1,70 @@
+/* Base compartilhada das tabelas, sobre os componentes do Bootstrap. */
+.pid-table {
+    min-width: 0;
+    border: 1px solid var(--pid-border);
+    border-radius: 0.625rem;
+    background-color: var(--pid-surface);
+}
+
+.pid-table__responsive {
+    overflow-y: hidden;
+    border-radius: inherit;
+}
+
+.pid-table__responsive:focus-visible {
+    outline: 2px solid var(--pid-link);
+    outline-offset: 3px;
+}
+
+.pid-table__table {
+    --bs-table-bg: var(--pid-surface);
+    --bs-table-color: var(--pid-text-secondary);
+    --bs-table-border-color: var(--pid-border);
+    --bs-table-hover-bg: var(--pid-hover);
+    --bs-table-hover-color: var(--pid-text);
+    width: 100%;
+    min-width: 760px;
+    font-size: 0.8125rem;
+}
+
+.pid-table__table > :not(caption) > * > * {
+    padding: 0.75rem 0.875rem;
+    overflow-wrap: anywhere;
+}
+
+.pid-table__head {
+    --bs-table-bg: var(--pid-surface-subtle);
+    --bs-table-color: var(--pid-muted);
+}
+
+.pid-table__head th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+.pid-table__table tbody tr:last-child > * {
+    border-bottom: 0;
+}
+
+.pid-table__toolbar,
+.pid-table__footer {
+    background-color: var(--pid-surface);
+    border-color: var(--pid-border);
+}
+
+.pid-table__actions {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.pid-table__description {
+    min-width: 260px;
+}
+
+/* O histórico reserva espaço para o parecer e os botões de cada marca. */
+.pid-table__table--history {
+    min-width: 960px;
+    table-layout: fixed;
+}

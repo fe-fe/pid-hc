@@ -27,65 +27,9 @@
     <ui:define name="pageContent">
         <h:messages id="mensagens" globalOnly="true" showDetail="true" styleClass="mb-3" />
 
-        <h:form id="formLista">
-            <section class="table-responsive">
-                <table class="table table-striped table-bordered table-hover align-middle">
-                    <thead class="table-dark">
-                    <tr>
-                        <th class="table__actions text-center">#</th>
-                        <th>Nome</th>
-                        <th>E-mail</th>
-                        <th>CPF</th>
-                        <th>Perfil</th>
-                        <th>Status</th>
-                        <th class="table__actions text-center">Ações</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <ui:repeat value="#{usuarioBean.usuarios}" var="usuario" varStatus="status">
-                        <tr>
-                            <td class="table__actions text-center">#{status.index + 1}</td>
-                            <td><h:outputText value="#{usuario.nome}" /></td>
-                            <td><h:outputText value="#{usuario.email}" /></td>
-                            <td><h:outputText value="#{empty usuario.cpf ? '-' : usuario.cpf}" /></td>
-                            <td><span class="badge text-bg-primary">#{usuario.perfil}</span></td>
-                            <td>
-                                <span class="badge #{usuario.inativo ? 'text-bg-secondary' : 'text-bg-success'}">
-                                    #{usuario.inativo ? 'Inativo' : 'Ativo'}
-                                </span>
-                            </td>
-                            <td class="table__actions">
-                                <div class="d-flex justify-content-center">
-                                    <h:commandLink styleClass="action__button action__button-warning"
-                                                   title="Editar usuário">
-                                        <f:setPropertyActionListener target="#{usuarioBean.usuarioSelecionado}"
-                                                                     value="#{usuario}" />
-                                        <f:ajax execute="@this" render=":formEditarUsuario"
-                                                onevent="abrirModalEdicao" />
-                                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
-                                    </h:commandLink>
-                                </div>
-                            </td>
-                        </tr>
-                    </ui:repeat>
-                    </tbody>
-                </table>
-            </section>
-
-            <!-- empty state -->
-            <h:panelGroup rendered="#{empty usuarioBean.usuarios}" layout="block"
-                          styleClass="alert alert-secondary">
-                Nenhum usuário cadastrado.
-            </h:panelGroup>
-
-            <!-- paginação -->
-            <ui:include src="/WEB-INF/components/paginacao.xhtml">
-                <ui:param name="bean" value="#{usuarioBean}" />
-                <ui:param name="desabilitarAnterior" value="#{usuarioBean.paginaAtual == 0}" />
-                <ui:param name="desabilitarProxima" value="#{usuarioBean.isUltimaPagina()}" />
-                <ui:param name="formAlvo" value=":formLista" />
-            </ui:include>
-        </h:form>
+        <ui:include src="/WEB-INF/components/tabelas/usuarios.xhtml">
+            <ui:param name="bean" value="#{usuarioBean}" />
+        </ui:include>
     </ui:define>
 
     <ui:define name="pageOverlays">

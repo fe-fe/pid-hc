@@ -28,7 +28,7 @@
 .material-lookup__examples { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; font-size: 12px; color: var(--pid-muted); }
 .material-lookup__examples button { border: 1px solid var(--pid-border); border-radius: 20px; padding: 6px 12px; font-size: 12px; color: var(--pid-link); background: var(--pid-surface-subtle); }
 .material-lookup__examples button:hover { background: var(--pid-hover); border-color: var(--pid-hover-border); }
-.material-lookup button:focus-visible, .material-lookup a:focus-visible, .material-lookup__table-wrap:focus-visible { outline: 2px solid var(--pid-link); outline-offset: 3px; }
+.material-lookup button:focus-visible, .material-lookup a:focus-visible { outline: 2px solid var(--pid-link); outline-offset: 3px; }
 .material-lookup__status { margin: 20px 0 12px; font-size: 13px; color: var(--pid-muted); }
 .material-lookup__empty { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 52px 24px; border: 1px dashed var(--pid-control-border); border-radius: 16px; }
 .material-lookup__empty > i { display: grid; place-items: center; width: 60px; height: 60px; margin-bottom: 4px; border-radius: 16px; font-size: 26px; color: var(--pid-accent-text); background: var(--pid-accent-soft); }
@@ -54,12 +54,6 @@
 .material-lookup__section-heading p { color: var(--pid-muted); font-size: 12px; line-height: 1.7; }
 .material-lookup__link { color: var(--pid-link); font-size: 12px; text-decoration: none; white-space: nowrap; }
 .material-lookup__link:hover { color: var(--pid-link-hover); text-decoration: underline; }
-.material-lookup__table-wrap { overflow-x: auto; border: 1px solid var(--pid-border); border-radius: 8px; }
-.material-lookup .table { --bs-table-bg: var(--pid-surface); --bs-table-color: var(--pid-text-secondary); --bs-table-border-color: var(--pid-border); min-width: 680px; font-size: 12px; }
-.material-lookup .table > :not(caption) > * > * { padding: 14px 16px; }
-.material-lookup .table thead { --bs-table-bg: var(--pid-surface-subtle); --bs-table-color: var(--pid-muted); }
-.material-lookup .table tbody tr:last-child > * { border-bottom: 0; }
-.material-lookup .table th { font-weight: 500; }
 .material-lookup__opinion { min-width: 260px; line-height: 1.8; }
 .material-lookup__badge { display: inline-block; padding: 5px 9px; border: 1px solid var(--pid-border); border-radius: 20px; font-size: 11px; white-space: nowrap; }
 .material-lookup__badge--approved { color: #166534; background: #dcfce7; border-color: #bbf7d0; }

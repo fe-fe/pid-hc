@@ -9,9 +9,6 @@
         Avaliações - PID
     </ui:define>
 
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="pages/materiais.css" />
-    </ui:define>
 
     <ui:define name="pageTitle">Avaliações</ui:define>
 
@@ -48,7 +45,7 @@
     </ui:define>
 
     <ui:define name="pageContent">
-        <ui:include src="/WEB-INF/components/tabelaAvaliacoes.xhtml">
+        <ui:include src="/WEB-INF/components/tabelas/avaliacoes.xhtml">
             <ui:param name="bean" value="#{avaliacaoBean}" />
         </ui:include>
     </ui:define>
