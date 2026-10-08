@@ -1,8 +1,15 @@
 package br.ufpr.pid.hc.enumeration;
 
+import lombok.Getter;
+
+@Getter
 public enum ResultadoTecnico {
-    PENDENTE,
-    APROVADO,
-    REPROVADO,
-    INCONCLUSIVO
+    APROVADO("Aprovado"),
+    REPROVADO("Reprovado");
+
+    private final String rotulo;
+
+    ResultadoTecnico(String rotulo) {
+        this.rotulo = rotulo;
+    }
 }

@@ -9,9 +9,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-public class Marca extends Auditavel {
+public class Fabricante extends Auditavel {
 
-    public Marca() {}
+    public Fabricante() {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -1,8 +1,8 @@
 package br.ufpr.pid.hc.service;
 
 import br.ufpr.pid.hc.dao.AbstractDao;
-import br.ufpr.pid.hc.dao.MarcaDao;
-import br.ufpr.pid.hc.entity.Marca;
+import br.ufpr.pid.hc.dao.FabricanteDao;
+import br.ufpr.pid.hc.entity.Fabricante;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.Stateless;
@@ -12,25 +12,25 @@ import java.util.List;
 import java.util.UUID;
 
 @Stateless
-public class MarcaService extends AbstractService<Marca, UUID> {
+public class FabricanteService extends AbstractService<Fabricante, UUID> {
     @Inject
-    private MarcaDao marcaDao;
+    private FabricanteDao fabricanteDao;
 
     @Override
-    protected AbstractDao<Marca, UUID> getDao() { return marcaDao; }
+    protected AbstractDao<Fabricante, UUID> getDao() { return fabricanteDao; }
 
     @PermitAll
     public List<String> listarNomes() {
-        return marcaDao.listarNomes();
+        return fabricanteDao.listarNomes();
     }
 
     @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
-    public Marca obterOuCriar(String nome) {
+    public Fabricante obterOuCriar(String nome) {
         String nomePadronizado = nome.trim().replaceAll("\\s+", " ").toUpperCase();
-        return marcaDao.buscarPorNome(nomePadronizado).orElseGet(() -> {
-            Marca novo = new Marca();
+        return fabricanteDao.buscarPorNome(nomePadronizado).orElseGet(() -> {
+            Fabricante novo = new Fabricante();
             novo.setNome(nomePadronizado);
-            return marcaDao.salvar(novo, null);
+            return fabricanteDao.salvar(novo, null);
         });
     }
 }

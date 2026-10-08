@@ -8,7 +8,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Entity(name = "anexo_avaliacao")
+@Entity
+@Table(name = "anexo_avaliacao")
 public class AnexoAvaliacao extends Auditavel {
 
     public AnexoAvaliacao() {}
