@@ -1,7 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="jakarta.faces.html"
     xmlns:ui="jakarta.faces.facelets"
-    template="/WEB-INF/templates/layout.xhtml">
+    template="/WEB-INF/templates/pagina.xhtml">
 
     <ui:define name="title">
         Fabricantes - PID
@@ -11,40 +11,38 @@
         <h:outputStylesheet library="css" name="pages/materiais.css" />
     </ui:define>
 
-    <ui:define name="content">
+    <ui:define name="pageTitle">Fabricantes</ui:define>
 
-        <header class="materials-page__header">
-            <h1>Fabricantes</h1>
-        </header>
+    <ui:define name="pageActions">
+        <p class="text-body-secondary small mb-0">Tabela de referência usada nas sugestões do cadastro de avaliação.</p>
 
-        <section class="materials-page__actions">
-            <p class="text-body-secondary small mb-0">Tabela de referência usada nas sugestões do cadastro de avaliação.</p>
-
-            <div class="action__buttons">
-                <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
-                    <ui:param name="filtroId" value="fabricantesFilters" />
-                </ui:include>
-                <button class="action__criar" type="button" data-bs-toggle="modal"
-                    data-bs-target="#modalIncluirCadastro">
-                    Incluir Fabricante
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M8 12h8" />
-                        <path d="M12 8v8" />
-                    </svg>
-                </button>
-            </div>
-        </section>
-
-        <div class="p-4">
-            <ui:include src="/WEB-INF/components/cadastroReferencia.xhtml">
-                <ui:param name="bean" value="#{fabricanteBean}" />
-                <ui:param name="titulo" value="Fabricantes" />
-                <ui:param name="rotulo" value="fabricante" />
-                <ui:param name="comCodigo" value="#{false}" />
+        <div class="page__action-buttons">
+            <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
+                <ui:param name="filtroId" value="fabricantesFilters" />
             </ui:include>
+            <button class="page__button page__button--primary" type="button" data-bs-toggle="modal"
+                data-bs-target="#modalIncluirCadastro">
+                Incluir Fabricante
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M8 12h8" />
+                    <path d="M12 8v8" />
+                </svg>
+            </button>
         </div>
+    </ui:define>
+
+    <ui:define name="pageContent">
+        <ui:include src="/WEB-INF/components/cadastroReferencia.xhtml">
+            <ui:param name="bean" value="#{fabricanteBean}" />
+            <ui:param name="titulo" value="Fabricantes" />
+            <ui:param name="rotulo" value="fabricante" />
+            <ui:param name="comCodigo" value="#{false}" />
+        </ui:include>
+    </ui:define>
+
+    <ui:define name="pageOverlays">
         <ui:include src="/WEB-INF/components/filtros/fabricantes.xhtml" />
     </ui:define>
 

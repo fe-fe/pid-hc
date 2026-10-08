@@ -2,46 +2,33 @@
                 xmlns:h="jakarta.faces.html"
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:f="jakarta.faces.core"
-                template="/WEB-INF/templates/layout.xhtml">
+                template="/WEB-INF/templates/pagina.xhtml">
 
     <ui:define name="title">Usuários - PID</ui:define>
 
-    <ui:define name="content">
+    <ui:define name="pageTitle">Usuários cadastrados</ui:define>
+
+    <ui:define name="pageSubtitle">
+        <span class="page__subtitle">Gerencie os dados e os perfis de acesso dos usuários</span>
+    </ui:define>
+
+    <ui:define name="pageActions">
+        <div class="page__action-buttons ms-auto">
+            <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
+                <ui:param name="filtroId" value="usuariosFilters" />
+            </ui:include>
+            <button type="button" class="page__button page__button--primary" data-bs-toggle="modal"
+                    data-bs-target="#modalCriarUsuario">
+                Novo usuário
+            </button>
+        </div>
+    </ui:define>
+
+    <ui:define name="pageContent">
         <h:messages id="mensagens" globalOnly="true" showDetail="true" styleClass="mb-3" />
 
         <h:form id="formLista">
-            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
-                <div class="d-flex flex-column">
-                    <h1>Usuários cadastrados</h1>
-                    <p>Gerencie os dados e os perfis de acesso dos usuários</p>
-                </div>
-
-                <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                        data-bs-target="#modalCriarUsuario">
-                    Novo usuário
-                </button>
-            </div>
-
-            <!-- ordenação -->
-            <div class="d-flex align-items-center gap-2 mt-3">
-                <h:outputLabel for="ordenacao" value="Ordenar por:" />
-                <h:selectOneMenu id="ordenacao" styleClass="form-select w-auto"
-                                 value="#{usuarioBean.ordenacaoAtual}">
-                    <f:selectItems value="#{usuarioBean.opcoesOrdenacao}" var="opcao"
-                                   itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
-                    <f:ajax render="@form" listener="#{usuarioBean.reordenar}" />
-                </h:selectOneMenu>
-
-                <div class="form-check ms-3">
-                    <h:selectBooleanCheckbox id="mostrarInativos" styleClass="form-check-input"
-                                             value="#{usuarioBean.mostrarInativos}">
-                        <f:ajax render="@form" listener="#{usuarioBean.alternarInativos}" />
-                    </h:selectBooleanCheckbox>
-                    <h:outputLabel for="mostrarInativos" value="Mostrar inativos" styleClass="form-check-label" />
-                </div>
-            </div>
-
-            <section class="table-responsive mt-3">
+            <section class="table-responsive">
                 <table class="table table-striped table-bordered table-hover align-middle">
                     <thead class="table-dark">
                     <tr>
@@ -99,7 +86,10 @@
                 <ui:param name="formAlvo" value=":formLista" />
             </ui:include>
         </h:form>
+    </ui:define>
 
+    <ui:define name="pageOverlays">
+        <ui:include src="/WEB-INF/components/filtros/usuarios.xhtml" />
         <!-- modal criar -->
         <aside class="modal fade" id="modalCriarUsuario" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">

@@ -21,12 +21,12 @@
                     <ui:insert name="campos" />
                 </form>
             </ui:insert>
-            <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
-                <ui:insert name="acoes">
+            <ui:insert name="acoes">
+                <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
                     <button class="btn btn-outline-secondary" type="reset" form="#{filtroId}Form">Limpar</button>
                     <button class="btn btn-primary" type="button" data-bs-dismiss="offcanvas">Aplicar filtros</button>
-                </ui:insert>
-            </div>
+                </div>
+            </ui:insert>
         </div>
     </aside>
 </ui:composition>

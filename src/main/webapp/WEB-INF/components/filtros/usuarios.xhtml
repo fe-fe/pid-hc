@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="jakarta.faces.core"
+    xmlns:h="jakarta.faces.html"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
+        <ui:param name="filtroId" value="usuariosFilters" />
+        <ui:param name="filtroDescricao" value="Refine os usuários exibidos" />
+
+        <ui:define name="formulario">
+            <h:form id="usuariosFiltersForm" styleClass="d-flex flex-column gap-3 flex-grow-1">
+                <div>
+                    <h:outputLabel for="ordenacao" value="Ordenar por" styleClass="form-label" />
+                    <h:selectOneMenu id="ordenacao" styleClass="form-select"
+                        value="#{usuarioBean.ordenacaoAtual}">
+                        <f:selectItems value="#{usuarioBean.opcoesOrdenacao}" var="opcao"
+                            itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
+                    </h:selectOneMenu>
+                </div>
+                <div class="form-check">
+                    <h:selectBooleanCheckbox id="mostrarInativos" styleClass="form-check-input"
+                        value="#{usuarioBean.mostrarInativos}" />
+                    <h:outputLabel for="mostrarInativos" value="Mostrar inativos" styleClass="form-check-label" />
+                </div>
+
+                <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
+                    <h:commandButton value="Limpar" styleClass="btn btn-outline-secondary"
+                        action="#{usuarioBean.limparFiltros}">
+                        <f:ajax execute="@this" render="@form :formLista" resetValues="true" />
+                    </h:commandButton>
+                    <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary"
+                        action="#{usuarioBean.reordenar}">
+                        <f:ajax execute="@form" render=":formLista" onevent="fecharFiltrosUsuarios" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </ui:define>
+        <!-- As ações ficam dentro do formulário JSF para submeter os campos por AJAX. -->
+        <ui:define name="acoes" />
+    </ui:decorate>
+
+    <h:outputScript target="body">
+        function fecharFiltrosUsuarios(data) {
+            if (data.status === "success") {
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById("usuariosFilters")).hide();
+            }
+        }
+    </h:outputScript>
+</ui:composition>

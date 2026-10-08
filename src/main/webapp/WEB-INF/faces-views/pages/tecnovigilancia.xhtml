@@ -1,7 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="jakarta.faces.html"
     xmlns:ui="jakarta.faces.facelets"
-    template="/WEB-INF/templates/layout.xhtml">
+    template="/WEB-INF/templates/pagina.xhtml">
 
     <ui:define name="title">
         Tecnovigilância - PID
@@ -11,48 +11,46 @@
         <h:outputStylesheet library="css" name="pages/materiais.css" />
     </ui:define>
 
-    <ui:define name="content">
+    <ui:define name="pageTitle">Tecnovigilância</ui:define>
 
-        <header class="materials-page__header">
-            <h1>Tecnovigilância</h1>
-        </header>
-
-        <section class="materials-page__actions">
-            <div class="action__areaInput">
-                <label class="materials-search">
-                    <span class="visually-hidden">Pesquisa livre</span>
-                    <svg class="materials-search__icon" width="16" height="16" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.3-4.3" />
-                    </svg>
-                    <input class="materials-search__input" type="search" name="tecnovigilanciaSearch"
-                        placeholder="Pesquisar por código ou produto" autocomplete="off" />
-                </label>
-            </div>
-
-            <div class="action__buttons">
-                <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
-                    <ui:param name="filtroId" value="tecnovigilanciaFilters" />
-                </ui:include>
-                <h:link outcome="/pages/importarPlanilha" styleClass="action__criar text-decoration-none">
-                    Importar Planilha
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                        <path d="m17 8-5-5-5 5" />
-                        <path d="M12 3v12" />
-                    </svg>
-                </h:link>
-            </div>
-        </section>
-
-        <div class="p-4">
-            <ui:include src="/WEB-INF/components/tabelaTecnovigilancia.xhtml">
-                <ui:param name="bean" value="#{desvioBean}" />
-            </ui:include>
+    <ui:define name="pageActions">
+        <div class="page__search-area">
+            <label class="page__search">
+                <span class="visually-hidden">Pesquisa livre</span>
+                <svg class="page__search-icon" width="16" height="16" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.3-4.3" />
+                </svg>
+                <input class="page__search-input" type="search" name="tecnovigilanciaSearch"
+                    placeholder="Pesquisar por código ou produto" autocomplete="off" />
+            </label>
         </div>
+
+        <div class="page__action-buttons">
+            <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
+                <ui:param name="filtroId" value="tecnovigilanciaFilters" />
+            </ui:include>
+            <h:link outcome="/pages/importarPlanilha" styleClass="page__button page__button--primary text-decoration-none">
+                Importar Planilha
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <path d="m17 8-5-5-5 5" />
+                    <path d="M12 3v12" />
+                </svg>
+            </h:link>
+        </div>
+    </ui:define>
+
+    <ui:define name="pageContent">
+        <ui:include src="/WEB-INF/components/tabelaTecnovigilancia.xhtml">
+            <ui:param name="bean" value="#{desvioBean}" />
+        </ui:include>
+    </ui:define>
+
+    <ui:define name="pageOverlays">
         <ui:include src="/WEB-INF/components/filtros/tecnovigilancia.xhtml" />
     </ui:define>
 

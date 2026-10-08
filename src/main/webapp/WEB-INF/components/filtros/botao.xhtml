@@ -1,6 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="jakarta.faces.facelets">
-    <button class="#{empty filtroBotaoClasse ? 'action__filtrar' : filtroBotaoClasse}" type="button"
+    <button class="#{empty filtroBotaoClasse ? 'page__button page__button--secondary' : filtroBotaoClasse}" type="button"
         data-bs-toggle="offcanvas" data-bs-target="##{filtroId}" aria-controls="#{filtroId}">
         Filtrar
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
