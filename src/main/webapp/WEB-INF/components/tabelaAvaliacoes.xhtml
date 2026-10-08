@@ -22,7 +22,7 @@
             <div class="table-responsive">
                 <table class="materials-table__table table table-hover align-middle mb-0">
                     <caption class="visually-hidden">
-                        Avaliações por material, fabricante e marca, com data, resultado e registro ANVISA.
+                        Avaliações por material, fabricante e marca, com data, resultado, registro ANVISA, descrição e parecer.
                     </caption>
                     <thead class="materials-table__head">
                         <tr>
@@ -33,6 +33,8 @@
                             <th scope="col">Data</th>
                             <th scope="col">Resultado</th>
                             <th scope="col">Registro ANVISA</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Parecer</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,12 +65,18 @@
                                 <td class="text-nowrap">
                                     <h:outputText value="#{empty avaliacao.registroAnvisa ? '—' : avaliacao.registroAnvisa}" />
                                 </td>
+                                <td>
+                                    <span class="materials-table__texto" title="#{avaliacao.descricao}">#{empty avaliacao.descricao ? '—' : avaliacao.descricao}</span>
+                                </td>
+                                <td>
+                                    <span class="materials-table__texto" title="#{avaliacao.parecer}">#{empty avaliacao.parecer ? '—' : avaliacao.parecer}</span>
+                                </td>
                             </tr>
                         </ui:repeat>
 
                         <ui:fragment rendered="#{empty bean.avaliacoes}">
                             <tr>
-                                <td class="text-center text-body-secondary py-5" colspan="7">
+                                <td class="text-center text-body-secondary py-5" colspan="9">
                                     Nenhuma avaliação cadastrada.
                                 </td>
                             </tr>
