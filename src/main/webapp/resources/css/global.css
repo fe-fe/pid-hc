@@ -79,6 +79,10 @@
     box-sizing: border-box;
 }
 
+@view-transition {
+    navigation: auto;
+}
+
 html {
     background-color: var(--pid-background);
 }
@@ -100,10 +104,12 @@ h1 {
     font-size: 24px;
     font-weight: 600;
     color: var(--pid-heading);
+    margin-bottom: 0;
 }
 
 h2 {
     font-family: "Outfit", sans-serif;
+    margin-bottom: 0;
 }
 
 p {
@@ -194,11 +200,26 @@ p {
     }
 
     .link {
+        --bs-btn-color: var(--pid-text-secondary);
+        --bs-btn-bg: transparent;
+        --bs-btn-border-color: transparent;
+        --bs-btn-hover-color: var(--pid-link);
+        --bs-btn-hover-bg: var(--pid-hover);
+        --bs-btn-hover-border-color: transparent;
+        --bs-btn-active-color: var(--pid-link);
+        --bs-btn-active-bg: var(--pid-hover);
+        --bs-btn-active-border-color: transparent;
         display: flex;
         align-items: center;
         gap: 8px;
-        border: 1px solid var(--pid-border);
+        border: 1px solid var(--bs-btn-border-color);
         font-family: "Outfit", sans-serif;
+
+        &[aria-current="page"] {
+            color: var(--pid-accent-text);
+            background-color: var(--pid-accent-soft);
+            border-color: var(--pid-hover-border);
+        }
     }
 }
 
@@ -222,6 +243,11 @@ p {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     @media (min-width: 992px) {
         height: 100dvh;
@@ -303,18 +329,6 @@ p {
 .sidebar__theme-switch:focus-visible {
     outline: 2px solid var(--pid-link);
     outline-offset: 3px;
-}
-
-:root[data-bs-theme="dark"] .sidebar .link {
-    --bs-btn-color: var(--pid-text);
-    --bs-btn-bg: var(--pid-surface);
-    --bs-btn-border-color: var(--pid-border);
-    --bs-btn-hover-color: var(--pid-link);
-    --bs-btn-hover-bg: var(--pid-hover);
-    --bs-btn-hover-border-color: var(--pid-hover-border);
-    --bs-btn-active-color: var(--pid-link);
-    --bs-btn-active-bg: var(--pid-hover);
-    --bs-btn-active-border-color: var(--pid-hover-border);
 }
 
 .sidebar__user {

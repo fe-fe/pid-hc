@@ -1,6 +1,7 @@
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="jakarta.faces.html"
+    xmlns:pt="jakarta.faces.passthrough"
     xmlns:ui="jakarta.faces.facelets">
 
     <aside class="sidebar offcanvas-lg offcanvas-start"
@@ -34,31 +35,26 @@
                     
                     <h:link outcome="/pages/admin/dashboard"
                             styleClass="btn btn-light link"
-                            aria-current="page">
+                            pt:aria-current="#{view.viewId.endsWith('/pages/admin/dashboard.xhtml') ? 'page' : null}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
                         Dashboard
                     </h:link>
 
-                    <h:link outcome="/pages/admin/users"
+                    <h:link outcome="/pages/avaliacoes"
                             styleClass="btn btn-light link"
-                            aria-current="page">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round"><path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/></svg>
-                        Usuários
-                    </h:link>
-                    <h:link outcome="/pages/materiais"
-                            styleClass="btn btn-light link"
-                            aria-current="page">
+                            pt:aria-current="#{view.viewId.endsWith('/pages/avaliacoes.xhtml') ? 'page' : null}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-boxes preview-icon"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85"/><path d="m7 16.5 5-3"/><path d="M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/><path d="m17 16.5-5-3"/><path d="m17 16.5 4.74-2.85"/><path d="M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"/><path d="M12 8 7.26 5.15"/><path d="m12 8 4.74-2.85"/><path d="M12 13.5V8"/></svg>
-                        Materiais
+                        Avaliações
                     </h:link>
                     <h:link outcome="/pages/tecnovigilancia"
-                            styleClass="btn btn-light link">
+                            styleClass="btn btn-light link"
+                            pt:aria-current="#{view.viewId.endsWith('/pages/tecnovigilancia.xhtml') ? 'page' : null}">
                         <i class="bi bi-shield-check" aria-hidden="true"></i>
                         Tecnovigilância
                     </h:link>
                     <h:link outcome="/pages/importarPlanilha"
                             styleClass="btn btn-light link"
-                            aria-current="page">
+                            pt:aria-current="#{view.viewId.endsWith('/pages/importarPlanilha.xhtml') ? 'page' : null}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folders preview-icon"><path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z"/><path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1"/></svg>
                         Importar Tecnovigilância
                     </h:link>
@@ -67,37 +63,47 @@
                 <ui:fragment rendered="#{sessao.contemPerfil('ANALISTA', 'AVALIADOR', 'CONSULTOR')}">
                     <h:link outcome="/pages/analista/dashboard"
                             styleClass="btn btn-light link"
-                            aria-current="page">
+                            pt:aria-current="#{view.viewId.endsWith('/pages/analista/dashboard.xhtml') ? 'page' : null}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
                         Dashboard
                     </h:link>
                 </ui:fragment>
 
                 <ui:fragment rendered="#{sessao.autenticado}">
-                    <h:link outcome="/pages/historicoMateriais" styleClass="btn btn-light link">
+                    <h:link outcome="/pages/historicoMateriais" styleClass="btn btn-light link"
+                            pt:aria-current="#{view.viewId.endsWith('/pages/historicoMateriais.xhtml') ? 'page' : null}">
                         <i class="bi bi-clock-history" aria-hidden="true"></i>
                         Histórico de materiais
                     </h:link>
 
-                    <button class="btn btn-light link w-100 text-start #{request.requestURI.contains('/pages/controle/') ? '' : 'collapsed'}"
-                            type="button" data-bs-toggle="collapse" data-bs-target="#sidebarControle"
-                            aria-expanded="#{request.requestURI.contains('/pages/controle/')}" aria-controls="sidebarControle">
+                    <button class="btn btn-light link w-100 text-start #{request.requestURI.contains('/pages/controle/') or request.requestURI.contains('/pages/admin/users') ? '' : 'collapsed'}"
+                            type="button" data-bs-toggle="collapse" data-bs-target="#sidebarGestao"
+                            aria-expanded="#{request.requestURI.contains('/pages/controle/') or request.requestURI.contains('/pages/admin/users')}" aria-controls="sidebarGestao">
                         <i class="bi bi-database" aria-hidden="true"></i>
-                        Controle
+                        Gestão
                         <i class="bi bi-chevron-down ms-auto" aria-hidden="true"></i>
                     </button>
 
-                    <div class="collapse #{request.requestURI.contains('/pages/controle/') ? 'show' : ''}" id="sidebarControle">
+                    <div class="collapse #{request.requestURI.contains('/pages/controle/') or request.requestURI.contains('/pages/admin/users') ? 'show' : ''}" id="sidebarGestao">
                         <div class="d-flex flex-column gap-1 ps-3">
-                            <h:link outcome="/pages/controle/materiais" styleClass="btn btn-light link">
+                            <h:link outcome="/pages/admin/users" styleClass="btn btn-light link"
+                                    pt:aria-current="#{view.viewId.endsWith('/pages/admin/users.xhtml') ? 'page' : null}"
+                                    rendered="#{sessao.contemPerfil('ADMINISTRADOR')}">
+                                <i class="bi bi-people" aria-hidden="true"></i>
+                                Usuários
+                            </h:link>
+                            <h:link outcome="/pages/controle/materiais" styleClass="btn btn-light link"
+                                    pt:aria-current="#{view.viewId.endsWith('/pages/controle/materiais.xhtml') ? 'page' : null}">
                                 <i class="bi bi-box-seam" aria-hidden="true"></i>
                                 Materiais
                             </h:link>
-                            <h:link outcome="/pages/controle/fabricantes" styleClass="btn btn-light link">
+                            <h:link outcome="/pages/controle/fabricantes" styleClass="btn btn-light link"
+                                    pt:aria-current="#{view.viewId.endsWith('/pages/controle/fabricantes.xhtml') ? 'page' : null}">
                                 <i class="bi bi-building" aria-hidden="true"></i>
                                 Fabricantes
                             </h:link>
-                            <h:link outcome="/pages/controle/marcas" styleClass="btn btn-light link">
+                            <h:link outcome="/pages/controle/marcas" styleClass="btn btn-light link"
+                                    pt:aria-current="#{view.viewId.endsWith('/pages/controle/marcas.xhtml') ? 'page' : null}">
                                 <i class="bi bi-tag" aria-hidden="true"></i>
                                 Marcas
                             </h:link>
