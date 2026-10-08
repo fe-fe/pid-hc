@@ -50,16 +50,6 @@
                         <path d="M8 12H3" />
                     </svg>
                 </button>
-                <button class="action__filtrar" type="button" data-bs-toggle="modal"
-                    data-bs-target="#modalCriarMaterial">
-                    Cadastrar Material
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M8 12h8" />
-                        <path d="M12 8v8" />
-                    </svg>
-                </button>
                 <button class="action__criar" type="button" data-bs-toggle="modal"
                     data-bs-target="#modalAvaliacao">
                     Criar Avaliação
@@ -74,49 +64,10 @@
         </section>
 
         <div class="p-4">
-            <ui:include src="/WEB-INF/components/tabelaMateriais.xhtml">
-                <ui:param name="bean" value="#{materialBean}" />
+            <ui:include src="/WEB-INF/components/tabelaAvaliacoes.xhtml">
+                <ui:param name="bean" value="#{avaliacaoBean}" />
             </ui:include>
         </div>
-
-        <aside class="modal fade" id="modalCriarMaterial" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5">Cadastrar Material</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                    </div>
-                    <h:form id="formCriarMaterial">
-                        <div class="d-flex mt-2 mb-2">
-                            <div class="d-flex flex-column p-2 mt-2 mb-2">
-                                <h:outputLabel for="codigo" value="Código do material" />
-                                <h:inputText styleClass="input" id="codigo" value="#{materialBean.material.codigo}"
-                                             required="true" requiredMessage="Informe o código" />
-                                <h:message for="codigo" styleClass="text-danger small" />
-                            </div>
-                            <div class="d-flex flex-column p-2 mt-2 mb-2">
-                                <h:outputLabel for="nome" value="Nome" />
-                                <h:inputText styleClass="input" id="nome" value="#{materialBean.material.nome}"
-                                             required="true" requiredMessage="Informe o nome" />
-                                <h:message for="nome" styleClass="text-danger small" />
-                            </div>
-                        </div>
-                        <div class="form-check mx-2 my-3">
-                            <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input" value="#{materialBean.material.ativo}" />
-                            <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-                            <h:commandButton value="Cadastrar" styleClass="btn btn-primary" action="#{materialBean.cadastrar}">
-                                <f:ajax execute="@form" render="@form :formAvaliacao :formTabelaMateriais"
-                                        onevent="fecharModalCriarMaterialSeSucesso" />
-                            </h:commandButton>
-                        </div>
-                    </h:form>
-                </div>
-            </div>
-        </aside>
 
         <aside class="modal fade" id="modalAvaliacao" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -126,26 +77,43 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <h:form id="formAvaliacao">
-                        <div class="d-flex flex-column p-2 mt-2 mb-2">
-                            <h:outputLabel for="material" value="Material" />
-                            <h:selectOneMenu id="material" value="#{materialBean.materialAvaliacaoId}" styleClass="form-select"
-                                             required="true" requiredMessage="Selecione o material">
-                                <f:selectItem itemLabel="Selecione um Material" itemValue="#{null}" noSelectionOption="true" />
-                                <f:selectItems value="#{materialBean.materiaisAvaliacao}"
-                                               var="materialAvaliacao"
-                                               itemValue="#{materialAvaliacao.id}"
-                                               itemLabel="#{materialAvaliacao.codigo} - #{materialAvaliacao.nome}" />
-                            </h:selectOneMenu>
-                            <h:message for="material" styleClass="text-danger small" />
+                        <h:messages globalOnly="true" styleClass="text-danger small list-unstyled px-2 pt-2 mb-0" />
+                        <div class="d-flex mt-2 mb-2">
+                            <div class="d-flex flex-column p-2 mt-2 mb-2">
+                                <h:outputLabel for="codigoMaterial" value="Código do material" />
+                                <h:inputText styleClass="input" id="codigoMaterial" value="#{avaliacaoBean.codigoMaterial}"
+                                             pt:list="listaMateriais" pt:autocomplete="off"
+                                             required="true" requiredMessage="Informe o código do material">
+                                    <f:ajax event="change" execute="@this" render="grupoNomeMaterial"
+                                            listener="#{avaliacaoBean.buscarMaterial}" />
+                                </h:inputText>
+                                <datalist id="listaMateriais">
+                                    <ui:repeat value="#{avaliacaoBean.materiais}" var="materialSugerido">
+                                        <option value="#{materialSugerido.codigo}" label="#{materialSugerido.nome}" />
+                                    </ui:repeat>
+                                </datalist>
+                                <h:message for="codigoMaterial" styleClass="text-danger small" />
+                            </div>
+                            <h:panelGroup id="grupoNomeMaterial" layout="block" styleClass="d-flex flex-column flex-grow-1 p-2 mt-2 mb-2">
+                                <h:outputLabel for="nomeMaterial" value="Nome do material" />
+                                <h:inputText styleClass="input" id="nomeMaterial" value="#{avaliacaoBean.nomeMaterial}"
+                                             readonly="#{avaliacaoBean.materialExistente}"
+                                             required="#{not avaliacaoBean.materialExistente}"
+                                             requiredMessage="Material novo: informe o nome" />
+                                <h:outputText rendered="#{not empty avaliacaoBean.codigoMaterial and not avaliacaoBean.materialExistente}"
+                                              value="Código não cadastrado: o material será criado ao salvar."
+                                              styleClass="text-body-secondary small" />
+                                <h:message for="nomeMaterial" styleClass="text-danger small" />
+                            </h:panelGroup>
                         </div>
                         <div class="d-flex mt-2 mb-2">
                             <div class="d-flex flex-column p-2 mt-2 mb-2">
                                 <h:outputLabel for="fabricante" value="Fabricante" />
-                                <h:inputText styleClass="input" id="fabricante" value="#{materialBean.fabricanteAvaliacao}"
+                                <h:inputText styleClass="input" id="fabricante" value="#{avaliacaoBean.fabricante}"
                                              pt:list="listaFabricantes" pt:autocomplete="off"
                                              required="true" requiredMessage="Informe o fabricante" />
                                 <datalist id="listaFabricantes">
-                                    <ui:repeat value="#{materialBean.fabricantes}" var="nomeFabricante">
+                                    <ui:repeat value="#{avaliacaoBean.fabricantes}" var="nomeFabricante">
                                         <option value="#{nomeFabricante}" />
                                     </ui:repeat>
                                 </datalist>
@@ -153,10 +121,10 @@
                             </div>
                             <div class="d-flex flex-column p-2 mt-2 mb-2">
                                 <h:outputLabel for="marca" value="Marca (opcional)" />
-                                <h:inputText styleClass="input" id="marca" value="#{materialBean.marcaAvaliacao}"
+                                <h:inputText styleClass="input" id="marca" value="#{avaliacaoBean.marca}"
                                              pt:list="listaMarcas" pt:autocomplete="off" />
                                 <datalist id="listaMarcas">
-                                    <ui:repeat value="#{materialBean.marcas}" var="nomeMarca">
+                                    <ui:repeat value="#{avaliacaoBean.marcas}" var="nomeMarca">
                                         <option value="#{nomeMarca}" />
                                     </ui:repeat>
                                 </datalist>
@@ -164,12 +132,12 @@
                         </div>
                         <div class="d-flex flex-column p-2 mt-2 mb-2">
                             <h:outputLabel for="registroAnvisa" value="Registro ANVISA" />
-                            <h:inputText styleClass="input" id="registroAnvisa" value="#{materialBean.avaliacao.registroAnvisa}" />
+                            <h:inputText styleClass="input" id="registroAnvisa" value="#{avaliacaoBean.avaliacao.registroAnvisa}" />
                         </div>
                         <div class="d-flex mt-2 mb-2">
                             <div class="d-flex flex-column p-2 mt-2 mb-2">
                                 <h:outputLabel for="data" value="Data" />
-                                <h:inputText styleClass="input" id="data" pt:type="date" value="#{materialBean.avaliacao.data}"
+                                <h:inputText styleClass="input" id="data" pt:type="date" value="#{avaliacaoBean.avaliacao.data}"
                                              required="true" requiredMessage="Informe a data">
                                     <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
                                 </h:inputText>
@@ -177,9 +145,9 @@
                             </div>
                             <div class="d-flex flex-column p-2 mt-2 mb-2">
                                 <h:outputLabel for="resultado" value="Resultado" />
-                                <h:selectOneMenu id="resultado" value="#{materialBean.avaliacao.resultado}" styleClass="form-select"
+                                <h:selectOneMenu id="resultado" value="#{avaliacaoBean.avaliacao.resultado}" styleClass="form-select"
                                                  required="true" requiredMessage="Selecione o resultado">
-                                    <f:selectItems value="#{materialBean.resultados}" var="resultado"
+                                    <f:selectItems value="#{avaliacaoBean.resultados}" var="resultado"
                                                    itemValue="#{resultado}" itemLabel="#{resultado.rotulo}" />
                                 </h:selectOneMenu>
                                 <h:message for="resultado" styleClass="text-danger small" />
@@ -187,21 +155,21 @@
                         </div>
                         <div class="d-flex flex-column p-2 mt-2 mb-2">
                             <h:outputLabel for="local" value="Local" />
-                            <h:inputText styleClass="input" id="local" value="#{materialBean.avaliacao.local}" />
+                            <h:inputText styleClass="input" id="local" value="#{avaliacaoBean.avaliacao.local}" />
                         </div>
                         <div class="d-flex flex-column p-2 mt-2 mb-2">
                             <h:outputLabel for="descricao" value="Descrição" />
-                            <h:inputTextarea styleClass="input" id="descricao" rows="3" value="#{materialBean.avaliacao.descricao}" />
+                            <h:inputTextarea styleClass="input" id="descricao" rows="3" value="#{avaliacaoBean.avaliacao.descricao}" />
                         </div>
                         <div class="d-flex flex-column p-2 mt-2 mb-2">
                             <h:outputLabel for="parecer" value="Parecer" />
-                            <h:inputTextarea styleClass="input" id="parecer" rows="4" value="#{materialBean.avaliacao.parecer}" />
+                            <h:inputTextarea styleClass="input" id="parecer" rows="4" value="#{avaliacaoBean.avaliacao.parecer}" />
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-                            <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{materialBean.avaliar}">
-                                <f:ajax execute="@form" render="@form :formTabelaMateriais"
+                            <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{avaliacaoBean.salvar}">
+                                <f:ajax execute="@form" render="@form :formTabelaAvaliacoes"
                                         onevent="fecharModalAvaliacaoSeSucesso" />
                             </h:commandButton>
                         </div>
@@ -219,7 +187,6 @@
             if (data.status !== "success" || !formSemErros(formId)) return;
             bootstrap.Modal.getOrCreateInstance(document.getElementById(modalId)).hide();
             }
-            function fecharModalCriarMaterialSeSucesso(data) { fecharModalSeValido(data, "modalCriarMaterial", "formCriarMaterial"); }
             function fecharModalAvaliacaoSeSucesso(data) { fecharModalSeValido(data, "modalAvaliacao", "formAvaliacao"); }
         </h:outputScript>
     </ui:define>

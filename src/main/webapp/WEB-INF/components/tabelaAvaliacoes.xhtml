@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="jakarta.faces.core"
+    xmlns:h="jakarta.faces.html"
+    xmlns:ui="jakarta.faces.facelets">
+
+    <section class="materials-table card border shadow-sm overflow-hidden" aria-labelledby="avaliacoes-table-title">
+        <h2 id="avaliacoes-table-title" class="visually-hidden">Tabela de avaliações</h2>
+
+        <h:form id="formTabelaAvaliacoes">
+            <div class="d-flex flex-wrap align-items-center gap-3 px-3 py-2 border-bottom bg-body">
+                <div class="d-flex align-items-center gap-2">
+                    <h:outputLabel for="ordenacao" value="Ordenar por:" styleClass="small text-body-secondary mb-0" />
+                    <h:selectOneMenu id="ordenacao" styleClass="form-select form-select-sm w-auto"
+                                     value="#{bean.ordenacaoAtual}">
+                        <f:selectItems value="#{bean.opcoesOrdenacao}" var="opcao"
+                                       itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
+                        <f:ajax render="@form" listener="#{bean.reordenar}" />
+                    </h:selectOneMenu>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="materials-table__table table table-hover align-middle mb-0">
+                    <caption class="visually-hidden">
+                        Avaliações por material, fabricante e marca, com data, resultado e registro ANVISA.
+                    </caption>
+                    <thead class="materials-table__head">
+                        <tr>
+                            <th scope="col">Código</th>
+                            <th scope="col">Material</th>
+                            <th scope="col">Fabricante</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Resultado</th>
+                            <th scope="col">Registro ANVISA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{bean.avaliacoes}" var="avaliacao">
+                            <tr>
+                                <td class="fw-semibold text-body text-nowrap">
+                                    <h:outputText value="#{avaliacao.material.codigo}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{avaliacao.material.nome}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{avaliacao.fabricante.nome}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{empty avaliacao.marca ? '—' : avaliacao.marca.nome}" />
+                                </td>
+                                <td class="text-nowrap">
+                                    <h:outputText value="#{avaliacao.data}">
+                                        <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </td>
+                                <td>
+                                    <span class="badge rounded-pill #{avaliacao.resultado == 'APROVADO' ? 'text-bg-success' : 'text-bg-danger'}">
+                                        #{avaliacao.resultado.rotulo}
+                                    </span>
+                                </td>
+                                <td class="text-nowrap">
+                                    <h:outputText value="#{empty avaliacao.registroAnvisa ? '—' : avaliacao.registroAnvisa}" />
+                                </td>
+                            </tr>
+                        </ui:repeat>
+
+                        <ui:fragment rendered="#{empty bean.avaliacoes}">
+                            <tr>
+                                <td class="text-center text-body-secondary py-5" colspan="7">
+                                    Nenhuma avaliação cadastrada.
+                                </td>
+                            </tr>
+                        </ui:fragment>
+                    </tbody>
+                </table>
+            </div>
+
+            <footer class="row align-items-center gx-2 gy-0 m-0 px-3 py-2 border-top bg-body">
+                <div class="col-12 col-sm-4 text-center text-sm-start">
+                    <small class="text-body-secondary">
+                        #{bean.totalRegistros}
+                        #{bean.totalRegistros == 1 ? 'avaliação encontrada' : 'avaliações encontradas'}
+                    </small>
+                </div>
+
+                <nav class="col-12 col-sm-4 d-flex justify-content-center"
+                    aria-label="Paginação da tabela de avaliações">
+                    <div class="btn-group btn-group-sm">
+                        <h:commandButton styleClass="btn btn-outline-secondary" value="&#8249;"
+                            action="#{bean.paginaAnterior}"
+                            disabled="#{bean.paginaAtual == 0}"
+                            title="Página anterior">
+                            <f:ajax render="@form" />
+                        </h:commandButton>
+
+                        <span class="btn btn-primary disabled" aria-current="page">
+                            #{bean.paginaAtual + 1}
+                        </span>
+
+                        <h:commandButton styleClass="btn btn-outline-secondary" value="&#8250;"
+                            action="#{bean.proximaPagina}"
+                            disabled="#{bean.ultimaPagina}"
+                            title="Próxima página">
+                            <f:ajax render="@form" />
+                        </h:commandButton>
+                    </div>
+                </nav>
+
+                <div class="d-none d-sm-block col-sm-4" aria-hidden="true"></div>
+            </footer>
+        </h:form>
+    </section>
+</ui:composition>

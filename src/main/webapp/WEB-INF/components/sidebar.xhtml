@@ -80,6 +80,31 @@
                         <i class="bi bi-clock-history" aria-hidden="true"></i>
                         Histórico de materiais
                     </h:link>
+
+                    <button class="btn btn-light link w-100 text-start #{request.requestURI.contains('/pages/controle/') ? '' : 'collapsed'}"
+                            type="button" data-bs-toggle="collapse" data-bs-target="#sidebarControle"
+                            aria-expanded="#{request.requestURI.contains('/pages/controle/')}" aria-controls="sidebarControle">
+                        <i class="bi bi-database" aria-hidden="true"></i>
+                        Controle
+                        <i class="bi bi-chevron-down ms-auto" aria-hidden="true"></i>
+                    </button>
+
+                    <div class="collapse #{request.requestURI.contains('/pages/controle/') ? 'show' : ''}" id="sidebarControle">
+                        <div class="d-flex flex-column gap-1 ps-3">
+                            <h:link outcome="/pages/controle/materiais" styleClass="btn btn-light link">
+                                <i class="bi bi-box-seam" aria-hidden="true"></i>
+                                Materiais
+                            </h:link>
+                            <h:link outcome="/pages/controle/fabricantes" styleClass="btn btn-light link">
+                                <i class="bi bi-building" aria-hidden="true"></i>
+                                Fabricantes
+                            </h:link>
+                            <h:link outcome="/pages/controle/marcas" styleClass="btn btn-light link">
+                                <i class="bi bi-tag" aria-hidden="true"></i>
+                                Marcas
+                            </h:link>
+                        </div>
+                    </div>
                 </ui:fragment>
             </nav>
 

@@ -2,6 +2,7 @@ package br.ufpr.pid.hc.dao;
 
 import br.ufpr.pid.hc.entity.Avaliacao;
 import br.ufpr.pid.hc.entity.Material;
+import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import br.ufpr.pid.hc.enumeration.ResultadoTecnico;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.TypedQuery;
@@ -13,6 +14,18 @@ import java.util.UUID;
 public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
 
     public AvaliacaoDao() { super(Avaliacao.class); }
+
+    @Override
+    public List<Avaliacao> buscar(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao, boolean incluirInativos) {
+        return entityManager.createQuery(
+                        "SELECT a FROM Avaliacao a JOIN a.material m JOIN a.fabricante f LEFT JOIN a.marca ma " +
+                                filtroAtivo("a", incluirInativos) +
+                                "ORDER BY " + campoOrdenacao.getCampoBanco(),
+                        Avaliacao.class)
+                .setFirstResult(pagina * tamanhoPagina)
+                .setMaxResults(tamanhoPagina)
+                .getResultList();
+    }
 
     public List<Material> buscarMateriaisAvaliados(int pagina, int tamanhoPagina, String termo,
                                                    String fabricante, ResultadoTecnico resultado) {
@@ -44,7 +57,7 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
         }
 
         TypedQuery<Avaliacao> query = entityManager.createQuery(
-                "SELECT a FROM Avaliacao a JOIN FETCH a.material m JOIN FETCH a.fabricante f LEFT JOIN FETCH a.marca ma " +
+                "SELECT a FROM Avaliacao a JOIN a.material m JOIN a.fabricante f LEFT JOIN a.marca ma " +
                         filtros(termo, fabricante, resultado) +
                         "AND m IN :materiais " +
                         "ORDER BY m.codigo, a.data DESC",

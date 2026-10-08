@@ -17,6 +17,9 @@ public class Material extends Auditavel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false, unique = true)
     private String codigo;
+
+    @Column(nullable = false)
     private String nome;
 }

@@ -15,6 +15,9 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
     private AvaliacaoDao avaliacaoDao;
 
     @Inject
+    private MaterialService materialService;
+
+    @Inject
     private FabricanteService fabricanteService;
 
     @Inject
@@ -24,7 +27,9 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
     protected AbstractDao<Avaliacao, UUID> getDao() { return avaliacaoDao; }
 
     @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
-    public Avaliacao registrar(Avaliacao avaliacao, String fabricante, String marca) {
+    public Avaliacao registrar(Avaliacao avaliacao, String codigoMaterial, String nomeMaterial,
+                               String fabricante, String marca) {
+        avaliacao.setMaterial(materialService.obterOuCriar(codigoMaterial, nomeMaterial));
         avaliacao.setFabricante(fabricanteService.obterOuCriar(fabricante));
         avaliacao.setMarca(marca == null || marca.isBlank() ? null : marcaService.obterOuCriar(marca));
         return salvar(avaliacao);
