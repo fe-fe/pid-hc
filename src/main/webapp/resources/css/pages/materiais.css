@@ -127,6 +127,17 @@
     min-width: 260px;
 }
 
+.materials-table__texto {
+    display: -webkit-box;
+    min-width: 240px;
+    max-width: 360px;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    white-space: pre-line;
+}
+
 @media (max-width: 575.98px) {
     .materials-page__actions {
         align-items: stretch;
