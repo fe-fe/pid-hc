@@ -1,0 +1,21 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
+        <ui:param name="filtroId" value="marcasFilters" />
+        <ui:param name="filtroDescricao" value="Refine os marcas exibidos" />
+        <ui:define name="campos">
+            <div>
+                <label class="form-label" for="marcasFilterNome">Nome</label>
+                <input class="form-control" type="text" id="marcasFilterNome" name="nome" />
+            </div>
+            <div>
+                <label class="form-label" for="marcasFilterStatus">Status</label>
+                <select class="form-select" id="marcasFilterStatus" name="status">
+                    <option value="">Todos os status</option>
+                    <option value="ativo">Ativo</option>
+                    <option value="inativo">Inativo</option>
+                </select>
+            </div>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>

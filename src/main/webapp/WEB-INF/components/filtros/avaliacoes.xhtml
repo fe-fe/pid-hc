@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
+        <ui:param name="filtroId" value="avaliacoesFilters" />
+        <ui:param name="filtroDescricao" value="Refine as avaliações exibidas" />
+        <ui:define name="campos">
+            <div>
+                <label class="form-label" for="avaliacoesFilterFabricante">Fabricante</label>
+                <input class="form-control" type="text" id="avaliacoesFilterFabricante" name="fabricante" />
+            </div>
+            <div>
+                <label class="form-label" for="avaliacoesFilterMarca">Marca</label>
+                <input class="form-control" type="text" id="avaliacoesFilterMarca" name="marca" />
+            </div>
+            <div>
+                <label class="form-label" for="avaliacoesFilterResultado">Resultado</label>
+                <select class="form-select" id="avaliacoesFilterResultado" name="resultado">
+                    <option value="">Todos os resultados</option>
+                    <option value="APROVADO">Aprovado</option>
+                    <option value="REPROVADO">Reprovado</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label" for="avaliacoesFilterDataInicial">Data inicial</label>
+                <input class="form-control" type="date" id="avaliacoesFilterDataInicial" name="dataInicial" />
+            </div>
+            <div>
+                <label class="form-label" for="avaliacoesFilterDataFinal">Data final</label>
+                <input class="form-control" type="date" id="avaliacoesFilterDataFinal" name="dataFinal" />
+            </div>
+            <div>
+                <label class="form-label" for="avaliacoesFilterLocal">Local</label>
+                <input class="form-control" type="text" id="avaliacoesFilterLocal" name="local" />
+            </div>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>

@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:ui="jakarta.faces.facelets">
+
+    <!-- Template compartilhado. Cada filtro define campos e pode substituir formulario/acoes. -->
+    <h:outputStylesheet library="css" name="components/filtros.css" />
+
+    <aside class="offcanvas offcanvas-end filters-panel" tabindex="-1" id="#{filtroId}"
+        aria-labelledby="#{filtroId}Title">
+        <div class="offcanvas-header border-bottom">
+            <div>
+                <h2 class="offcanvas-title fs-5" id="#{filtroId}Title">Filtros</h2>
+                <p class="filters-panel__description mt-1 mb-0">#{filtroDescricao}</p>
+            </div>
+            <button class="btn-close" type="button" data-bs-dismiss="offcanvas" aria-label="Fechar filtros"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column gap-4">
+            <ui:insert name="formulario">
+                <!-- Campos visuais; a integração com os beans pode substituir este formulário. -->
+                <form id="#{filtroId}Form" class="d-flex flex-column gap-3" onsubmit="return false;">
+                    <ui:insert name="campos" />
+                </form>
+            </ui:insert>
+            <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
+                <ui:insert name="acoes">
+                    <button class="btn btn-outline-secondary" type="reset" form="#{filtroId}Form">Limpar</button>
+                    <button class="btn btn-primary" type="button" data-bs-dismiss="offcanvas">Aplicar filtros</button>
+                </ui:insert>
+            </div>
+        </div>
+    </aside>
+</ui:composition>

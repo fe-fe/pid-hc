@@ -277,17 +277,11 @@
     --bs-btn-active-border-color: var(--history-danger-border);
 }
 
-.material-history__filters,
 .material-history__modal .modal-content {
     color: var(--pid-text);
     background-color: var(--pid-surface);
     border-color: var(--pid-border);
 }
-
-.material-history__filters {
-    --bs-offcanvas-width: 360px;
-}
-
 .material-history__modal .modal-content {
     border-radius: 14px;
 }
@@ -302,16 +296,14 @@
     padding: 20px;
 }
 
-.material-history__modal .form-label,
-.material-history__filters .form-label {
+.material-history__modal .form-label {
     color: var(--pid-text-secondary);
     font-size: 0.8125rem;
     font-weight: 500;
 }
 
 .material-history__modal .form-control,
-.material-history__modal .form-select,
-.material-history__filters .form-select {
+.material-history__modal .form-select {
     min-height: 40px;
     color: var(--pid-text);
     background-color: var(--pid-surface);
@@ -321,8 +313,7 @@
 }
 
 .material-history__modal .form-control:focus,
-.material-history__modal .form-select:focus,
-.material-history__filters .form-select:focus {
+.material-history__modal .form-select:focus {
     border-color: var(--pid-hover-border);
     box-shadow: 0 0 0 3px var(--pid-accent-soft);
 }

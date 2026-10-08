@@ -21,6 +21,9 @@
             <p class="text-body-secondary small mb-0">Tabela de referência usada nas sugestões do cadastro de avaliação.</p>
 
             <div class="action__buttons">
+                <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
+                    <ui:param name="filtroId" value="fabricantesFilters" />
+                </ui:include>
                 <button class="action__criar" type="button" data-bs-toggle="modal"
                     data-bs-target="#modalIncluirCadastro">
                     Incluir Fabricante
@@ -42,6 +45,7 @@
                 <ui:param name="comCodigo" value="#{false}" />
             </ui:include>
         </div>
+        <ui:include src="/WEB-INF/components/filtros/fabricantes.xhtml" />
     </ui:define>
 
 </ui:composition>
