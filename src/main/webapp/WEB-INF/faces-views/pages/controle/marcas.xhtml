@@ -31,7 +31,7 @@
     </ui:define>
 
     <ui:define name="pageContent">
-        <ui:include src="/WEB-INF/components/cadastroReferencia.xhtml">
+        <ui:include src="/WEB-INF/components/tabelas/cadastros.xhtml">
             <ui:param name="bean" value="#{marcaBean}" />
             <ui:param name="titulo" value="Marcas" />
             <ui:param name="rotulo" value="marca" />
@@ -41,6 +41,8 @@
 
     <ui:define name="pageOverlays">
         <ui:include src="/WEB-INF/components/filtros/marcas.xhtml" />
+        <ui:include src="/WEB-INF/components/modais/marcas/modalCriarMarcas.xhtml" />
+        <ui:include src="/WEB-INF/components/modais/marcas/modalEditarMarcas.xhtml" />
     </ui:define>
 
 </ui:composition>

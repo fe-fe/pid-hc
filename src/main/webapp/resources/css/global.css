@@ -85,6 +85,7 @@
 
 html {
     background-color: var(--pid-background);
+    scroll-behavior: smooth;
 }
 
 body {
@@ -692,4 +693,41 @@ p {
         border-color: #145c3e;
         background-color: #145c3e;
     }
+}
+
+/* Modais compartilhadas: estrutura e controles Bootstrap com as cores do projeto. */
+.pid-modal {
+    --bs-modal-bg: var(--pid-surface);
+    --bs-modal-color: var(--pid-text);
+    --bs-modal-border-color: var(--pid-border);
+    --bs-modal-border-radius: 14px;
+}
+
+.pid-modal .modal-content > form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.pid-modal .form-control,
+.pid-modal .form-select {
+    color: var(--pid-text);
+    background-color: var(--pid-surface);
+    border-color: var(--pid-control-border);
+}
+
+.pid-modal .form-control:focus,
+.pid-modal .form-select:focus {
+    border-color: var(--pid-hover-border);
+    box-shadow: 0 0 0 3px var(--pid-accent-soft);
+}
+
+.pid-modal .form-control::placeholder {
+    color: var(--pid-placeholder);
+}
+
+.pid-modal .form-control[readonly] {
+    color: var(--pid-muted);
+    background-color: var(--pid-surface-subtle);
 }

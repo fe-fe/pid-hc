@@ -191,67 +191,8 @@
     --bs-btn-active-border-color: var(--history-danger-border);
 }
 
-.material-history__modal .modal-content {
-    color: var(--pid-text);
-    background-color: var(--pid-surface);
-    border-color: var(--pid-border);
-}
-.material-history__modal .modal-content {
-    border-radius: 14px;
-}
-
-.material-history__modal .modal-header,
-.material-history__modal .modal-footer {
-    padding: 20px;
-    border-color: var(--pid-border);
-}
-
-.material-history__modal .modal-body {
-    padding: 20px;
-}
-
-.material-history__modal .form-label {
-    color: var(--pid-text-secondary);
-    font-size: 0.8125rem;
-    font-weight: 500;
-}
-
-.material-history__modal .form-control,
-.material-history__modal .form-select {
-    min-height: 40px;
-    color: var(--pid-text);
-    background-color: var(--pid-surface);
-    border-color: var(--pid-control-border);
-    border-radius: 8px;
-    font-size: 0.8125rem;
-}
-
-.material-history__modal .form-control:focus,
-.material-history__modal .form-select:focus {
-    border-color: var(--pid-hover-border);
-    box-shadow: 0 0 0 3px var(--pid-accent-soft);
-}
-
-.material-history__modal .form-control::placeholder {
-    color: var(--pid-placeholder);
-}
-
-.material-history__modal .form-control[readonly] {
-    color: var(--pid-muted);
-    background-color: var(--pid-surface-subtle);
-}
-
 .material-history__required {
     color: var(--history-danger-text);
-}
-
-.material-history__delete-icon {
-    width: 44px;
-    height: 44px;
-    color: var(--history-danger-text);
-    background-color: var(--history-danger-bg);
-    border-radius: 50%;
-    font-size: 1.25rem;
 }
 
 @media (max-width: 575.98px) {

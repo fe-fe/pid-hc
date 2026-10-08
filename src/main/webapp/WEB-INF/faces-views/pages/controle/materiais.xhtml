@@ -31,7 +31,7 @@
     </ui:define>
 
     <ui:define name="pageContent">
-        <ui:include src="/WEB-INF/components/cadastroReferencia.xhtml">
+        <ui:include src="/WEB-INF/components/tabelas/cadastros.xhtml">
             <ui:param name="bean" value="#{materialBean}" />
             <ui:param name="titulo" value="Materiais" />
             <ui:param name="rotulo" value="material" />
@@ -41,6 +41,8 @@
 
     <ui:define name="pageOverlays">
         <ui:include src="/WEB-INF/components/filtros/materiais.xhtml" />
+        <ui:include src="/WEB-INF/components/modais/materiais/modalCriarMateriais.xhtml" />
+        <ui:include src="/WEB-INF/components/modais/materiais/modalEditarMateriais.xhtml" />
     </ui:define>
 
 </ui:composition>

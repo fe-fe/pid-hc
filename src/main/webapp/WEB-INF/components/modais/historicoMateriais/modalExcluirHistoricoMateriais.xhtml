@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
+        <ui:param name="modalId" value="historyDeleteModal" />
+        <ui:param name="modalTitulo" value="Excluir histórico" />
+        <ui:param name="modalTamanho" value="" />
+        <ui:define name="conteudo">
+            <div class="modal-body">
+                <i class="bi bi-trash3 text-danger fs-3 d-block mb-3" aria-hidden="true"></i>
+                <p>Deseja excluir o histórico da marca <strong id="historyDeleteBrand"></strong>?</p>
+                <p class="text-body-secondary small mb-0" id="historyDeleteMaterial"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Excluir histórico</button>
+            </div>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>

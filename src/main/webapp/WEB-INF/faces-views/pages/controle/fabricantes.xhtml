@@ -31,7 +31,7 @@
     </ui:define>
 
     <ui:define name="pageContent">
-        <ui:include src="/WEB-INF/components/cadastroReferencia.xhtml">
+        <ui:include src="/WEB-INF/components/tabelas/cadastros.xhtml">
             <ui:param name="bean" value="#{fabricanteBean}" />
             <ui:param name="titulo" value="Fabricantes" />
             <ui:param name="rotulo" value="fabricante" />
@@ -41,6 +41,8 @@
 
     <ui:define name="pageOverlays">
         <ui:include src="/WEB-INF/components/filtros/fabricantes.xhtml" />
+        <ui:include src="/WEB-INF/components/modais/fabricantes/modalCriarFabricantes.xhtml" />
+        <ui:include src="/WEB-INF/components/modais/fabricantes/modalEditarFabricantes.xhtml" />
     </ui:define>
 
 </ui:composition>

@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
+        <ui:param name="modalId" value="modalIncluirCadastro" />
+        <ui:param name="modalTitulo" value="Incluir marca" />
+        <ui:param name="modalTamanho" value="" />
+        <ui:define name="conteudo">
+            <h:form id="formIncluirCadastro">
+                <div class="modal-body">
+                    <h:messages globalOnly="true" styleClass="text-danger small list-unstyled mb-2" />
+                    <div class="d-flex flex-column mb-3">
+                        <h:outputLabel styleClass="form-label" for="nome" value="Nome" />
+                        <h:inputText styleClass="form-control" id="nome" value="#{marcaBean.entidade.nome}"
+                            required="true" requiredMessage="Informe o nome" />
+                        <h:message for="nome" styleClass="text-danger small" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <h:commandButton value="Incluir" styleClass="btn btn-primary" action="#{marcaBean.cadastrar}">
+                        <f:ajax execute="@form" render="@form :formTabelaCadastro"
+                            onevent="fecharModalIncluirCadastro" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>
