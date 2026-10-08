@@ -76,7 +76,6 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
         usuario.setNome(dadosAtualizados.getNome());
         usuario.setEmail(dadosAtualizados.getEmail());
         usuario.setPerfil(dadosAtualizados.getPerfil());
-        usuario.setSetor(dadosAtualizados.getSetor());
         usuario.setAtivo(dadosAtualizados.getAtivo());
 
         return usuarioDao.salvar(usuario, null);

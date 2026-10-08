@@ -3,9 +3,6 @@
     xmlns:ui="jakarta.faces.facelets"
     template="/WEB-INF/templates/layout.xhtml">
 
-    <!-- A listagem permanece vazia até a integração com os dados de tecnovigilância. -->
-    <ui:param name="registrosTecnovigilancia" value="#{[]}" />
-
     <ui:define name="title">
         Tecnovigilância - PID
     </ui:define>
@@ -65,7 +62,7 @@
 
         <div class="p-4">
             <ui:include src="/WEB-INF/components/tabelaTecnovigilancia.xhtml">
-                <ui:param name="registros" value="#{registrosTecnovigilancia}" />
+                <ui:param name="bean" value="#{desvioBean}" />
             </ui:include>
         </div>
     </ui:define>

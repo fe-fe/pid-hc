@@ -1,81 +1,109 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:fn="jakarta.tags.functions"
+    xmlns:f="jakarta.faces.core"
     xmlns:h="jakarta.faces.html"
     xmlns:ui="jakarta.faces.facelets">
 
     <section class="materials-table card border shadow-sm overflow-hidden" aria-labelledby="tecnovigilancia-table-title">
         <h2 id="tecnovigilancia-table-title" class="visually-hidden">Tabela de tecnovigilância</h2>
 
-        <div class="table-responsive">
-            <table class="materials-table__table table table-hover align-middle mb-0">
-                <caption class="visually-hidden">
-                    Registros de tecnovigilância com código, data, produto, marca, fabricante e descrição.
-                </caption>
-                <thead class="materials-table__head">
-                    <tr>
-                        <th scope="col">Código</th>
-                        <th scope="col">Data</th>
-                        <th scope="col">Produto</th>
-                        <th scope="col">Marca</th>
-                        <th scope="col">Fabricante</th>
-                        <th scope="col">Descrição</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <ui:repeat value="#{registros}" var="registro">
+        <h:form id="formTabelaTecnovigilancia">
+            <div class="table-responsive">
+                <table class="materials-table__table table table-hover align-middle mb-0">
+                    <caption class="visually-hidden">
+                        Desvios de qualidade com número VigiHosp, data, produto, marca, fabricante, motivo, desfecho e grau de dano.
+                    </caption>
+                    <thead class="materials-table__head">
                         <tr>
-                            <td class="fw-semibold text-body text-nowrap">
-                                <h:outputText value="#{registro.codigo}" />
-                            </td>
-                            <td class="text-nowrap">
-                                <h:outputText value="#{registro.data}" />
-                            </td>
-                            <td>
-                                <h:outputText value="#{registro.produto}" />
-                            </td>
-                            <td>
-                                <h:outputText value="#{registro.marca}" />
-                            </td>
-                            <td>
-                                <h:outputText value="#{registro.fabricante}" />
-                            </td>
-                            <td class="materials-table__description">
-                                <h:outputText value="#{registro.descricao}" />
-                            </td>
+                            <th scope="col">VigiHosp</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Produto</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Fabricante</th>
+                            <th scope="col">Motivo</th>
+                            <th scope="col">Desfecho</th>
+                            <th scope="col">Grau de dano</th>
                         </tr>
-                    </ui:repeat>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{bean.desvios}" var="desvio">
+                            <tr>
+                                <td class="fw-semibold text-body text-nowrap">
+                                    <h:outputText value="#{empty desvio.vigihosp ? '—' : desvio.vigihosp}" />
+                                </td>
+                                <td class="text-nowrap">
+                                    <h:outputText value="#{desvio.data}">
+                                        <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </td>
+                                <td class="text-nowrap">
+                                    <h:outputText value="#{desvio.material.codigo}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{desvio.material.nome}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{empty desvio.marca ? '—' : desvio.marca.nome}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{desvio.fabricante.nome}" />
+                                </td>
+                                <td class="materials-table__description">
+                                    <h:outputText value="#{desvio.motivo}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{empty desvio.desfecho ? '—' : desvio.desfecho.rotulo}" />
+                                </td>
+                                <td class="text-nowrap">
+                                    <h:outputText value="#{empty desvio.grauDano ? '—' : desvio.grauDano.rotulo}" />
+                                </td>
+                            </tr>
+                        </ui:repeat>
 
-                    <ui:fragment rendered="#{empty registros}">
-                        <tr>
-                            <td class="text-center text-body-secondary py-5" colspan="6">
-                                Nenhum registro de tecnovigilância encontrado.
-                            </td>
-                        </tr>
-                    </ui:fragment>
-                </tbody>
-            </table>
-        </div>
-
-        <footer class="row align-items-center gx-2 gy-0 m-0 px-3 py-2 border-top bg-body">
-            <div class="col-12 col-sm-4 text-center text-sm-start">
-                <small class="text-body-secondary">
-                    #{fn:length(registros)}
-                    #{fn:length(registros) == 1 ? 'registro encontrado' : 'registros encontrados'}
-                </small>
+                        <ui:fragment rendered="#{empty bean.desvios}">
+                            <tr>
+                                <td class="text-center text-body-secondary py-5" colspan="9">
+                                    Nenhum registro de tecnovigilância encontrado.
+                                </td>
+                            </tr>
+                        </ui:fragment>
+                    </tbody>
+                </table>
             </div>
 
-            <nav class="col-12 col-sm-4 d-flex justify-content-center"
-                aria-label="Paginação da tabela de tecnovigilância">
-                <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-secondary" type="button" disabled="disabled"
-                        title="Página anterior">&#8249;</button>
-                    <span class="btn btn-primary disabled" aria-current="page">1</span>
-                    <button class="btn btn-outline-secondary" type="button" disabled="disabled"
-                        title="Próxima página">&#8250;</button>
+            <footer class="row align-items-center gx-2 gy-0 m-0 px-3 py-2 border-top bg-body">
+                <div class="col-12 col-sm-4 text-center text-sm-start">
+                    <small class="text-body-secondary">
+                        #{bean.totalRegistros}
+                        #{bean.totalRegistros == 1 ? 'registro encontrado' : 'registros encontrados'}
+                    </small>
                 </div>
-            </nav>
 
-            <div class="d-none d-sm-block col-sm-4" aria-hidden="true"></div>
-        </footer>
+                <nav class="col-12 col-sm-4 d-flex justify-content-center"
+                    aria-label="Paginação da tabela de tecnovigilância">
+                    <div class="btn-group btn-group-sm">
+                        <h:commandButton styleClass="btn btn-outline-secondary" value="&#8249;"
+                            action="#{bean.paginaAnterior}"
+                            disabled="#{bean.paginaAtual == 0}"
+                            title="Página anterior">
+                            <f:ajax render="@form" />
+                        </h:commandButton>
+
+                        <span class="btn btn-primary disabled" aria-current="page">
+                            #{bean.paginaAtual + 1}
+                        </span>
+
+                        <h:commandButton styleClass="btn btn-outline-secondary" value="&#8250;"
+                            action="#{bean.proximaPagina}"
+                            disabled="#{bean.ultimaPagina}"
+                            title="Próxima página">
+                            <f:ajax render="@form" />
+                        </h:commandButton>
+                    </div>
+                </nav>
+
+                <div class="d-none d-sm-block col-sm-4" aria-hidden="true"></div>
+            </footer>
+        </h:form>
     </section>
 </ui:composition>

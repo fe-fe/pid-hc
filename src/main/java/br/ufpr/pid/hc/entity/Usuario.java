@@ -34,8 +34,4 @@ public class Usuario extends Auditavel {
     @Column(name = "perfil", nullable = false)
     private Perfil perfil;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "setor_id")
-    private Setor setor;
-
 }

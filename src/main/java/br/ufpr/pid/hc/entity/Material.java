@@ -19,10 +19,4 @@ public class Material extends Auditavel {
 
     private String codigo;
     private String nome;
-    private String descricao;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "categoria_id")
-    private Categoria categoria;
-
 }

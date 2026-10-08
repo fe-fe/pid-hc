@@ -1,6 +1,6 @@
 package br.ufpr.pid.hc.dao;
 
-import br.ufpr.pid.hc.entity.Marca;
+import br.ufpr.pid.hc.entity.Fabricante;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
@@ -8,12 +8,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @ApplicationScoped
-public class MarcaDao extends AbstractDao<Marca, UUID> {
-    public MarcaDao() { super(Marca.class); }
+public class FabricanteDao extends AbstractDao<Fabricante, UUID> {
+    public FabricanteDao() { super(Fabricante.class); }
 
-    public Optional<Marca> buscarPorNome(String nome) {
+    public Optional<Fabricante> buscarPorNome(String nome) {
         return entityManager.createQuery(
-                        "SELECT m FROM Marca m WHERE upper(m.nome) = upper(:nome)", Marca.class)
+                        "SELECT f FROM Fabricante f WHERE upper(f.nome) = upper(:nome)", Fabricante.class)
                 .setParameter("nome", nome)
                 .getResultStream()
                 .findFirst();
@@ -21,7 +21,7 @@ public class MarcaDao extends AbstractDao<Marca, UUID> {
 
     public List<String> listarNomes() {
         return entityManager.createQuery(
-                "SELECT m.nome FROM Marca m " + filtroAtivo("m", false) + "ORDER BY m.nome",
+                "SELECT f.nome FROM Fabricante f " + filtroAtivo("f", false) + "ORDER BY f.nome",
                 String.class
         ).getResultList();
     }

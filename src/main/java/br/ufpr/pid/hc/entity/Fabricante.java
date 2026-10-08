@@ -9,15 +9,14 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-public class Categoria extends Auditavel {
+public class Fabricante extends Auditavel {
 
-    public Categoria() {}
+    public Fabricante() {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String nome;
-
 }
