@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets">
+    <div class="material-lookup" id="materialLookup">
+        <header class="material-lookup__header">
+            <span class="material-lookup__eyebrow">Dashboard</span>
+            <h1>Consulte antes de decidir</h1>
+            <p>Encontre um material e consulte suas avaliações e os incidentes relatados.</p>
+        </header>
+
+        <section class="material-lookup__search-panel" aria-labelledby="materialSearchTitle">
+            <div class="material-lookup__search-heading">
+                <h2 id="materialSearchTitle">Consulta rápida de material</h2>
+                <span class="material-lookup__demo"><i class="bi bi-info-circle" aria-hidden="true"></i> Dados demonstrativos</span>
+            </div>
+            <form id="materialLookupForm" role="search">
+                <label for="materialLookupSearch">Código ou nome do material</label>
+                <div class="material-lookup__search-row">
+                    <div class="material-lookup__input-wrap">
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                        <input id="materialLookupSearch" type="search" placeholder="Ex.: MAT-001 ou cateter"
+                            autocomplete="off" aria-describedby="materialLookupHelp" />
+                    </div>
+                    <button type="submit" class="btn material-lookup__primary">Consultar material</button>
+                    <button type="button" id="materialLookupClear" class="btn material-lookup__secondary">Limpar</button>
+                </div>
+                <p id="materialLookupHelp" class="material-lookup__help">Os exemplos abaixo permitem explorar a consulta. As informações ainda não estão conectadas aos registros do sistema.</p>
+            </form>
+            <div class="material-lookup__examples" aria-label="Exemplos para consulta">
+                <span>Experimentar:</span>
+                <button type="button" data-search="MAT-001">Cateter · MAT-001</button>
+                <button type="button" data-search="MAT-003">Equipo · MAT-003</button>
+                <button type="button" data-search="MAT-004">Luva · MAT-004</button>
+            </div>
+        </section>
+
+        <p id="materialLookupStatus" class="material-lookup__status" role="status" aria-live="polite" aria-atomic="true"></p>
+        <section id="materialLookupEmpty" class="material-lookup__empty" aria-labelledby="materialLookupEmptyTitle">
+            <i class="bi bi-box-seam" aria-hidden="true"></i>
+            <h2 id="materialLookupEmptyTitle">Qual material você quer consultar?</h2>
+            <p id="materialLookupEmptyText">Pesquise pelo código ou nome para reunir o histórico de avaliações e os incidentes em um só lugar.</p>
+        </section>
+        <div id="materialLookupResults" class="material-lookup__results"></div>
+
+        <template id="materialLookupCardTemplate">
+            <article class="material-lookup__card">
+                <header class="material-lookup__card-header">
+                    <div class="material-lookup__identity">
+                        <span class="material-lookup__material-icon"><i class="bi bi-box-seam" aria-hidden="true"></i></span>
+                        <div>
+                            <span class="material-lookup__code" data-field="code"></span>
+                            <h2 data-field="name"></h2>
+                            <p data-field="description"></p>
+                            <span class="material-lookup__category" data-field="category"></span>
+                        </div>
+                    </div>
+                    <span class="material-lookup__demo">Exemplo ilustrativo</span>
+                </header>
+
+                <dl class="material-lookup__metrics">
+                    <div><dt>Avaliações registradas</dt><dd data-field="evaluationCount"></dd></div>
+                    <div><dt>Marcas avaliadas</dt><dd data-field="brandCount"></dd></div>
+                    <div><dt>Incidentes relatados</dt><dd data-field="incidentCount"></dd></div>
+                    <div><dt>Última avaliação</dt><dd class="material-lookup__metric-date" data-field="lastEvaluation"></dd></div>
+                </dl>
+
+                <p class="material-lookup__notice" data-field="notice"></p>
+
+                <section class="material-lookup__section" aria-label="Histórico de avaliações">
+                    <div class="material-lookup__section-heading">
+                        <div><h3>Avaliações por marca</h3><p>Da mais recente para a mais antiga. O resultado se refere à marca e ao material avaliados.</p></div>
+                        <h:link outcome="/pages/historicoMateriais" styleClass="material-lookup__link">Abrir histórico de materiais <i class="bi bi-arrow-up-right" aria-hidden="true"></i></h:link>
+                    </div>
+                    <p data-field="noEvaluations" hidden="hidden">Este material ainda não possui avaliações registradas.</p>
+                    <div class="material-lookup__table-wrap" tabindex="0" role="region" aria-label="Avaliações por marca; role horizontalmente para ver todas as colunas">
+                        <table class="table align-middle mb-0">
+                            <caption class="visually-hidden">Marca, data, resultado e parecer de cada avaliação do material.</caption>
+                            <thead><tr><th scope="col">Marca</th><th scope="col">Data</th><th scope="col">Resultado</th><th scope="col">Parecer</th></tr></thead>
+                            <tbody data-field="evaluations"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="material-lookup__section" aria-label="Incidentes de tecnovigilância">
+                    <div class="material-lookup__section-heading">
+                        <div><h3>Incidentes de tecnovigilância</h3><p>Relatos associados ao código deste material, do mais recente para o mais antigo.</p></div>
+                        <h:link outcome="/pages/tecnovigilancia" styleClass="material-lookup__link">Abrir tecnovigilância <i class="bi bi-arrow-up-right" aria-hidden="true"></i></h:link>
+                    </div>
+                    <p class="material-lookup__no-incidents" data-field="noIncidents" hidden="hidden">Nenhum incidente registrado para este material na base demonstrativa.</p>
+                    <ul class="material-lookup__incidents" data-field="incidents"></ul>
+                </section>
+            </article>
+        </template>
+
+        <template id="materialLookupEvaluationTemplate">
+            <tr><th scope="row" data-field="brand"></th><td class="text-nowrap"><time data-field="date"></time></td><td><span class="material-lookup__badge" data-field="result"></span></td><td class="material-lookup__opinion" data-field="opinion"></td></tr>
+        </template>
+        <template id="materialLookupIncidentTemplate">
+            <li class="material-lookup__incident">
+                <div class="material-lookup__incident-heading"><strong data-field="brand"></strong><time data-field="date"></time></div>
+                <p data-field="description"></p>
+                <div class="material-lookup__incident-meta"><span data-field="reference"></span><span data-field="lot"></span><span data-field="sector"></span></div>
+            </li>
+        </template>
+        <noscript><p class="material-lookup__notice">Ative o JavaScript para utilizar a consulta rápida.</p></noscript>
+    </div>
+</ui:composition>

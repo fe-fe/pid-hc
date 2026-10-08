@@ -79,6 +79,10 @@
     box-sizing: border-box;
 }
 
+html {
+    background-color: var(--pid-background);
+}
+
 body {
     width: 100%;
     min-height: 100dvh;
@@ -104,10 +108,6 @@ h2 {
 
 p {
     margin-bottom: 0;
-}
-
-.none {
-    display: none;
 }
 
 /* template styles */
@@ -440,24 +440,6 @@ p {
     border-radius: 50%;
     width: 36px;
     height: 36px;
-}
-
-.action__button-destructive{
-    background-color: #ee2f21;
-
-    &:hover,
-    &:focus-visible {
-        color: white;
-        border-color: #b42318;
-        background-color: #b42318;
-
-    }
-
-    &:active {
-        color: white;
-        border-color: #7f1d1d;
-        background-color: #7f1d1d;
-    }
 }
 
 .action__button-warning{

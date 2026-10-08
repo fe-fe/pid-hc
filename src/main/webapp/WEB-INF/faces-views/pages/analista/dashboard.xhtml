@@ -8,14 +8,14 @@
         Dashboard Analista de Qualidade
     </ui:define>
 
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="pages/dashboard.css" />
+    </ui:define>
     <ui:define name="content">
-
-        <h1>Bem vindo, Analista!</h1>
-
-        <p>
-            Crie avaliações
-        </p>
-
+        <ui:include src="/WEB-INF/components/consultaMaterial.xhtml" />
+    </ui:define>
+    <ui:define name="scripts">
+        <h:outputScript library="js" name="pages/dashboard.js" target="body" />
     </ui:define>
 
 </ui:composition>
