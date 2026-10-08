@@ -7,17 +7,35 @@
         <h2 id="materials-table-title" class="visually-hidden">Tabela de materiais</h2>
 
             <h:form id="formTabelaMateriais">
+                <div class="d-flex flex-wrap align-items-center gap-3 px-3 py-2 border-bottom bg-body">
+                    <div class="d-flex align-items-center gap-2">
+                        <h:outputLabel for="ordenacao" value="Ordenar por:" styleClass="small text-body-secondary mb-0" />
+                        <h:selectOneMenu id="ordenacao" styleClass="form-select form-select-sm w-auto"
+                                         value="#{bean.ordenacaoAtual}">
+                            <f:selectItems value="#{bean.opcoesOrdenacao}" var="opcao"
+                                           itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
+                            <f:ajax render="@form" listener="#{bean.reordenar}" />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="form-check mb-0">
+                        <h:selectBooleanCheckbox id="mostrarInativos" styleClass="form-check-input"
+                                                 value="#{bean.mostrarInativos}">
+                            <f:ajax render="@form" listener="#{bean.alternarInativos}" />
+                        </h:selectBooleanCheckbox>
+                        <h:outputLabel for="mostrarInativos" value="Mostrar inativos" styleClass="form-check-label small" />
+                    </div>
+                </div>
+
                 <div class="table-responsive">
                     <table class="materials-table__table table table-hover align-middle mb-0">
                         <caption class="visually-hidden">
-                            Materiais cadastrados, sua identificação, categoria e status.
+                            Materiais cadastrados, sua identificação e status.
                         </caption>
                         <thead class="materials-table__head">
                             <tr>
                                 <th scope="col">Código</th>
                                 <th scope="col">Nome</th>
-                                <th scope="col">Descrição</th>
-                                <th scope="col">Categoria</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Parecer</th>
                                 <th scope="col">Ações</th>
@@ -31,12 +49,6 @@
                                     </td>
                                     <td>
                                         <h:outputText value="#{material.nome}" />
-                                    </td>
-                                    <td class="materials-table__description">
-                                        <h:outputText value="#{material.descricao}" />
-                                    </td>
-                                    <td>
-                                        <h:outputText value="#{empty material.categoria ? 'Sem categoria' : material.categoria.nome}" />
                                     </td>
                                     <td>
                                         <span class="badge rounded-pill #{material.inativo ? 'text-bg-secondary' : 'text-bg-success'}">
@@ -63,7 +75,7 @@
 
                             <ui:fragment rendered="#{empty bean.materiais}">
                                 <tr>
-                                    <td class="text-center text-body-secondary py-5" colspan="7">
+                                    <td class="text-center text-body-secondary py-5" colspan="5">
                                         Nenhum material encontrado com os filtros informados.
                                     </td>
                                 </tr>

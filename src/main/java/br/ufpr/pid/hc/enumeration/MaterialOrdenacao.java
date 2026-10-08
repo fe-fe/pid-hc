@@ -5,8 +5,7 @@ import lombok.Getter;
 @Getter
 public enum MaterialOrdenacao implements CampoOrdenacao {
     CODIGO("codigo","Código"),
-    NOME("nome", "Nome"),
-    CATEGORIA("categoria_id", "Categoria");
+    NOME("nome", "Nome");
 
     private final String campoBanco;
     private final String rotulo;
