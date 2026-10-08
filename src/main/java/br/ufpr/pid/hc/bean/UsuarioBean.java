@@ -1,13 +1,10 @@
 package br.ufpr.pid.hc.bean;
 
-import br.ufpr.pid.hc.entity.Setor;
 import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.Perfil;
-import br.ufpr.pid.hc.enumeration.SetorOrdenacao;
 import br.ufpr.pid.hc.enumeration.UsuarioOrdenacao;
 import br.ufpr.pid.hc.exception.DomainException;
 import br.ufpr.pid.hc.service.AbstractService;
-import br.ufpr.pid.hc.service.SetorService;
 import br.ufpr.pid.hc.service.UsuarioService;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -29,13 +26,6 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
     @Inject
     private UsuarioService usuarioService;
 
-    @Inject
-    private SetorService setorService;
-
-    private List<Setor> setores;
-    private String setorSelecionadoCadastrarId;
-    private String setorSelecionadoAtualizarId;
-
     public UsuarioBean() {
         super(15, UsuarioOrdenacao.NOME);
     }
@@ -51,16 +41,9 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
     }
 
     @Override
-    protected void posInit() {
-        setores = setorService.buscar(0, Integer.MAX_VALUE, SetorOrdenacao.CODIGO);
-    }
-
-    @Override
     public void cadastrar() {
         try {
-            getUsuario().setSetor(buscarSetor(setorSelecionadoCadastrarId));
             super.cadastrar();
-            setorSelecionadoCadastrarId = null;
             adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuário cadastrado com sucesso");
         } catch (DomainException | IllegalArgumentException e) {
             adicionarMensagem(FacesMessage.SEVERITY_ERROR, e.getMessage());
@@ -70,7 +53,6 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
     @Override
     public void atualizar() {
         try {
-            getUsuarioSelecionado().setSetor(buscarSetor(setorSelecionadoAtualizarId));
             super.atualizar();
             adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuário atualizado com sucesso");
         } catch (DomainException | IllegalArgumentException e) {
@@ -78,14 +60,6 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
             carregarPagina();
             adicionarMensagem(FacesMessage.SEVERITY_ERROR, e.getMessage());
         }
-    }
-
-    private Setor buscarSetor(String setorId) {
-        if (setorId == null || setorId.isBlank()) {
-            return null;
-        }
-
-        return setorService.buscarPorId(UUID.fromString(setorId));
     }
 
     private void adicionarMensagem(FacesMessage.Severity severidade, String mensagem) {
@@ -109,9 +83,6 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
 
     public void setUsuarioSelecionado(Usuario usuario) {
         setEntidadeSelecionada(usuario);
-        setorSelecionadoAtualizarId = usuario != null && usuario.getSetor() != null
-                ? usuario.getSetor().getId().toString()
-                : null;
     }
 
     public Perfil[] getPerfis() {

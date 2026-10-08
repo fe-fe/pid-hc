@@ -17,12 +17,9 @@ public class Material extends Auditavel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false, unique = true)
     private String codigo;
+
+    @Column(nullable = false)
     private String nome;
-    private String descricao;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "categoria_id")
-    private Categoria categoria;
-
 }

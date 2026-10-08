@@ -50,4 +50,8 @@ public abstract class AbstractService<T extends Auditavel, ID> {
         return getDao().buscarPorId(id);
     }
 
+    protected static String padronizarNome(String nome) {
+        return nome == null ? null : nome.trim().replaceAll("\\s+", " ").toUpperCase();
+    }
+
 }

@@ -460,6 +460,24 @@ p {
     }
 }
 
+.action__button-success{
+    background-color: #22a06b;
+
+    &:hover,
+    &:focus-visible {
+        color: white;
+        border-color: #1a7f55;
+        background-color: #1a7f55;
+
+    }
+
+    &:active {
+        color: white;
+        border-color: #145c3e;
+        background-color: #145c3e;
+    }
+}
+
 /* table global style */
 
 .table__actions {

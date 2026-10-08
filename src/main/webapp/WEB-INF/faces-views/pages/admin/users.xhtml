@@ -49,7 +49,6 @@
                         <th>Nome</th>
                         <th>E-mail</th>
                         <th>CPF</th>
-                        <th>Setor</th>
                         <th>Perfil</th>
                         <th>Status</th>
                         <th class="table__actions text-center">Ações</th>
@@ -62,7 +61,6 @@
                             <td><h:outputText value="#{usuario.nome}" /></td>
                             <td><h:outputText value="#{usuario.email}" /></td>
                             <td><h:outputText value="#{empty usuario.cpf ? '-' : usuario.cpf}" /></td>
-                            <td><h:outputText value="#{empty usuario.setor ? '-' : usuario.setor.codigo}" /></td>
                             <td><span class="badge text-bg-primary">#{usuario.perfil}</span></td>
                             <td>
                                 <span class="badge #{usuario.inativo ? 'text-bg-secondary' : 'text-bg-success'}">
@@ -158,18 +156,6 @@
                                     <h:message for="perfil" styleClass="text-danger small" />
                                 </div>
 
-                                <div class="col-md-6">
-                                    <h:outputLabel for="setor" value="Setor" styleClass="form-label" />
-                                    <h:selectOneMenu id="setor"
-                                                     value="#{usuarioBean.setorSelecionadoCadastrarId}"
-                                                     styleClass="form-select">
-                                        <f:selectItem itemLabel="Sem setor" itemValue="#{null}"
-                                                      noSelectionOption="true" />
-                                        <f:selectItems value="#{usuarioBean.setores}" var="setor"
-                                                       itemValue="#{setor.id}"
-                                                       itemLabel="#{setor.codigo} - #{setor.unidade}" />
-                                    </h:selectOneMenu>
-                                </div>
 
                                 <div class="col-12">
                                     <div class="form-check">
@@ -238,18 +224,6 @@
                                     <h:message for="perfil" styleClass="text-danger small" />
                                 </div>
 
-                                <div class="col-12">
-                                    <h:outputLabel for="setor" value="Setor" styleClass="form-label" />
-                                    <h:selectOneMenu id="setor"
-                                                     value="#{usuarioBean.setorSelecionadoAtualizarId}"
-                                                     styleClass="form-select">
-                                        <f:selectItem itemLabel="Sem setor" itemValue="#{null}"
-                                                      noSelectionOption="true" />
-                                        <f:selectItems value="#{usuarioBean.setores}" var="setor"
-                                                       itemValue="#{setor.id}"
-                                                       itemLabel="#{setor.codigo} - #{setor.unidade}" />
-                                    </h:selectOneMenu>
-                                </div>
 
                                 <div class="col-12">
                                     <div class="form-check">

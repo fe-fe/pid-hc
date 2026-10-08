@@ -1,9 +1,9 @@
 package br.ufpr.pid.hc.bean;
 
-import br.ufpr.pid.hc.entity.Marca;
+import br.ufpr.pid.hc.entity.Fabricante;
 import br.ufpr.pid.hc.enumeration.NomeOrdenacao;
 import br.ufpr.pid.hc.service.AbstractService;
-import br.ufpr.pid.hc.service.MarcaService;
+import br.ufpr.pid.hc.service.FabricanteService;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -16,20 +16,20 @@ import java.util.UUID;
 @ViewScoped
 @Getter
 @Setter
-public class MarcaBean extends AbstractCadastroBean<Marca, NomeOrdenacao> {
+public class FabricanteBean extends AbstractCadastroBean<Fabricante, NomeOrdenacao> {
 
     @Inject
-    private MarcaService marcaService;
+    private FabricanteService fabricanteService;
 
-    public MarcaBean() {
+    public FabricanteBean() {
         super(NomeOrdenacao.NOME);
     }
 
     @Override
-    protected AbstractService<Marca, UUID> getService() { return marcaService; }
+    protected AbstractService<Fabricante, UUID> getService() { return fabricanteService; }
 
     @Override
-    protected Marca criarNovaEntidade() { return new Marca(); }
+    protected Fabricante criarNovaEntidade() { return new Fabricante(); }
 
     @Override
     public NomeOrdenacao[] getOpcoesOrdenacao() { return NomeOrdenacao.values(); }
