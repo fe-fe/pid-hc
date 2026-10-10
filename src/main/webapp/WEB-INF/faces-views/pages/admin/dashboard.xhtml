@@ -1,21 +1,24 @@
-<ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="jakarta.faces.html"
     xmlns:ui="jakarta.faces.facelets"
     template="/WEB-INF/templates/layout.xhtml">
 
-    <ui:define name="title">
-        Dashboard Admin
-    </ui:define>
+    <ui:param name="contentClass" value="material-lookup-page" />
+
+    <ui:define name="title">Dashboard - PID</ui:define>
 
     <ui:define name="head">
         <h:outputStylesheet library="css" name="pages/dashboard.css" />
     </ui:define>
-    <ui:define name="content">
-        <ui:include src="/WEB-INF/components/consultaMaterial.xhtml" />
-    </ui:define>
-    <ui:define name="scripts">
-        <h:outputScript library="js" name="pages/dashboard.js" target="body" />
-    </ui:define>
 
+    <ui:define name="content">
+        <section id="materialLookupEmpty" class="material-lookup__empty" aria-labelledby="materialLookupEmptyTitle">
+            <i class="bi bi-box-seam" aria-hidden="true"></i>
+            <h2 id="materialLookupEmptyTitle">Qual material você quer consultar?</h2>
+            <label for="materialLookupInput" class="visually-hidden">Código ou nome do material</label>
+            <input type="text" id="materialLookupInput" class="form-control"
+                placeholder="Digite o código ou nome do material" aria-describedby="materialLookupEmptyText" />
+            <p id="materialLookupEmptyText">Pesquise pelo código ou nome para reunir o histórico de avaliações e os incidentes em um só lugar.</p>
+        </section>
+    </ui:define>
 </ui:composition>
