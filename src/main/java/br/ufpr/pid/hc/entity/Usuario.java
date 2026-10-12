@@ -31,6 +31,7 @@ public class Usuario extends Auditavel {
     @Column(name = "senha", nullable = false)
     private String senha;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "perfil", nullable = false)
     private Perfil perfil;
 

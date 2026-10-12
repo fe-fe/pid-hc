@@ -27,7 +27,7 @@ public class FabricanteService extends AbstractService<Fabricante, UUID> {
         return fabricanteDao.listarNomes();
     }
 
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Fabricante obterOuCriar(String nome) {
         String nomePadronizado = padronizarNome(nome);
         return fabricanteDao.buscarPorNome(nomePadronizado).orElseGet(() -> {
@@ -38,7 +38,7 @@ public class FabricanteService extends AbstractService<Fabricante, UUID> {
     }
 
     @Override
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Fabricante salvar(Fabricante fabricante) {
         if (fabricante.getNome() == null || fabricante.getNome().isBlank()) {
             throw new MissingRequiredFieldsException();

@@ -31,11 +31,10 @@
             <nav class="nav nav-pills flex-column sidebar__nav" aria-label="Menu principal">
                 <span class="sidebar__section-title">Menu</span>
 
-                <ui:fragment rendered="#{sessao.contemPerfil('ADMINISTRADOR')}">
-                    
-                    <h:link outcome="/pages/admin/dashboard"
+                <ui:fragment rendered="#{sessao.autenticado}">
+                    <h:link outcome="#{sessao.paginaInicial}"
                             styleClass="btn btn-light link"
-                            pt:aria-current="#{view.viewId.endsWith('/pages/admin/dashboard.xhtml') ? 'page' : null}">
+                            pt:aria-current="#{view.viewId.endsWith('/dashboard.xhtml') ? 'page' : null}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
                         Dashboard
                     </h:link>
@@ -58,18 +57,7 @@
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folders preview-icon"><path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z"/><path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1"/></svg>
                         Importar Tecnovigilância
                     </h:link>
-                </ui:fragment>
 
-                <ui:fragment rendered="#{sessao.contemPerfil('ANALISTA', 'AVALIADOR', 'CONSULTOR')}">
-                    <h:link outcome="/pages/analista/dashboard"
-                            styleClass="btn btn-light link"
-                            pt:aria-current="#{view.viewId.endsWith('/pages/analista/dashboard.xhtml') ? 'page' : null}">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-                        Dashboard
-                    </h:link>
-                </ui:fragment>
-
-                <ui:fragment rendered="#{sessao.autenticado}">
                     <h:link outcome="/pages/historicoMateriais" styleClass="btn btn-light link"
                             pt:aria-current="#{view.viewId.endsWith('/pages/historicoMateriais.xhtml') ? 'page' : null}">
                         <i class="bi bi-clock-history" aria-hidden="true"></i>
