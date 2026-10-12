@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
+        <ui:param name="filtroId" value="tecnovigilanciaFilters" />
+        <ui:param name="filtroDescricao" value="Refine os registros de tecnovigilância" />
+        <ui:define name="campos">
+            <div>
+                <label class="form-label" for="tecnovigilanciaFilterVigihosp">VigiHosp</label>
+                <input class="form-control" type="text" id="tecnovigilanciaFilterVigihosp" name="vigihosp" />
+            </div>
+            <div>
+                <label class="form-label" for="tecnovigilanciaFilterFabricante">Fabricante</label>
+                <input class="form-control" type="text" id="tecnovigilanciaFilterFabricante" name="fabricante" />
+            </div>
+            <div>
+                <label class="form-label" for="tecnovigilanciaFilterMarca">Marca</label>
+                <input class="form-control" type="text" id="tecnovigilanciaFilterMarca" name="marca" />
+            </div>
+            <div>
+                <label class="form-label" for="tecnovigilanciaFilterDesfecho">Desfecho</label>
+                <select class="form-select" id="tecnovigilanciaFilterDesfecho" name="desfecho">
+                    <option value="">Todos os desfechos</option>
+                    <option value="QUEIXA_PONTUAL">Queixa pontual</option>
+                    <option value="ESCLARECIMENTO">Esclarecimento usuários e/ou serviços envolvidos</option>
+                    <option value="INCONCLUSIVO">Inconclusivo ou descartada queixa técnica</option>
+                    <option value="DESVIO_FINALIDADE">Desvio de finalidade</option>
+                    <option value="SUGESTAO_TROCA_LOTE">Sugestão de troca de lote</option>
+                    <option value="SUGESTAO_REPROVACAO_MARCA">Sugestão de reprovação marca</option>
+                    <option value="SUGESTAO_REVISAO_DESCRITIVO">Sugestão de revisão descritivo insumo</option>
+                    <option value="SUGESTAO_REPOSICAO">Sugestão de reposição do item pelo fornecedor</option>
+                    <option value="SUGESTAO_RECOLHIMENTO">Sugestão de recolhimento do produto pelo SAFS</option>
+                    <option value="SUGESTAO_CAPACITACAO">Sugestão de capacitação usuários</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label" for="tecnovigilanciaFilterGrauDano">Grau de dano</label>
+                <select class="form-select" id="tecnovigilanciaFilterGrauDano" name="grauDano">
+                    <option value="">Todos os graus de dano</option>
+                    <option value="AUSENTE">Ausente</option>
+                    <option value="POTENCIAL">Dano potencial</option>
+                    <option value="LEVE">Leve</option>
+                    <option value="MODERADO">Moderado</option>
+                    <option value="GRAVE">Grave</option>
+                    <option value="OBITO">Óbito</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label" for="tecnovigilanciaFilterDataInicial">Data inicial</label>
+                <input class="form-control" type="date" id="tecnovigilanciaFilterDataInicial" name="dataInicial" />
+            </div>
+            <div>
+                <label class="form-label" for="tecnovigilanciaFilterDataFinal">Data final</label>
+                <input class="form-control" type="date" id="tecnovigilanciaFilterDataFinal" name="dataFinal" />
+            </div>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>

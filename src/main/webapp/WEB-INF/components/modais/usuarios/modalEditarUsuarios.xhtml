@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:pt="jakarta.faces.passthrough"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
+        <ui:param name="modalId" value="modalEditarUsuario" />
+        <ui:param name="modalTitulo" value="Editar usuário" />
+        <ui:param name="modalTamanho" value="modal-lg" />
+        <ui:define name="conteudo">
+            <h:form id="formEditarUsuario">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <h:outputLabel for="nome" value="Nome" styleClass="form-label" />
+                            <h:inputText id="nome" value="#{usuarioBean.usuarioSelecionado.nome}"
+                                styleClass="form-control" required="true"
+                                requiredMessage="Informe o nome" />
+                            <h:message for="nome" styleClass="text-danger small" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <h:outputLabel for="email" value="E-mail" styleClass="form-label" />
+                            <h:inputText id="email" value="#{usuarioBean.usuarioSelecionado.email}"
+                                styleClass="form-control" required="true"
+                                requiredMessage="Informe o e-mail" />
+                            <h:message for="email" styleClass="text-danger small" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <h:outputLabel for="cpf" value="CPF" styleClass="form-label" />
+                            <h:inputText id="cpf" value="#{usuarioBean.usuarioSelecionado.cpf}"
+                                styleClass="form-control" readonly="true" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <h:outputLabel for="perfil" value="Perfil de acesso" styleClass="form-label" />
+                            <h:selectOneMenu id="perfil" value="#{usuarioBean.usuarioSelecionado.perfil}"
+                                styleClass="form-select" required="true"
+                                requiredMessage="Selecione o perfil">
+                                <f:selectItems value="#{usuarioBean.perfis}" var="perfil"
+                                    itemValue="#{perfil}" itemLabel="#{perfil}" />
+                            </h:selectOneMenu>
+                            <h:message for="perfil" styleClass="text-danger small" />
+                        </div>
+
+
+                        <div class="col-12">
+                            <div class="form-check">
+                                <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input"
+                                    value="#{usuarioBean.usuarioSelecionado.ativo}" />
+                                <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <h:commandButton value="Salvar" styleClass="btn btn-primary"
+                        action="#{usuarioBean.atualizar}" />
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+    <h:outputScript target="body">
+            function abrirModalEdicao(data) {
+                if (data.status === "success") {
+                    bootstrap.Modal.getOrCreateInstance(document.getElementById("modalEditarUsuario")).show();
+                }
+            }
+    </h:outputScript>
+</ui:composition>

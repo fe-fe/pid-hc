@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets">
+    <section class="pid-table card border shadow-sm overflow-hidden" aria-labelledby="usuarios-table-title">
+        <h2 id="usuarios-table-title" class="visually-hidden">Tabela de usuários</h2>
+        <h:form id="formLista">
+            <div class="pid-table__responsive table-responsive">
+                <table class="pid-table__table table table-hover align-middle mb-0">
+                    <caption class="visually-hidden">Usuários cadastrados, perfis de acesso, status e ações.</caption>
+                    <thead class="pid-table__head">
+                    <tr>
+                        <th scope="col" class="pid-table__actions text-center">#</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">CPF</th>
+                        <th scope="col">Perfil</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="pid-table__actions text-center">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{usuarioBean.usuarios}" var="usuario" varStatus="status">
+                        <tr>
+                            <td class="pid-table__actions text-center">#{status.index + 1}</td>
+                            <td><h:outputText value="#{usuario.nome}" /></td>
+                            <td><h:outputText value="#{usuario.email}" /></td>
+                            <td><h:outputText value="#{empty usuario.cpf ? '-' : usuario.cpf}" /></td>
+                            <td><span class="badge rounded-pill text-bg-primary">#{usuario.perfil}</span></td>
+                            <td>
+                                <span class="badge rounded-pill #{usuario.inativo ? 'text-bg-secondary' : 'text-bg-success'}">
+                                    #{usuario.inativo ? 'Inativo' : 'Ativo'}
+                                </span>
+                            </td>
+                            <td class="pid-table__actions">
+                                <div class="d-flex justify-content-center">
+                                    <h:commandLink styleClass="btn btn-sm btn-outline-primary"
+                                                   title="Editar usuário">
+                                        <f:setPropertyActionListener target="#{usuarioBean.usuarioSelecionado}"
+                                                                     value="#{usuario}" />
+                                        <f:ajax execute="@this" render=":formEditarUsuario"
+                                                onevent="abrirModalEdicao" />
+                                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                                    </h:commandLink>
+                                </div>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                    <ui:fragment rendered="#{empty usuarioBean.usuarios}">
+                        <tr><td class="text-center text-body-secondary py-5" colspan="7">Nenhum usuário cadastrado.</td></tr>
+                    </ui:fragment>
+                    </tbody>
+                </table>
+            </div>
+
+            <ui:include src="/WEB-INF/components/tabelas/paginacao.xhtml">
+                <ui:param name="registroSingular" value="usuário encontrado" />
+                <ui:param name="registroPlural" value="usuários encontrados" />
+                <ui:param name="tabelaDescricao" value="usuários" />
+            </ui:include>
+        </h:form>
+    </section>
+</ui:composition>

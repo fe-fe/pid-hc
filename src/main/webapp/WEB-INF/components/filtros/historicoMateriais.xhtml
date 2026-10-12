@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
+        <ui:param name="filtroId" value="historyFilters" />
+        <ui:param name="filtroDescricao" value="Refine os materiais exibidos" />
+        <ui:define name="campos">
+            <div>
+                <label class="form-label" for="historyManufacturerFilter">Fabricante</label>
+                <select class="form-select" id="historyManufacturerFilter" name="fabricante">
+                    <option value="">Todos os fabricantes</option>
+                    <option>BD</option>
+                    <option>BioSupply</option>
+                    <option>Descarpack</option>
+                    <option>Hospitalar Brasil</option>
+                    <option>Medix Brasil</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label" for="historyStatusFilter">Status</label>
+                <select class="form-select" id="historyStatusFilter" name="status">
+                    <option value="">Todos os status</option>
+                    <option>Aprovado</option>
+                    <option>Reprovado</option>
+                </select>
+            </div>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>
