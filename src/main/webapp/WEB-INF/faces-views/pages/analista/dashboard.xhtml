@@ -4,6 +4,8 @@
     xmlns:ui="jakarta.faces.facelets"
     template="/WEB-INF/templates/layout.xhtml">
 
+    <ui:param name="contentClass" value="material-lookup-page" />
+
     <ui:define name="title">
         Dashboard Analista de Qualidade
     </ui:define>
@@ -13,9 +15,6 @@
     </ui:define>
     <ui:define name="content">
         <ui:include src="/WEB-INF/components/consultaMaterial.xhtml" />
-    </ui:define>
-    <ui:define name="scripts">
-        <h:outputScript library="js" name="pages/dashboard.js" target="body" />
     </ui:define>
 
 </ui:composition>
