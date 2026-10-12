@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="jakarta.faces.facelets"
+    template="/WEB-INF/templates/layout.xhtml">
+
+    <ui:param name="contentClass" value="layout__content--page" />
+
+    <ui:define name="content">
+        <div class="page #{pageClass}">
+            <header class="page__header">
+                <h1 class="page__title"><ui:insert name="pageTitle" /></h1>
+                <ui:insert name="pageSubtitle" />
+            </header>
+
+            <section class="page__actions" aria-label="Pesquisa e ações da página">
+                <ui:insert name="pageActions" />
+            </section>
+
+            <div class="page__content">
+                <ui:insert name="pageContent" />
+            </div>
+
+            <ui:insert name="pageOverlays" />
+        </div>
+    </ui:define>
+</ui:composition>

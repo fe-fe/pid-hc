@@ -30,6 +30,12 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
         super(15, UsuarioOrdenacao.NOME);
     }
 
+    public void limparFiltros() {
+        ordenacaoAtual = UsuarioOrdenacao.NOME;
+        mostrarInativos = false;
+        reordenar();
+    }
+
     @Override
     protected AbstractService<Usuario, UUID> getService() {
         return usuarioService;

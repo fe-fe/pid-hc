@@ -12,8 +12,12 @@
         }
     };
 
+    // Apply the saved theme before the page is rendered.
+    applyTheme(localStorage.getItem(storageKey) || 'light');
+
     document.addEventListener('DOMContentLoaded', () => {
-        applyTheme(localStorage.getItem(storageKey) || 'light');
+        // The sidebar switch is only available after the body has been parsed.
+        applyTheme(root.dataset.bsTheme);
     });
 
     document.addEventListener('change', (event) => {

@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets">
+    <section class="pid-table card border shadow-sm overflow-hidden" aria-labelledby="cadastro-table-title">
+        <h2 id="cadastro-table-title" class="visually-hidden">Tabela de #{titulo}</h2>
+
+        <h:form id="formTabelaCadastro">
+            <div class="pid-table__toolbar d-flex flex-wrap align-items-center gap-3 px-3 py-2 border-bottom bg-body">
+                <div class="d-flex align-items-center gap-2">
+                    <h:outputLabel for="ordenacao" value="Ordenar por:" styleClass="small text-body-secondary mb-0" />
+                    <h:selectOneMenu id="ordenacao" styleClass="form-select form-select-sm w-auto"
+                                     value="#{bean.ordenacaoAtual}">
+                        <f:selectItems value="#{bean.opcoesOrdenacao}" var="opcao"
+                                       itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
+                        <f:ajax render="@form" listener="#{bean.reordenar}" />
+                    </h:selectOneMenu>
+                </div>
+
+                <div class="form-check mb-0">
+                    <h:selectBooleanCheckbox id="mostrarInativos" styleClass="form-check-input"
+                                             value="#{bean.mostrarInativos}">
+                        <f:ajax render="@form" listener="#{bean.alternarInativos}" />
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="mostrarInativos" value="Mostrar inativos" styleClass="form-check-label small" />
+                </div>
+            </div>
+
+            <div class="pid-table__responsive table-responsive">
+                <table class="pid-table__table table table-hover align-middle mb-0">
+                    <caption class="visually-hidden">#{titulo} cadastrados e seu status.</caption>
+                    <thead class="pid-table__head">
+                        <tr>
+                            <ui:fragment rendered="#{comCodigo}">
+                                <th scope="col">Código</th>
+                            </ui:fragment>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{bean.lista}" var="item">
+                            <tr>
+                                <ui:fragment rendered="#{comCodigo}">
+                                    <td class="fw-semibold text-body text-nowrap">
+                                        <h:outputText value="#{item.codigo}" />
+                                    </td>
+                                </ui:fragment>
+                                <td>
+                                    <h:outputText value="#{item.nome}" />
+                                </td>
+                                <td>
+                                    <span class="badge rounded-pill #{item.inativo ? 'text-bg-secondary' : 'text-bg-success'}">
+                                        #{item.inativo ? 'Inativo' : 'Ativo'}
+                                    </span>
+                                </td>
+                                <td>
+                                    <h:commandLink styleClass="btn btn-sm btn-outline-primary" title="Editar">
+                                        <f:setPropertyActionListener target="#{bean.entidadeSelecionada}" value="#{item}" />
+                                        <f:ajax execute="@this" render=":formEditarCadastro" onevent="abrirModalEditarCadastro" />
+                                        Editar
+                                    </h:commandLink>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+
+                        <ui:fragment rendered="#{empty bean.lista}">
+                            <tr>
+                                <td class="text-center text-body-secondary py-5" colspan="#{comCodigo ? 4 : 3}">
+                                    Nenhum cadastro encontrado.
+                                </td>
+                            </tr>
+                        </ui:fragment>
+                    </tbody>
+                </table>
+            </div>
+
+            <ui:include src="/WEB-INF/components/tabelas/paginacao.xhtml">
+                <ui:param name="registroSingular" value="cadastro encontrado" />
+                <ui:param name="registroPlural" value="cadastros encontrados" />
+                <ui:param name="tabelaDescricao" value="#{titulo}" />
+            </ui:include>
+        </h:form>
+    </section>
+</ui:composition>

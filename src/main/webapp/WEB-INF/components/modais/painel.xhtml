@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:pt="jakarta.faces.passthrough"
+    xmlns:ui="jakarta.faces.facelets">
+    <!-- Estrutura Bootstrap compartilhada; os componentes por tela fornecem o formulário. -->
+    <aside class="modal fade pid-modal" id="#{modalId}" tabindex="-1"
+        aria-labelledby="#{modalId}Title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable #{modalTamanho}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h2 class="modal-title fs-5" id="#{modalId}Title">#{modalTitulo}</h2>
+                        <ui:insert name="descricao" />
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <ui:insert name="conteudo" />
+            </div>
+        </div>
+    </aside>
+</ui:composition>

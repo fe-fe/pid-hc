@@ -30,7 +30,7 @@ public class MaterialService extends AbstractService<Material, UUID> {
         return materialDao.buscarPorCodigo(codigo.trim());
     }
 
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Material obterOuCriar(String codigo, String nome) {
         return buscarPorCodigo(codigo).orElseGet(() -> {
             Material novo = new Material();
@@ -41,7 +41,7 @@ public class MaterialService extends AbstractService<Material, UUID> {
     }
 
     @Override
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Material salvar(Material material) {
         if (material.getCodigo() == null || material.getCodigo().isBlank()
                 || material.getNome() == null || material.getNome().isBlank()) {

@@ -48,9 +48,17 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E
         this.entidadeSelecionada = entidade;
     }
 
+    protected long contarRegistros() {
+        return getService().contarTotal(mostrarInativos);
+    }
+
+    protected List<T> buscarRegistros() {
+        return getService().buscar(paginaAtual, tamanhoPagina, ordenacaoAtual, mostrarInativos);
+    }
+
     protected void carregarPagina() {
-        totalRegistros = getService().contarTotal(mostrarInativos);
-        lista = getService().buscar(paginaAtual, tamanhoPagina, ordenacaoAtual, mostrarInativos);
+        totalRegistros = contarRegistros();
+        lista = buscarRegistros();
 
         if (lista.isEmpty() && paginaAtual > 0) {
             paginaAtual--;

@@ -27,7 +27,7 @@ public class MarcaService extends AbstractService<Marca, UUID> {
         return marcaDao.listarNomes();
     }
 
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Marca obterOuCriar(String nome) {
         String nomePadronizado = padronizarNome(nome);
         return marcaDao.buscarPorNome(nomePadronizado).orElseGet(() -> {
@@ -38,7 +38,7 @@ public class MarcaService extends AbstractService<Marca, UUID> {
     }
 
     @Override
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Marca salvar(Marca marca) {
         if (marca.getNome() == null || marca.getNome().isBlank()) {
             throw new MissingRequiredFieldsException();

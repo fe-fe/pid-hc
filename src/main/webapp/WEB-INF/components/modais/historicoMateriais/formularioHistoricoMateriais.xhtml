@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
+        <ui:param name="modalTamanho" value="modal-lg" />
+        <ui:define name="descricao">
+            <p class="text-body-secondary small mt-1 mb-0" id="#{modalId}Description">#{modalDescricao}</p>
+        </ui:define>
+        <ui:define name="conteudo">
+            <div class="modal-body">
+                <form id="#{modalId}Form" class="row g-3">
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="#{modalId}historyMaterialCode">Código <span class="material-history__required">*</span></label>
+                        <input class="form-control" id="#{modalId}historyMaterialCode" name="codigo" placeholder="Ex.: MAT-005" />
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="#{modalId}historyAnalysisDate">Data <span class="material-history__required">*</span></label>
+                        <input class="form-control" id="#{modalId}historyAnalysisDate" name="data" type="date" />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="#{modalId}historyMaterialName">Nome <span class="material-history__required">*</span></label>
+                        <input class="form-control" id="#{modalId}historyMaterialName" name="nome" placeholder="Nome do material" />
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="#{modalId}historyManufacturer">Fabricante <span class="material-history__required">*</span></label>
+                        <input class="form-control" id="#{modalId}historyManufacturer" name="fabricante" placeholder="Nome do fabricante" />
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="#{modalId}historyBrand">Marca <span class="material-history__required">*</span></label>
+                        <input class="form-control" id="#{modalId}historyBrand" name="marca" placeholder="Marca analisada" />
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="#{modalId}historyLocation">Local <span class="material-history__required">*</span></label>
+                        <input class="form-control" id="#{modalId}historyLocation" name="local" placeholder="Local da avaliação" />
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <label class="form-label" for="#{modalId}historyStatus">Status <span class="material-history__required">*</span></label>
+                        <select class="form-select" id="#{modalId}historyStatus" name="status">
+                            <option value="aprovado">Aprovado</option>
+                            <option value="reprovado">Reprovado</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="#{modalId}historyOpinion">Parecer <span class="material-history__required">*</span></label>
+                        <textarea class="form-control" id="#{modalId}historyOpinion" name="parecer" rows="4" placeholder="Descreva o parecer da análise"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" id="#{modalId}Action" type="button" data-bs-dismiss="modal">#{modalAcao}</button>
+            </div>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>

@@ -3,10 +3,15 @@ package br.ufpr.pid.hc.service;
 import br.ufpr.pid.hc.dao.AbstractDao;
 import br.ufpr.pid.hc.dao.AvaliacaoDao;
 import br.ufpr.pid.hc.entity.Avaliacao;
+import br.ufpr.pid.hc.entity.Fabricante;
+import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Stateless
@@ -26,7 +31,25 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
     @Override
     protected AbstractDao<Avaliacao, UUID> getDao() { return avaliacaoDao; }
 
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @PermitAll
+    public List<Fabricante> buscarFabricantesPorNome(String termo) {
+        return avaliacaoDao.buscarFabricantesAvaliadosPorNome(termo);
+    }
+
+    @PermitAll
+    public List<Avaliacao> buscarComFiltros(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao,
+                                            String termoMaterial, List<UUID> fabricantes,
+                                            LocalDate dataInicio, LocalDate dataFim) {
+        return avaliacaoDao.buscarComFiltros(pagina, tamanhoPagina, campoOrdenacao, termoMaterial, fabricantes,
+                dataInicio, dataFim);
+    }
+
+    @PermitAll
+    public long contarComFiltros(String termoMaterial, List<UUID> fabricantes, LocalDate dataInicio, LocalDate dataFim) {
+        return avaliacaoDao.contarComFiltros(termoMaterial, fabricantes, dataInicio, dataFim);
+    }
+
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Avaliacao registrar(Avaliacao avaliacao, String codigoMaterial, String nomeMaterial,
                                String fabricante, String marca) {
         avaliacao.setMaterial(materialService.obterOuCriar(codigoMaterial, nomeMaterial));

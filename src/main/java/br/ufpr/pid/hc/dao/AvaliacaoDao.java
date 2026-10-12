@@ -1,12 +1,14 @@
 package br.ufpr.pid.hc.dao;
 
 import br.ufpr.pid.hc.entity.Avaliacao;
+import br.ufpr.pid.hc.entity.Fabricante;
 import br.ufpr.pid.hc.entity.Material;
 import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import br.ufpr.pid.hc.enumeration.ResultadoTecnico;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.TypedQuery;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,6 +75,81 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
                         "ORDER BY f.nome",
                 String.class
         ).getResultList();
+    }
+
+    public List<Fabricante> buscarFabricantesAvaliadosPorNome(String termo) {
+        return entityManager.createQuery(
+                        "SELECT DISTINCT f FROM Avaliacao a JOIN a.fabricante f " +
+                                "WHERE (a.ativo IS NULL OR a.ativo = true) AND lower(f.nome) LIKE :termo " +
+                                "ORDER BY f.nome",
+                        Fabricante.class)
+                .setParameter("termo", "%" + termo.trim().toLowerCase() + "%")
+                .getResultList();
+    }
+
+    public List<Avaliacao> buscarComFiltros(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao,
+                                            String termoMaterial, List<UUID> fabricantes,
+                                            LocalDate dataInicio, LocalDate dataFim) {
+        if (fabricantes != null && fabricantes.isEmpty()) {
+            return List.of();
+        }
+        TypedQuery<Avaliacao> query = entityManager.createQuery(
+                "SELECT a FROM Avaliacao a JOIN a.material m JOIN a.fabricante f LEFT JOIN a.marca ma " +
+                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim) +
+                        "ORDER BY " + campoOrdenacao.getCampoBanco(),
+                Avaliacao.class);
+        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim);
+        return query
+                .setFirstResult(pagina * tamanhoPagina)
+                .setMaxResults(tamanhoPagina)
+                .getResultList();
+    }
+
+    public long contarComFiltros(String termoMaterial, List<UUID> fabricantes,
+                                 LocalDate dataInicio, LocalDate dataFim) {
+        if (fabricantes != null && fabricantes.isEmpty()) {
+            return 0;
+        }
+        TypedQuery<Long> query = entityManager.createQuery(
+                "SELECT count(a) FROM Avaliacao a JOIN a.material m JOIN a.fabricante f " +
+                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim),
+                Long.class);
+        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim);
+        return query.getSingleResult();
+    }
+
+    private String filtrosMaterialFabricante(String termoMaterial, List<UUID> fabricantes,
+                                             LocalDate dataInicio, LocalDate dataFim) {
+        StringBuilder where = new StringBuilder("WHERE (a.ativo IS NULL OR a.ativo = true) ");
+        if (termoMaterial != null && !termoMaterial.isBlank()) {
+            where.append("AND (lower(m.codigo) LIKE :termoMaterial OR lower(m.nome) LIKE :termoMaterial) ");
+        }
+        if (fabricantes != null) {
+            where.append("AND f.id IN :fabricantes ");
+        }
+        if (dataInicio != null) {
+            where.append("AND a.data >= :dataInicio ");
+        }
+        if (dataFim != null) {
+            where.append("AND a.data <= :dataFim ");
+        }
+        return where.toString();
+    }
+
+    private void aplicarFiltrosMaterialFabricante(TypedQuery<?> query, String termoMaterial, List<UUID> fabricantes,
+                                                  LocalDate dataInicio, LocalDate dataFim) {
+        if (termoMaterial != null && !termoMaterial.isBlank()) {
+            query.setParameter("termoMaterial", "%" + termoMaterial.trim().toLowerCase() + "%");
+        }
+        if (fabricantes != null) {
+            query.setParameter("fabricantes", fabricantes);
+        }
+        if (dataInicio != null) {
+            query.setParameter("dataInicio", dataInicio);
+        }
+        if (dataFim != null) {
+            query.setParameter("dataFim", dataFim);
+        }
     }
 
     private String filtros(String termo, String fabricante, ResultadoTecnico resultado) {
