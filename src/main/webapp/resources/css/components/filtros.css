@@ -47,3 +47,7 @@
     border-radius: 8px;
     font-size: 0.8125rem;
 }
+
+.filters-panel__opcoes label {
+    margin-left: 0.375rem;
+}

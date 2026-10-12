@@ -77,7 +77,7 @@
                         <ui:fragment rendered="#{empty bean.avaliacoes}">
                             <tr>
                                 <td class="text-center text-body-secondary py-5" colspan="9">
-                                    Nenhuma avaliação cadastrada.
+                                    #{bean.filtroAtivo ? 'Nenhuma avaliação encontrada com esses filtros.' : 'Nenhuma avaliação cadastrada.'}
                                 </td>
                             </tr>
                         </ui:fragment>

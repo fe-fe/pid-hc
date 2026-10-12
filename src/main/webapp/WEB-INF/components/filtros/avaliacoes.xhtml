@@ -1,37 +1,85 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="jakarta.faces.core"
+    xmlns:h="jakarta.faces.html"
+    xmlns:pt="jakarta.faces.passthrough"
     xmlns:ui="jakarta.faces.facelets">
     <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
         <ui:param name="filtroId" value="avaliacoesFilters" />
         <ui:param name="filtroDescricao" value="Refine as avaliações exibidas" />
-        <ui:define name="campos">
-            <div>
-                <label class="form-label" for="avaliacoesFilterFabricante">Fabricante</label>
-                <input class="form-control" type="text" id="avaliacoesFilterFabricante" name="fabricante" />
-            </div>
-            <div>
-                <label class="form-label" for="avaliacoesFilterMarca">Marca</label>
-                <input class="form-control" type="text" id="avaliacoesFilterMarca" name="marca" />
-            </div>
-            <div>
-                <label class="form-label" for="avaliacoesFilterResultado">Resultado</label>
-                <select class="form-select" id="avaliacoesFilterResultado" name="resultado">
-                    <option value="">Todos os resultados</option>
-                    <option value="APROVADO">Aprovado</option>
-                    <option value="REPROVADO">Reprovado</option>
-                </select>
-            </div>
-            <div>
-                <label class="form-label" for="avaliacoesFilterDataInicial">Data inicial</label>
-                <input class="form-control" type="date" id="avaliacoesFilterDataInicial" name="dataInicial" />
-            </div>
-            <div>
-                <label class="form-label" for="avaliacoesFilterDataFinal">Data final</label>
-                <input class="form-control" type="date" id="avaliacoesFilterDataFinal" name="dataFinal" />
-            </div>
-            <div>
-                <label class="form-label" for="avaliacoesFilterLocal">Local</label>
-                <input class="form-control" type="text" id="avaliacoesFilterLocal" name="local" />
-            </div>
+        <ui:define name="formulario">
+            <h:form id="formFiltrosAvaliacao" styleClass="d-flex flex-column gap-4 flex-grow-1">
+                <div>
+                    <h:outputLabel for="termoMaterial" value="Material" styleClass="form-label" />
+                    <h:inputText id="termoMaterial" type="search" styleClass="form-control"
+                                 value="#{avaliacaoBean.termoMaterial}"
+                                 pt:placeholder="Código ou nome" pt:autocomplete="off"
+                                 pt:onkeydown="return event.key !== 'Enter';" />
+                </div>
+
+                <fieldset>
+                    <legend class="form-label mb-2">Data da avaliação</legend>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <h:outputLabel for="dataInicio" value="De" styleClass="form-label small mb-1" />
+                            <h:inputText id="dataInicio" pt:type="date" styleClass="form-control"
+                                         value="#{avaliacaoBean.dataInicio}">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                        </div>
+                        <div class="col-6">
+                            <h:outputLabel for="dataFim" value="Até" styleClass="form-label small mb-1" />
+                            <h:inputText id="dataFim" pt:type="date" styleClass="form-control"
+                                         value="#{avaliacaoBean.dataFim}">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                        </div>
+                    </div>
+                    <h:message for="dataFim" styleClass="text-danger small" />
+                </fieldset>
+
+                <div>
+                    <h:outputLabel for="termoFabricante" value="Fabricante" styleClass="form-label" />
+                    <h:inputText id="termoFabricante" type="search" styleClass="form-control"
+                                 value="#{avaliacaoBean.termoFabricante}"
+                                 pt:placeholder="Buscar fabricante" pt:autocomplete="off"
+                                 pt:onkeydown="return event.key !== 'Enter';">
+                        <f:ajax event="keyup" delay="400" listener="#{avaliacaoBean.buscarFabricantes}"
+                                render="opcoesFabricante" />
+                    </h:inputText>
+
+                    <h:panelGroup id="opcoesFabricante" layout="block" styleClass="mt-3 small">
+                        <ui:fragment rendered="#{not empty avaliacaoBean.termoFabricante and empty avaliacaoBean.fabricantesEncontrados}">
+                            <span class="text-body-secondary">Nenhum fabricante contém "#{avaliacaoBean.termoFabricante}".</span>
+                        </ui:fragment>
+                        <h:selectManyCheckbox id="fabricantesSelecionados" layout="list"
+                                              rendered="#{not empty avaliacaoBean.fabricantesEncontrados}"
+                                              styleClass="filters-panel__opcoes list-unstyled d-flex flex-column gap-2 mb-0"
+                                              value="#{avaliacaoBean.fabricantesSelecionados}">
+                            <f:selectItems value="#{avaliacaoBean.fabricantesEncontrados}" var="fabricanteEncontrado"
+                                           itemValue="#{fabricanteEncontrado.id.toString()}"
+                                           itemLabel="#{fabricanteEncontrado.nome}" />
+                        </h:selectManyCheckbox>
+                    </h:panelGroup>
+                </div>
+
+                <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
+                    <h:commandButton value="Limpar" styleClass="btn btn-outline-secondary"
+                                     action="#{avaliacaoBean.limparFiltros}">
+                        <f:ajax execute="@this" render="@form :formTabelaAvaliacoes" />
+                    </h:commandButton>
+                    <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary"
+                                     action="#{avaliacaoBean.aplicarFiltros}">
+                        <f:ajax execute="@form" render="@form :formTabelaAvaliacoes" onevent="fecharFiltrosAvaliacao" />
+                    </h:commandButton>
+                </div>
+            </h:form>
         </ui:define>
+        <ui:define name="acoes" />
     </ui:decorate>
+    <h:outputScript target="body">
+            function fecharFiltrosAvaliacao(data) {
+            if (data.status !== "success" || !formSemErros("formFiltrosAvaliacao")) return;
+            bootstrap.Offcanvas.getOrCreateInstance(document.getElementById("avaliacoesFilters")).hide();
+            }
+    </h:outputScript>
 </ui:composition>
