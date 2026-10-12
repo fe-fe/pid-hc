@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="jakarta.faces.core"
+    xmlns:h="jakarta.faces.html"
+    xmlns:pt="jakarta.faces.passthrough"
+    xmlns:ui="jakarta.faces.facelets"
+    template="/WEB-INF/templates/pagina.xhtml">
+
+    <ui:define name="title">
+        Base ANVISA - PID
+    </ui:define>
+
+    <ui:define name="pageTitle">Base ANVISA</ui:define>
+
+    <ui:define name="pageSubtitle">
+        <h:panelGroup id="ultimaImportacaoAnvisa" layout="block" styleClass="page__subtitle">
+            <ui:fragment rendered="#{empty produtoAnvisaBean.ultimaImportacao}">Base ainda não importada</ui:fragment>
+            <ui:fragment rendered="#{not empty produtoAnvisaBean.ultimaImportacao}">
+                Dados da ANVISA de
+                <h:outputText value="#{produtoAnvisaBean.ultimaImportacao.dtAtualizacaoDado}">
+                    <f:convertDateTime type="localDateTime" pattern="dd/MM/yyyy HH:mm" />
+                </h:outputText>
+                · importados em
+                <h:outputText value="#{produtoAnvisaBean.ultimaImportacao.importadoEm}">
+                    <f:convertDateTime type="localDateTime" pattern="dd/MM/yyyy HH:mm" />
+                </h:outputText>
+            </ui:fragment>
+        </h:panelGroup>
+    </ui:define>
+
+    <ui:define name="pageActions">
+        <h:form id="formAcoesAnvisa" styleClass="d-flex flex-wrap align-items-center justify-content-between gap-3 w-100">
+            <div class="page__search-area">
+                <label class="page__search">
+                    <span class="visually-hidden">Pesquisar</span>
+                    <svg class="page__search-icon" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.3-4.3" />
+                    </svg>
+                    <h:inputText id="termo" type="search" autocomplete="off" styleClass="page__search-input"
+                                 value="#{produtoAnvisaBean.termo}"
+                                 pt:placeholder="Registro, CNPJ, nome, fabricante ou detentor"
+                                 pt:onkeydown="return event.key !== 'Enter';">
+                        <f:ajax event="keyup" delay="400" listener="#{produtoAnvisaBean.buscar}" render=":formAnvisa" />
+                    </h:inputText>
+                </label>
+            </div>
+
+            <div class="page__action-buttons align-items-center">
+                <h:outputText rendered="#{produtoAnvisaBean.atualizacaoBloqueada}"
+                              value="#{produtoAnvisaBean.proximaAtualizacao}" styleClass="small text-body-secondary">
+                    <f:convertDateTime type="localDateTime" pattern="'Nova atualização a partir de' dd/MM 'às' HH:mm" />
+                </h:outputText>
+                <h:commandButton id="atualizar" styleClass="page__button page__button--primary" value="Atualizar"
+                                 disabled="#{produtoAnvisaBean.atualizacaoBloqueada}"
+                                 action="#{produtoAnvisaBean.atualizar}">
+                    <f:ajax render="@form :formAnvisa :ultimaImportacaoAnvisa" onevent="aoAtualizarAnvisa" />
+                </h:commandButton>
+            </div>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="pageContent">
+        <h:form id="formAnvisa">
+            <h:messages globalOnly="true" infoClass="text-success small" warnClass="text-body-secondary small"
+                        errorClass="text-danger small"
+                        styleClass="list-unstyled mb-2" />
+
+            <section class="pid-table card border shadow-sm overflow-hidden" aria-labelledby="anvisa-table-title">
+                <h2 id="anvisa-table-title" class="visually-hidden">Tabela de produtos da ANVISA</h2>
+
+                <div class="pid-table__responsive table-responsive">
+                    <table class="pid-table__table table table-hover align-middle mb-0">
+                        <caption class="visually-hidden">Produtos para saúde registrados na ANVISA.</caption>
+                        <thead class="pid-table__head">
+                            <tr>
+                                <th scope="col">Registro</th>
+                                <th scope="col">Nome comercial</th>
+                                <th scope="col">Nome técnico</th>
+                                <th scope="col">Classe</th>
+                                <th scope="col">Detentor</th>
+                                <th scope="col">Fabricante</th>
+                                <th scope="col">Validade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ui:repeat value="#{produtoAnvisaBean.lista}" var="produto">
+                                <tr>
+                                    <td class="fw-semibold text-body text-nowrap">
+                                        #{produto.numeroRegistroCadastro}
+                                        <div class="small text-body-secondary fw-normal">Proc. #{produto.numeroProcesso}</div>
+                                    </td>
+                                    <td class="pid-table__description">#{produto.nomeComercial}</td>
+                                    <td>#{produto.nomeTecnico}</td>
+                                    <td>#{produto.classeRisco}</td>
+                                    <td>
+                                        #{produto.detentorRegistroCadastro}
+                                        <div class="small text-body-secondary">#{produto.cnpjDetentorRegistroCadastro}</div>
+                                    </td>
+                                    <td>
+                                        #{empty produto.nomeFabricante ? '—' : produto.nomeFabricante}
+                                        <div class="small text-body-secondary">#{produto.nomePaisFabric}</div>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        #{produto.validadeRegistroCadastro}
+                                        <div class="small text-body-secondary">Publ. #{produto.dtPubRegistroCadastro}</div>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+
+                            <ui:fragment rendered="#{empty produtoAnvisaBean.lista}">
+                                <tr>
+                                    <td class="text-center text-body-secondary py-5" colspan="7">
+                                        Nenhum produto encontrado.
+                                    </td>
+                                </tr>
+                            </ui:fragment>
+                        </tbody>
+                    </table>
+                </div>
+
+                <ui:include src="/WEB-INF/components/tabelas/paginacao.xhtml">
+                    <ui:param name="bean" value="#{produtoAnvisaBean}" />
+                    <ui:param name="registroSingular" value="produto encontrado" />
+                    <ui:param name="registroPlural" value="produtos encontrados" />
+                    <ui:param name="tabelaDescricao" value="produtos da ANVISA" />
+                </ui:include>
+            </section>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="pageOverlays">
+        <h:outputScript target="body">
+            function aoAtualizarAnvisa(data) {
+            if (data.status === "begin") {
+            data.source.disabled = true;
+            data.source.value = "Atualizando...";
+            }
+            }
+        </h:outputScript>
+    </ui:define>
+
+</ui:composition>
