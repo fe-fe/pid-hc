@@ -2,6 +2,7 @@ package br.ufpr.pid.hc.bean;
 
 import br.ufpr.pid.hc.entity.Avaliacao;
 import br.ufpr.pid.hc.entity.Material;
+import br.ufpr.pid.hc.entity.ProdutoAnvisa;
 import br.ufpr.pid.hc.enumeration.AvaliacaoOrdenacao;
 import br.ufpr.pid.hc.enumeration.MaterialOrdenacao;
 import br.ufpr.pid.hc.enumeration.ResultadoTecnico;
@@ -9,6 +10,7 @@ import br.ufpr.pid.hc.exception.DomainException;
 import br.ufpr.pid.hc.service.AbstractService;
 import br.ufpr.pid.hc.service.AvaliacaoService;
 import br.ufpr.pid.hc.service.FabricanteService;
+import br.ufpr.pid.hc.service.ImportacaoAnvisaService;
 import br.ufpr.pid.hc.service.MarcaService;
 import br.ufpr.pid.hc.service.MaterialService;
 import jakarta.faces.application.FacesMessage;
@@ -41,6 +43,9 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     @Inject
     private MarcaService marcaService;
 
+    @Inject
+    private ImportacaoAnvisaService importacaoAnvisaService;
+
     private Avaliacao avaliacao;
     private String codigoMaterial;
     private String nomeMaterial;
@@ -51,6 +56,10 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     private List<Material> materiais;
     private List<String> fabricantes;
     private List<String> marcas;
+
+    private Boolean registroAnvisaEncontrado;
+    private List<String> fabricantesAnvisa = List.of();
+    private List<String> marcasAnvisa = List.of();
 
     public AvaliacaoBean() {
         super(15, AvaliacaoOrdenacao.MATERIAL);
@@ -87,6 +96,33 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         materialExistente = false;
         fabricante = null;
         marca = null;
+        registroAnvisaEncontrado = null;
+        fabricantesAnvisa = List.of();
+        marcasAnvisa = List.of();
+    }
+
+    public void buscarRegistroAnvisa() {
+        String registro = avaliacao.getRegistroAnvisa() == null ? "" : avaliacao.getRegistroAnvisa().replaceAll("\\D", "");
+        List<ProdutoAnvisa> produtos = registro.isEmpty() ? List.of() : importacaoAnvisaService.buscarPorRegistro(registro);
+        registroAnvisaEncontrado = registro.isEmpty() ? null : !produtos.isEmpty();
+        fabricantesAnvisa = produtos.stream()
+                .map(ProdutoAnvisa::getNomeFabricante)
+                .filter(nome -> nome != null && !nome.isBlank())
+                .distinct()
+                .toList();
+        marcasAnvisa = produtos.stream()
+                .map(ProdutoAnvisa::getNomeComercial)
+                .filter(nome -> nome != null && !nome.isBlank())
+                .distinct()
+                .toList();
+    }
+
+    public List<String> getSugestoesFabricante() {
+        return fabricantesAnvisa.isEmpty() ? fabricantes : fabricantesAnvisa;
+    }
+
+    public List<String> getSugestoesMarca() {
+        return marcasAnvisa.isEmpty() ? marcas : marcasAnvisa;
     }
 
     public void buscarMaterial() {

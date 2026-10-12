@@ -39,33 +39,49 @@
                             <h:message for="nomeMaterial" styleClass="text-danger small" />
                         </h:panelGroup>
                     </div>
+                    <div class="mb-3">
+                        <h:outputLabel styleClass="form-label" for="registroAnvisa" value="Registro ANVISA" />
+                        <h:inputText styleClass="form-control" id="registroAnvisa" value="#{avaliacaoBean.avaliacao.registroAnvisa}"
+                            pt:autocomplete="off">
+                            <f:ajax event="change" execute="@this" listener="#{avaliacaoBean.buscarRegistroAnvisa}"
+                                render="resultadoRegistroAnvisa grupoListaFabricantes grupoListaMarcas" />
+                        </h:inputText>
+                        <h:panelGroup id="resultadoRegistroAnvisa" layout="block" styleClass="small">
+                            <h:outputText rendered="#{avaliacaoBean.registroAnvisaEncontrado == true}"
+                                value="Registro encontrado na ANVISA: veja as sugestões de fabricante e marca."
+                                styleClass="text-success" />
+                            <h:outputText rendered="#{avaliacaoBean.registroAnvisaEncontrado == false}"
+                                value="Registro não encontrado na base ANVISA."
+                                styleClass="text-body-secondary" />
+                        </h:panelGroup>
+                    </div>
                     <div class="row g-3 mb-3">
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="fabricante" value="Fabricante" />
                             <h:inputText styleClass="form-control" id="fabricante" value="#{avaliacaoBean.fabricante}"
                                 pt:list="listaFabricantes" pt:autocomplete="off"
                                 required="true" requiredMessage="Informe o fabricante" />
-                            <datalist id="listaFabricantes">
-                                <ui:repeat value="#{avaliacaoBean.fabricantes}" var="nomeFabricante">
-                                    <option value="#{nomeFabricante}" />
-                                </ui:repeat>
-                            </datalist>
+                            <h:panelGroup id="grupoListaFabricantes">
+                                <datalist id="listaFabricantes">
+                                    <ui:repeat value="#{avaliacaoBean.sugestoesFabricante}" var="nomeFabricante">
+                                        <option value="#{nomeFabricante}" />
+                                    </ui:repeat>
+                                </datalist>
+                            </h:panelGroup>
                             <h:message for="fabricante" styleClass="text-danger small" />
                         </div>
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="marca" value="Marca (opcional)" />
                             <h:inputText styleClass="form-control" id="marca" value="#{avaliacaoBean.marca}"
                                 pt:list="listaMarcas" pt:autocomplete="off" />
-                            <datalist id="listaMarcas">
-                                <ui:repeat value="#{avaliacaoBean.marcas}" var="nomeMarca">
-                                    <option value="#{nomeMarca}" />
-                                </ui:repeat>
-                            </datalist>
+                            <h:panelGroup id="grupoListaMarcas">
+                                <datalist id="listaMarcas">
+                                    <ui:repeat value="#{avaliacaoBean.sugestoesMarca}" var="nomeMarca">
+                                        <option value="#{nomeMarca}" />
+                                    </ui:repeat>
+                                </datalist>
+                            </h:panelGroup>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <h:outputLabel styleClass="form-label" for="registroAnvisa" value="Registro ANVISA" />
-                        <h:inputText styleClass="form-control" id="registroAnvisa" value="#{avaliacaoBean.avaliacao.registroAnvisa}" />
                     </div>
                     <div class="row g-3 mb-3">
                         <div class="col-12 col-md-6">
