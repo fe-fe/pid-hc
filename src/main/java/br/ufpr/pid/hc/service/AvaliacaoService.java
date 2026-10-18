@@ -29,7 +29,9 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
     private MarcaService marcaService;
 
     @Override
-    protected AbstractDao<Avaliacao, UUID> getDao() { return avaliacaoDao; }
+    protected AbstractDao<Avaliacao, UUID> getDao() {
+        return avaliacaoDao;
+    }
 
     @PermitAll
     public List<Fabricante> buscarFabricantesPorNome(String termo) {
@@ -38,23 +40,33 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
 
     @PermitAll
     public List<Avaliacao> buscarComFiltros(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao,
-                                            String termoMaterial, List<UUID> fabricantes,
-                                            LocalDate dataInicio, LocalDate dataFim) {
+            String termoMaterial, List<UUID> fabricantes,
+            LocalDate dataInicio, LocalDate dataFim) {
         return avaliacaoDao.buscarComFiltros(pagina, tamanhoPagina, campoOrdenacao, termoMaterial, fabricantes,
                 dataInicio, dataFim);
     }
 
     @PermitAll
-    public long contarComFiltros(String termoMaterial, List<UUID> fabricantes, LocalDate dataInicio, LocalDate dataFim) {
+    public long contarComFiltros(String termoMaterial, List<UUID> fabricantes, LocalDate dataInicio,
+            LocalDate dataFim) {
         return avaliacaoDao.contarComFiltros(termoMaterial, fabricantes, dataInicio, dataFim);
     }
 
-    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
+    @RolesAllowed({ "ADMINISTRADOR", "ANALISTA" })
     public Avaliacao registrar(Avaliacao avaliacao, String codigoMaterial, String nomeMaterial,
-                               String fabricante, String marca) {
+            String fabricante, String marca) {
         avaliacao.setMaterial(materialService.obterOuCriar(codigoMaterial, nomeMaterial));
         avaliacao.setFabricante(fabricanteService.obterOuCriar(fabricante));
         avaliacao.setMarca(marca == null || marca.isBlank() ? null : marcaService.obterOuCriar(marca));
         return salvar(avaliacao);
+    }
+
+    @RolesAllowed({ "ADMINISTRADOR", "ANALISTA" })
+    public List<Avaliacao> buscarAvaliacoesPorMaterial(String codigo) {
+        if (codigo == null || codigo.isBlank()) {
+            return List.of();
+        }
+
+        return avaliacaoDao.buscarAvaliacoesPorCodigoMaterial(codigo.trim());
     }
 }
