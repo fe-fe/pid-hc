@@ -25,6 +25,12 @@
     font-size: 0.8125rem;
 }
 
+.material-history__brand-title{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .material-history__button {
     display: inline-flex;
     align-items: center;
@@ -124,6 +130,19 @@
 
 .material-history__column-date {
     width: 112px;
+}
+
+.material-history .pid-table__table--history {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.material-history__column-limited {
+    width: 140px;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .material-history__column-status {
