@@ -7,12 +7,12 @@
 }
 
 .filters-panel .offcanvas-header {
-    padding: 20px;
+    padding: 16px;
     border-color: var(--pid-border);
 }
 
 .filters-panel .offcanvas-body {
-    padding: 20px;
+    padding: 16px;
 }
 
 .filters-panel__description {
@@ -50,4 +50,64 @@
 
 .filters-panel__opcoes label {
     margin-left: 0.375rem;
+}
+
+.form-helper {
+    color: var(--pid-muted);
+    margin-top: 8px;
+    font-size: 0.75rem;
+}
+
+.filters-panel__suggestions {
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.filters-panel__autocomplete .filters-panel__dropdown {
+    top: 4px;
+    left: 0;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    color: var(--pid-text);
+    background-color: var(--pid-surface);
+    border-color: var(--pid-control-border);
+    border-radius: 8px;
+    font-size: inherit;
+}
+
+.filters-panel__autocomplete:focus-within .filters-panel__dropdown {
+    display: block;
+}
+
+.filters-panel__dropdown .filters-panel__suggestion {
+    border: 0;
+}
+
+.filters-panel__suggestion {
+    color: var(--pid-text);
+    border: 1px solid var(--pid-border);
+}
+
+.filters-panel__selection {
+    max-width: 100%;
+    padding: 8px 10px;
+    color: var(--pid-link);
+    background-color: var(--pid-accent-soft);
+    border: 1px solid var(--pid-control-border);
+    font-size: inherit;
+    font-weight: 500;
+}
+
+.filters-panel__suggestion:hover,
+.filters-panel__selection:hover {
+    color: var(--pid-link);
+    background-color: var(--pid-hover);
+    border-color: var(--pid-hover-border);
+}
+
+.filters-panel__suggestion:focus-visible,
+.filters-panel__selection:focus-visible {
+    outline: 2px solid var(--pid-link);
+    outline-offset: 2px;
 }

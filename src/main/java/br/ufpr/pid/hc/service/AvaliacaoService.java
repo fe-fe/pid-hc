@@ -35,7 +35,10 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
 
     @PermitAll
     public List<Fabricante> buscarFabricantesPorNome(String termo) {
-        return avaliacaoDao.buscarFabricantesAvaliadosPorNome(termo);
+        if (termo == null || termo.trim().length() < 3) {
+            return List.of();
+        }
+        return avaliacaoDao.buscarFabricantesAvaliadosPorNome(termo.trim());
     }
 
     @PermitAll

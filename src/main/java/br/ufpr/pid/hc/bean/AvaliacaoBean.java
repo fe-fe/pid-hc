@@ -68,7 +68,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     private String codigoFiltrado;
     private String termoFabricante;
     private List<Fabricante> fabricantesEncontrados = List.of();
-    private List<String> fabricantesSelecionados = new ArrayList<>();
+    private List<Fabricante> fabricantesSelecionados = new ArrayList<>();
     private List<UUID> fabricantesFiltrados;
     private String materialFiltrado;
     private LocalDate dataInicio;
@@ -165,12 +165,31 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     }
 
     public void buscarFabricantes() {
-        fabricantesEncontrados = termoFabricante == null || termoFabricante.isBlank()
-                ? List.of()
-                : avaliacaoService.buscarFabricantesPorNome(termoFabricante);
-        fabricantesSelecionados = new ArrayList<>(fabricantesEncontrados.stream()
-                .map(fabricanteEncontrado -> fabricanteEncontrado.getId().toString())
-                .toList());
+        fabricantesEncontrados = isBuscaFabricanteValida()
+                ? avaliacaoService.buscarFabricantesPorNome(termoFabricante.trim())
+                : List.of();
+    }
+
+    public boolean isBuscaFabricanteValida() {
+        return termoFabricante != null && termoFabricante.trim().length() >= 3;
+    }
+
+    public List<Fabricante> getSugestoesFabricantesFiltro() {
+        return fabricantesEncontrados.stream()
+                .filter(opcao -> fabricantesSelecionados.stream()
+                        .noneMatch(selecionado -> selecionado.getId().equals(opcao.getId())))
+                .toList();
+    }
+
+    public void adicionarFabricante(Fabricante fabricanteSelecionado) {
+        if (fabricanteSelecionado != null && fabricantesSelecionados.stream()
+                .noneMatch(selecionado -> selecionado.getId().equals(fabricanteSelecionado.getId()))) {
+            fabricantesSelecionados.add(fabricanteSelecionado);
+        }
+    }
+
+    public void removerFabricante(Fabricante fabricanteSelecionado) {
+        fabricantesSelecionados.removeIf(selecionado -> selecionado.getId().equals(fabricanteSelecionado.getId()));
     }
 
     public void aplicarFiltros() {
@@ -182,9 +201,9 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         dataInicioFiltrada = dataInicio;
         dataFimFiltrada = dataFim;
         materialFiltrado = termoMaterial == null || termoMaterial.isBlank() ? null : termoMaterial;
-        fabricantesFiltrados = termoFabricante == null || termoFabricante.isBlank()
+        fabricantesFiltrados = fabricantesSelecionados.isEmpty()
                 ? null
-                : fabricantesSelecionados.stream().map(UUID::fromString).toList();
+                : fabricantesSelecionados.stream().map(Fabricante::getId).toList();
         reordenar();
     }
 

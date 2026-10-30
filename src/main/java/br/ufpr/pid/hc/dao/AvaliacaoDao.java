@@ -87,6 +87,7 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
                         "ORDER BY f.nome",
                 Fabricante.class)
                 .setParameter("termo", "%" + termo.trim().toLowerCase() + "%")
+                .setMaxResults(10)
                 .getResultList();
     }
 
