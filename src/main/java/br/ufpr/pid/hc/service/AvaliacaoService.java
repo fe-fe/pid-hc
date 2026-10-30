@@ -41,15 +41,15 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
     @PermitAll
     public List<Avaliacao> buscarComFiltros(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao,
             String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial) {
         return avaliacaoDao.buscarComFiltros(pagina, tamanhoPagina, campoOrdenacao, termoMaterial, fabricantes,
-                dataInicio, dataFim);
+                dataInicio, dataFim, codigoMaterial);
     }
 
     @PermitAll
     public long contarComFiltros(String termoMaterial, List<UUID> fabricantes, LocalDate dataInicio,
-            LocalDate dataFim) {
-        return avaliacaoDao.contarComFiltros(termoMaterial, fabricantes, dataInicio, dataFim);
+            LocalDate dataFim, String codigoMaterial) {
+        return avaliacaoDao.contarComFiltros(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial);
     }
 
     @RolesAllowed({ "ADMINISTRADOR", "ANALISTA" })

@@ -64,6 +64,8 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     private List<String> marcasAnvisa = List.of();
 
     private String termoMaterial;
+    private String codigoPesquisa;
+    private String codigoFiltrado;
     private String termoFabricante;
     private List<Fabricante> fabricantesEncontrados = List.of();
     private List<String> fabricantesSelecionados = new ArrayList<>();
@@ -153,8 +155,13 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     public ResultadoTecnico[] getResultados() { return ResultadoTecnico.values(); }
 
     public boolean isFiltroAtivo() {
-        return materialFiltrado != null || fabricantesFiltrados != null
+        return codigoFiltrado != null || materialFiltrado != null || fabricantesFiltrados != null
                 || dataInicioFiltrada != null || dataFimFiltrada != null;
+    }
+
+    public void pesquisarPorCodigo() {
+        codigoFiltrado = codigoPesquisa == null || codigoPesquisa.isBlank() ? null : codigoPesquisa.trim();
+        reordenar();
     }
 
     public void buscarFabricantes() {
@@ -199,7 +206,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     protected long contarRegistros() {
         return isFiltroAtivo()
                 ? avaliacaoService.contarComFiltros(materialFiltrado, fabricantesFiltrados,
-                        dataInicioFiltrada, dataFimFiltrada)
+                        dataInicioFiltrada, dataFimFiltrada, codigoFiltrado)
                 : super.contarRegistros();
     }
 
@@ -207,7 +214,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     protected List<Avaliacao> buscarRegistros() {
         return isFiltroAtivo()
                 ? avaliacaoService.buscarComFiltros(paginaAtual, tamanhoPagina, ordenacaoAtual, materialFiltrado,
-                        fabricantesFiltrados, dataInicioFiltrada, dataFimFiltrada)
+                        fabricantesFiltrados, dataInicioFiltrada, dataFimFiltrada, codigoFiltrado)
                 : super.buscarRegistros();
     }
 

@@ -92,38 +92,40 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
 
     public List<Avaliacao> buscarComFiltros(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao,
             String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial) {
         if (fabricantes != null && fabricantes.isEmpty()) {
             return List.of();
         }
         TypedQuery<Avaliacao> query = entityManager.createQuery(
                 "SELECT a FROM Avaliacao a JOIN a.material m JOIN a.fabricante f LEFT JOIN a.marca ma " +
-                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim) +
+                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial) +
                         "ORDER BY " + campoOrdenacao.getCampoBanco(),
                 Avaliacao.class);
-        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim);
+        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial);
         return query
                 .setFirstResult(pagina * tamanhoPagina)
                 .setMaxResults(tamanhoPagina)
                 .getResultList();
     }
 
-    public long contarComFiltros(String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim) {
+    public long contarComFiltros(String termoMaterial, List<UUID> fabricantes, LocalDate dataInicio, LocalDate dataFim, String codigoMaterial) {
         if (fabricantes != null && fabricantes.isEmpty()) {
             return 0;
         }
         TypedQuery<Long> query = entityManager.createQuery(
                 "SELECT count(a) FROM Avaliacao a JOIN a.material m JOIN a.fabricante f " +
-                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim),
+                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial),
                 Long.class);
-        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim);
+        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial);
         return query.getSingleResult();
     }
 
     private String filtrosMaterialFabricante(String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial) {
         StringBuilder where = new StringBuilder("WHERE (a.ativo IS NULL OR a.ativo = true) ");
+        if (codigoMaterial != null && !codigoMaterial.isBlank()) {
+            where.append("AND m.codigo = :codigoMaterial ");
+        }
         if (termoMaterial != null && !termoMaterial.isBlank()) {
             where.append("AND (lower(m.codigo) LIKE :termoMaterial OR lower(m.nome) LIKE :termoMaterial) ");
         }
@@ -140,7 +142,10 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
     }
 
     private void aplicarFiltrosMaterialFabricante(TypedQuery<?> query, String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial) {
+        if (codigoMaterial != null && !codigoMaterial.isBlank()) {
+            query.setParameter("codigoMaterial", codigoMaterial.trim());
+        }
         if (termoMaterial != null && !termoMaterial.isBlank()) {
             query.setParameter("termoMaterial", "%" + termoMaterial.trim().toLowerCase() + "%");
         }
