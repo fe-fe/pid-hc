@@ -71,14 +71,14 @@
                 <h2 id="anvisa-table-title" class="visually-hidden">Tabela de produtos da ANVISA</h2>
 
                 <div class="pid-table__responsive table-responsive">
-                    <table class="pid-table__table table table-hover align-middle mb-0">
+                    <table class="pid-table__table pid-table__table--anvisa table table-hover align-middle mb-0">
                         <caption class="visually-hidden">Produtos para saúde registrados na ANVISA.</caption>
                         <thead class="pid-table__head">
                             <tr>
                                 <th scope="col">Registro</th>
                                 <th scope="col">Nome comercial</th>
                                 <th scope="col">Nome técnico</th>
-                                <th scope="col">Classe</th>
+                                <th scope="col" class="text-center">Classe</th>
                                 <th scope="col">Detentor</th>
                                 <th scope="col">Fabricante</th>
                                 <th scope="col">Validade</th>
@@ -93,7 +93,7 @@
                                     </td>
                                     <td class="pid-table__description">#{produto.nomeComercial}</td>
                                     <td>#{produto.nomeTecnico}</td>
-                                    <td>#{produto.classeRisco}</td>
+                                    <td class="text-center">#{produto.classeRisco}</td>
                                     <td>
                                         #{produto.detentorRegistroCadastro}
                                         <div class="small text-body-secondary">#{produto.cnpjDetentorRegistroCadastro}</div>
