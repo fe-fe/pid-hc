@@ -494,6 +494,23 @@ p {
     text-transform: uppercase;
 }
 
+.sidebar__chevron {
+    flex-shrink: 0;
+    transform: rotate(0deg);
+    transform-origin: center;
+    transition: transform 200ms ease;
+}
+
+.sidebar__nav [aria-expanded="true"] .sidebar__chevron {
+    transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar__chevron {
+        transition: none;
+    }
+}
+
 .sidebar__footer {
     margin-top: auto;
     padding: 14px;
