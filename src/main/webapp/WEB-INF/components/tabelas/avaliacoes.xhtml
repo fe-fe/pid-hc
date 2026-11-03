@@ -3,7 +3,7 @@
     xmlns:h="jakarta.faces.html"
     xmlns:ui="jakarta.faces.facelets">
 
-    <section class="pid-table card border shadow-sm overflow-hidden" aria-labelledby="avaliacoes-table-title">
+    <section class="pid-table card border shadow-sm overflow-hidden" aria-labelledby="avaliacoes-table-title" data-table-scroll="true">
         <h2 id="avaliacoes-table-title" class="visually-hidden">Tabela de avaliações</h2>
 
         <h:form id="formTabelaAvaliacoes">
@@ -17,9 +17,20 @@
                         <f:ajax render="@form" listener="#{bean.reordenar}" />
                     </h:selectOneMenu>
                 </div>
+                <div class="pid-table__scroll-controls d-flex gap-2 ms-auto" role="group" aria-label="Rolagem horizontal da tabela">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-table-scroll-direction="-1"
+                            aria-label="Rolar tabela para a esquerda" aria-controls="avaliacoes-scroll" title="Rolar para a esquerda" disabled="disabled">
+                        <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-table-scroll-direction="1"
+                            aria-label="Rolar tabela para a direita" aria-controls="avaliacoes-scroll" title="Rolar para a direita" disabled="disabled">
+                        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
 
-            <div class="pid-table__responsive table-responsive">
+            <div id="avaliacoes-scroll" class="pid-table__responsive table-responsive" data-table-scroll-viewport="true"
+                 tabindex="0" role="region" aria-label="Tabela de avaliações com rolagem horizontal">
                 <table class="pid-table__table pid-table__table--avaliacoes table table-hover align-middle mb-0">
                     <caption class="visually-hidden">
                         Avaliações por material, fabricante e marca, com data, resultado, registro ANVISA, descrição e parecer.

@@ -16,6 +16,23 @@
     outline-offset: 3px;
 }
 
+.pid-table__scroll-controls .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+}
+
+[data-table-scroll-viewport].is-scrollable {
+    cursor: grab;
+}
+
+[data-table-scroll-viewport].is-dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
 .pid-table__table {
     --bs-table-bg: var(--pid-surface);
     --bs-table-color: var(--pid-text-secondary);
