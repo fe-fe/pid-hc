@@ -1,28 +1,143 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="jakarta.faces.core"
+    xmlns:h="jakarta.faces.html"
+    xmlns:pt="jakarta.faces.passthrough"
     xmlns:ui="jakarta.faces.facelets">
     <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
         <ui:param name="filtroId" value="historyFilters" />
-        <ui:param name="filtroDescricao" value="Refine os materiais exibidos" />
-        <ui:define name="campos">
-            <div>
-                <label class="form-label" for="historyManufacturerFilter">Fabricante</label>
-                <select class="form-select" id="historyManufacturerFilter" name="fabricante">
-                    <option value="">Todos os fabricantes</option>
-                    <option>BD</option>
-                    <option>BioSupply</option>
-                    <option>Descarpack</option>
-                    <option>Hospitalar Brasil</option>
-                    <option>Medix Brasil</option>
-                </select>
-            </div>
-            <div>
-                <label class="form-label" for="historyStatusFilter">Status</label>
-                <select class="form-select" id="historyStatusFilter" name="status">
-                    <option value="">Todos os status</option>
-                    <option>Aprovado</option>
-                    <option>Reprovado</option>
-                </select>
-            </div>
+        <ui:param name="filtroDescricao" value="Refine as avaliações por marca e fabricante" />
+        <ui:define name="formulario">
+            <h:form id="formFiltrosHistoricoMateriais" styleClass="d-flex flex-column gap-2 flex-grow-1">
+                <div>
+                    <h:outputLabel for="termoMarca" value="Marca" styleClass="form-label" />
+                    <div class="filters-panel__autocomplete">
+                        <h:inputText id="termoMarca" pt:type="search" styleClass="form-control"
+                                     value="#{consultaMaterialBean.termoMarca}"
+                                     pt:placeholder="Digite o nome da marca" pt:autocomplete="off"
+                                     pt:aria-describedby="marcaAjuda"
+                                     pt:onkeydown="return event.key !== 'Enter';">
+                            <f:ajax event="keyup" execute="@this" delay="400" listener="#{consultaMaterialBean.buscarMarcas}"
+                                    render="opcoesMarca" />
+                            <f:ajax event="change" execute="@this" delay="400" listener="#{consultaMaterialBean.buscarMarcas}"
+                                    render="opcoesMarca" />
+                        </h:inputText>
+                        <h:panelGroup id="opcoesMarca" layout="block" styleClass="position-relative small pt-2">
+                            <ui:fragment rendered="#{consultaMaterialBean.buscaMarcaValida}">
+                                <div class="filters-panel__dropdown dropdown-menu shadow-sm p-1" aria-label="Sugestões de marcas">
+                                    <ui:fragment rendered="#{empty consultaMaterialBean.marcasEncontradas}">
+                                        <p class="text-body-secondary p-2 mb-0" role="status">Nenhuma marca encontrada para “#{consultaMaterialBean.termoMarca}”.</p>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{not empty consultaMaterialBean.marcasEncontradas and empty consultaMaterialBean.sugestoesMarcasFiltro}">
+                                        <p class="text-body-secondary p-2 mb-0" role="status">As marcas encontradas já estão selecionadas.</p>
+                                    </ui:fragment>
+                                    <div class="filters-panel__suggestions">
+                                        <ui:repeat value="#{consultaMaterialBean.sugestoesMarcasFiltro}" var="marcaEncontrada">
+                                            <h:commandLink action="#{consultaMaterialBean.adicionarMarca(marcaEncontrada)}"
+                                                           styleClass="filters-panel__suggestion dropdown-item d-flex align-items-center justify-content-between gap-2 rounded p-2"
+                                                           pt:aria-label="Adicionar marca #{marcaEncontrada.nome}">
+                                                <h:outputText value="#{marcaEncontrada.nome}" styleClass="text-break text-wrap" />
+                                                <i class="bi bi-plus-lg flex-shrink-0" aria-hidden="true"></i>
+                                                <f:ajax execute="@this" render=":formFiltrosHistoricoMateriais:opcoesMarca" />
+                                            </h:commandLink>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                            <small id="marcaAjuda" class="form-text form-helper d-block mt-0 mb-0">
+                                Digite 3 caracteres para sugestões
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-slash preview-icon"><path d="m13.5 8.5-5 5"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </small>
+                            <ui:fragment rendered="#{not empty consultaMaterialBean.marcasSelecionadas}">
+                                <div class="d-flex flex-wrap gap-2 mt-2 mb-3">
+                                    <ui:repeat value="#{consultaMaterialBean.marcasSelecionadas}" var="marcaSelecionada">
+                                        <h:commandLink action="#{consultaMaterialBean.removerMarca(marcaSelecionada)}"
+                                                       styleClass="filters-panel__selection badge rounded-pill d-inline-flex align-items-center gap-2 text-start text-decoration-none"
+                                                       pt:aria-label="Remover marca #{marcaSelecionada.nome}">
+                                            <h:outputText value="#{marcaSelecionada.nome}" styleClass="text-break text-wrap" />
+                                            <i class="bi bi-x-lg flex-shrink-0" aria-hidden="true"></i>
+                                            <f:ajax execute="@this" render=":formFiltrosHistoricoMateriais:opcoesMarca" />
+                                        </h:commandLink>
+                                    </ui:repeat>
+                                </div>
+                            </ui:fragment>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <div>
+                    <h:outputLabel for="termoFabricante" value="Fabricante" styleClass="form-label" />
+                    <div class="filters-panel__autocomplete">
+                        <h:inputText id="termoFabricante" pt:type="search" styleClass="form-control"
+                                     value="#{consultaMaterialBean.termoFabricante}"
+                                     pt:placeholder="Digite o nome do fabricante" pt:autocomplete="off"
+                                     pt:aria-describedby="fabricanteAjuda"
+                                     pt:onkeydown="return event.key !== 'Enter';">
+                            <f:ajax event="keyup" execute="@this" delay="400" listener="#{consultaMaterialBean.buscarFabricantes}"
+                                    render="opcoesFabricante" />
+                            <f:ajax event="change" execute="@this" delay="400" listener="#{consultaMaterialBean.buscarFabricantes}"
+                                    render="opcoesFabricante" />
+                        </h:inputText>
+                        <h:panelGroup id="opcoesFabricante" layout="block" styleClass="position-relative small pt-2">
+                            <ui:fragment rendered="#{consultaMaterialBean.buscaFabricanteValida}">
+                                <div class="filters-panel__dropdown dropdown-menu shadow-sm p-1" aria-label="Sugestões de fabricantes">
+                                    <ui:fragment rendered="#{empty consultaMaterialBean.fabricantesEncontrados}">
+                                        <p class="text-body-secondary p-2 mb-0" role="status">Nenhum fabricante encontrado para “#{consultaMaterialBean.termoFabricante}”.</p>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{not empty consultaMaterialBean.fabricantesEncontrados and empty consultaMaterialBean.sugestoesFabricantesFiltro}">
+                                        <p class="text-body-secondary p-2 mb-0" role="status">Os fabricantes encontrados já estão selecionados.</p>
+                                    </ui:fragment>
+                                    <div class="filters-panel__suggestions">
+                                        <ui:repeat value="#{consultaMaterialBean.sugestoesFabricantesFiltro}" var="fabricanteEncontrado">
+                                            <h:commandLink action="#{consultaMaterialBean.adicionarFabricante(fabricanteEncontrado)}"
+                                                           styleClass="filters-panel__suggestion dropdown-item d-flex align-items-center justify-content-between gap-2 rounded p-2"
+                                                           pt:aria-label="Adicionar fabricante #{fabricanteEncontrado.nome}">
+                                                <h:outputText value="#{fabricanteEncontrado.nome}" styleClass="text-break text-wrap" />
+                                                <i class="bi bi-plus-lg flex-shrink-0" aria-hidden="true"></i>
+                                                <f:ajax execute="@this" render=":formFiltrosHistoricoMateriais:opcoesFabricante" />
+                                            </h:commandLink>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                            <small id="fabricanteAjuda" class="form-text form-helper d-block mt-0 mb-0">
+                                Digite 3 caracteres para sugestões
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-slash preview-icon"><path d="m13.5 8.5-5 5"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </small>
+                            <ui:fragment rendered="#{not empty consultaMaterialBean.fabricantesSelecionados}">
+                                <div class="d-flex flex-wrap gap-2 mt-2 mb-3">
+                                    <ui:repeat value="#{consultaMaterialBean.fabricantesSelecionados}" var="fabricanteSelecionado">
+                                        <h:commandLink action="#{consultaMaterialBean.removerFabricante(fabricanteSelecionado)}"
+                                                       styleClass="filters-panel__selection badge rounded-pill d-inline-flex align-items-center gap-2 text-start text-decoration-none"
+                                                       pt:aria-label="Remover fabricante #{fabricanteSelecionado.nome}">
+                                            <h:outputText value="#{fabricanteSelecionado.nome}" styleClass="text-break text-wrap" />
+                                            <i class="bi bi-x-lg flex-shrink-0" aria-hidden="true"></i>
+                                            <f:ajax execute="@this" render=":formFiltrosHistoricoMateriais:opcoesFabricante" />
+                                        </h:commandLink>
+                                    </ui:repeat>
+                                </div>
+                            </ui:fragment>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
+                    <h:commandButton value="Limpar" styleClass="btn btn-outline-secondary"
+                                     action="#{consultaMaterialBean.limparFiltros}">
+                        <f:ajax execute="@this" render="@form :resultado" resetValues="true" />
+                    </h:commandButton>
+                    <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary"
+                                     action="#{consultaMaterialBean.aplicarFiltros}">
+                        <f:ajax execute="@form" render="@form :resultado" onevent="fecharFiltrosHistoricoMateriais" />
+                    </h:commandButton>
+                </div>
+            </h:form>
         </ui:define>
+        <ui:define name="acoes" />
     </ui:decorate>
+    <h:outputScript target="body">
+            function fecharFiltrosHistoricoMateriais(data) {
+            if (data.status !== "success") return;
+            bootstrap.Offcanvas.getOrCreateInstance(document.getElementById("historyFilters")).hide();
+            }
+    </h:outputScript>
 </ui:composition>
