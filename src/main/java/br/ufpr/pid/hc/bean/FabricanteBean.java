@@ -10,6 +10,7 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Named
@@ -21,8 +22,27 @@ public class FabricanteBean extends AbstractCadastroBean<Fabricante, NomeOrdenac
     @Inject
     private FabricanteService fabricanteService;
 
+    private String termoPesquisa;
+    private String termoFiltrado;
+
     public FabricanteBean() {
         super(NomeOrdenacao.NOME);
+    }
+
+    public void pesquisar() {
+        termoFiltrado = termoPesquisa == null || termoPesquisa.isBlank() ? null : termoPesquisa.trim();
+        reordenar();
+    }
+
+    @Override
+    protected long contarRegistros() {
+        return fabricanteService.contarPorTermo(termoFiltrado, mostrarInativos);
+    }
+
+    @Override
+    protected List<Fabricante> buscarRegistros() {
+        return fabricanteService.buscarPorTermo(paginaAtual, tamanhoPagina, ordenacaoAtual,
+                termoFiltrado, mostrarInativos);
     }
 
     @Override
