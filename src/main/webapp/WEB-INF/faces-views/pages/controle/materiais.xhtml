@@ -1,5 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="jakarta.faces.core"
     xmlns:h="jakarta.faces.html"
+    xmlns:pt="jakarta.faces.passthrough"
     xmlns:ui="jakarta.faces.facelets"
     template="/WEB-INF/templates/pagina.xhtml">
 
@@ -10,13 +12,28 @@
 
     <ui:define name="pageTitle">Materiais</ui:define>
 
-    <ui:define name="pageActions">
-        <p class="text-body-secondary small mb-0">Tabela de referência usada nas sugestões do cadastro de avaliação.</p>
+    <ui:define name="pageSubtitle">
+        <p class="page__subtitle">Tabela de referência usada nas sugestões do cadastro de avaliação.</p>
+    </ui:define>
 
-        <div class="page__action-buttons">
-            <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
-                <ui:param name="filtroId" value="materiaisFilters" />
-            </ui:include>
+    <ui:define name="pageActions">
+        <h:form id="formPesquisaMateriais" styleClass="page__search" onsubmit="return false;">
+            <h:outputLabel for="termo" value="Código ou nome do material" styleClass="visually-hidden" />
+            <svg class="page__search-icon" width="16" height="16" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+            </svg>
+            <h:inputText id="termo" value="#{materialBean.termoPesquisa}"
+                         styleClass="page__search-input" pt:autocomplete="off"
+                         pt:type="search" pt:placeholder="Pesquisar por código ou nome"
+                         pt:oninput="this.dispatchEvent(new Event('change'));">
+                <f:ajax event="change" execute="@this" delay="400"
+                        listener="#{materialBean.pesquisar}" render=":formTabelaCadastro" />
+            </h:inputText>
+        </h:form>
+        <div class="page__action-buttons ms-auto">
             <button class="page__button page__button--primary" type="button" data-bs-toggle="modal"
                 data-bs-target="#modalIncluirCadastro">
                 Incluir Material
@@ -36,11 +53,11 @@
             <ui:param name="titulo" value="Materiais" />
             <ui:param name="rotulo" value="material" />
             <ui:param name="comCodigo" value="#{true}" />
+            <ui:param name="ocultarFiltroInativos" value="#{true}" />
         </ui:include>
     </ui:define>
 
     <ui:define name="pageOverlays">
-        <ui:include src="/WEB-INF/components/filtros/materiais.xhtml" />
         <ui:include src="/WEB-INF/components/modais/materiais/modalCriarMateriais.xhtml" />
         <ui:include src="/WEB-INF/components/modais/materiais/modalEditarMateriais.xhtml" />
     </ui:define>
