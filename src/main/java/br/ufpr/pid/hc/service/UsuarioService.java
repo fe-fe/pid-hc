@@ -4,6 +4,7 @@ import br.ufpr.pid.hc.dao.AbstractDao;
 import br.ufpr.pid.hc.dao.UsuarioDao;
 import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.Perfil;
+import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import br.ufpr.pid.hc.exception.DuplicateEmailException;
 import br.ufpr.pid.hc.exception.LastActiveAdminException;
 import br.ufpr.pid.hc.exception.MissingRequiredFieldsException;
@@ -13,6 +14,7 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
+import java.util.List;
 import java.util.UUID;
 
 @Stateless
@@ -32,6 +34,17 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
     @PermitAll
     public Usuario buscarPorEmail(String email) {
         return usuarioDao.buscarPorEmail(email);
+    }
+
+    @PermitAll
+    public List<Usuario> buscarPorNome(int pagina, int tamanhoPagina, CampoOrdenacao ordenacao,
+            String nome, boolean incluirInativos) {
+        return usuarioDao.buscarPorNome(pagina, tamanhoPagina, ordenacao, nome, incluirInativos);
+    }
+
+    @PermitAll
+    public long contarPorNome(String nome, boolean incluirInativos) {
+        return usuarioDao.contarPorNome(nome, incluirInativos);
     }
 
     @Override
