@@ -36,13 +36,13 @@ public class MaterialBean extends AbstractCadastroBean<Material, MaterialOrdenac
 
     @Override
     protected long contarRegistros() {
-        return materialService.contarPorTermo(termoFiltrado, mostrarInativos);
+        return materialService.contarPorTermo(termoFiltrado, true);
     }
 
     @Override
     protected List<Material> buscarRegistros() {
         return materialService.buscarPorTermo(paginaAtual, tamanhoPagina, ordenacaoAtual,
-                termoFiltrado, mostrarInativos);
+                termoFiltrado, true);
     }
 
     @Override
