@@ -2,6 +2,7 @@ package br.ufpr.pid.hc.bean;
 
 import br.ufpr.pid.hc.entity.Avaliacao;
 import br.ufpr.pid.hc.entity.Fabricante;
+import br.ufpr.pid.hc.entity.Marca;
 import br.ufpr.pid.hc.entity.Material;
 import br.ufpr.pid.hc.entity.ProdutoAnvisa;
 import br.ufpr.pid.hc.enumeration.AvaliacaoOrdenacao;
@@ -64,10 +65,16 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     private List<String> marcasAnvisa = List.of();
 
     private String termoMaterial;
+    private String codigoPesquisa;
+    private String codigoFiltrado;
     private String termoFabricante;
     private List<Fabricante> fabricantesEncontrados = List.of();
-    private List<String> fabricantesSelecionados = new ArrayList<>();
+    private List<Fabricante> fabricantesSelecionados = new ArrayList<>();
     private List<UUID> fabricantesFiltrados;
+    private String termoMarca;
+    private List<Marca> marcasEncontradas = List.of();
+    private List<Marca> marcasSelecionadas = new ArrayList<>();
+    private List<UUID> marcasFiltradas;
     private String materialFiltrado;
     private LocalDate dataInicio;
     private LocalDate dataFim;
@@ -153,17 +160,73 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     public ResultadoTecnico[] getResultados() { return ResultadoTecnico.values(); }
 
     public boolean isFiltroAtivo() {
-        return materialFiltrado != null || fabricantesFiltrados != null
+        return codigoFiltrado != null || materialFiltrado != null || fabricantesFiltrados != null || marcasFiltradas != null
                 || dataInicioFiltrada != null || dataFimFiltrada != null;
     }
 
+    public void pesquisarPorCodigo() {
+        codigoFiltrado = codigoPesquisa == null || codigoPesquisa.isBlank() ? null : codigoPesquisa.trim();
+        reordenar();
+    }
+
     public void buscarFabricantes() {
-        fabricantesEncontrados = termoFabricante == null || termoFabricante.isBlank()
-                ? List.of()
-                : avaliacaoService.buscarFabricantesPorNome(termoFabricante);
-        fabricantesSelecionados = new ArrayList<>(fabricantesEncontrados.stream()
-                .map(fabricanteEncontrado -> fabricanteEncontrado.getId().toString())
-                .toList());
+        fabricantesEncontrados = isBuscaFabricanteValida()
+                ? avaliacaoService.buscarFabricantesPorNome(termoFabricante.trim())
+                : List.of();
+    }
+
+    public boolean isBuscaFabricanteValida() {
+        return termoFabricante != null && termoFabricante.trim().length() >= 2;
+    }
+
+    public List<Fabricante> getSugestoesFabricantesFiltro() {
+        return fabricantesEncontrados.stream()
+                .filter(opcao -> fabricantesSelecionados.stream()
+                        .noneMatch(selecionado -> selecionado.getId().equals(opcao.getId())))
+                .toList();
+    }
+
+    public void adicionarFabricante(Fabricante fabricanteSelecionado) {
+        if (fabricanteSelecionado != null && fabricantesSelecionados.stream()
+                .noneMatch(selecionado -> selecionado.getId().equals(fabricanteSelecionado.getId()))) {
+            fabricantesSelecionados.add(fabricanteSelecionado);
+            termoFabricante = null;
+            fabricantesEncontrados = List.of();
+        }
+    }
+
+    public void removerFabricante(Fabricante fabricanteSelecionado) {
+        fabricantesSelecionados.removeIf(selecionado -> selecionado.getId().equals(fabricanteSelecionado.getId()));
+    }
+
+    public void buscarMarcas() {
+        marcasEncontradas = isBuscaMarcaValida()
+                ? avaliacaoService.buscarMarcasPorNome(termoMarca.trim())
+                : List.of();
+    }
+
+    public boolean isBuscaMarcaValida() {
+        return termoMarca != null && termoMarca.trim().length() >= 2;
+    }
+
+    public List<Marca> getSugestoesMarcasFiltro() {
+        return marcasEncontradas.stream()
+                .filter(opcao -> marcasSelecionadas.stream()
+                        .noneMatch(selecionada -> selecionada.getId().equals(opcao.getId())))
+                .toList();
+    }
+
+    public void adicionarMarca(Marca marcaSelecionada) {
+        if (marcaSelecionada != null && marcasSelecionadas.stream()
+                .noneMatch(selecionada -> selecionada.getId().equals(marcaSelecionada.getId()))) {
+            marcasSelecionadas.add(marcaSelecionada);
+            termoMarca = null;
+            marcasEncontradas = List.of();
+        }
+    }
+
+    public void removerMarca(Marca marcaSelecionada) {
+        marcasSelecionadas.removeIf(selecionada -> selecionada.getId().equals(marcaSelecionada.getId()));
     }
 
     public void aplicarFiltros() {
@@ -175,13 +238,18 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         dataInicioFiltrada = dataInicio;
         dataFimFiltrada = dataFim;
         materialFiltrado = termoMaterial == null || termoMaterial.isBlank() ? null : termoMaterial;
-        fabricantesFiltrados = termoFabricante == null || termoFabricante.isBlank()
+        fabricantesFiltrados = fabricantesSelecionados.isEmpty()
                 ? null
-                : fabricantesSelecionados.stream().map(UUID::fromString).toList();
+                : fabricantesSelecionados.stream().map(Fabricante::getId).toList();
+        marcasFiltradas = marcasSelecionadas.isEmpty()
+                ? null
+                : marcasSelecionadas.stream().map(Marca::getId).toList();
         reordenar();
     }
 
     public void limparFiltros() {
+        codigoPesquisa = null;
+        codigoFiltrado = null;
         dataInicio = null;
         dataFim = null;
         dataInicioFiltrada = null;
@@ -192,6 +260,10 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         fabricantesEncontrados = List.of();
         fabricantesSelecionados = new ArrayList<>();
         fabricantesFiltrados = null;
+        termoMarca = null;
+        marcasEncontradas = List.of();
+        marcasSelecionadas = new ArrayList<>();
+        marcasFiltradas = null;
         reordenar();
     }
 
@@ -199,7 +271,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     protected long contarRegistros() {
         return isFiltroAtivo()
                 ? avaliacaoService.contarComFiltros(materialFiltrado, fabricantesFiltrados,
-                        dataInicioFiltrada, dataFimFiltrada)
+                        dataInicioFiltrada, dataFimFiltrada, codigoFiltrado, marcasFiltradas)
                 : super.contarRegistros();
     }
 
@@ -207,7 +279,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     protected List<Avaliacao> buscarRegistros() {
         return isFiltroAtivo()
                 ? avaliacaoService.buscarComFiltros(paginaAtual, tamanhoPagina, ordenacaoAtual, materialFiltrado,
-                        fabricantesFiltrados, dataInicioFiltrada, dataFimFiltrada)
+                        fabricantesFiltrados, dataInicioFiltrada, dataFimFiltrada, codigoFiltrado, marcasFiltradas)
                 : super.buscarRegistros();
     }
 

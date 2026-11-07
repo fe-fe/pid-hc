@@ -4,6 +4,7 @@ import br.ufpr.pid.hc.dao.AbstractDao;
 import br.ufpr.pid.hc.dao.AvaliacaoDao;
 import br.ufpr.pid.hc.entity.Avaliacao;
 import br.ufpr.pid.hc.entity.Fabricante;
+import br.ufpr.pid.hc.entity.Marca;
 import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -35,21 +36,32 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
 
     @PermitAll
     public List<Fabricante> buscarFabricantesPorNome(String termo) {
-        return avaliacaoDao.buscarFabricantesAvaliadosPorNome(termo);
+        if (termo == null || termo.trim().length() < 2) {
+            return List.of();
+        }
+        return avaliacaoDao.buscarFabricantesAvaliadosPorNome(termo.trim());
+    }
+
+    @PermitAll
+    public List<Marca> buscarMarcasPorNome(String termo) {
+        if (termo == null || termo.trim().length() < 2) {
+            return List.of();
+        }
+        return avaliacaoDao.buscarMarcasAvaliadasPorNome(termo.trim());
     }
 
     @PermitAll
     public List<Avaliacao> buscarComFiltros(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao,
             String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
         return avaliacaoDao.buscarComFiltros(pagina, tamanhoPagina, campoOrdenacao, termoMaterial, fabricantes,
-                dataInicio, dataFim);
+                dataInicio, dataFim, codigoMaterial, marcas);
     }
 
     @PermitAll
     public long contarComFiltros(String termoMaterial, List<UUID> fabricantes, LocalDate dataInicio,
-            LocalDate dataFim) {
-        return avaliacaoDao.contarComFiltros(termoMaterial, fabricantes, dataInicio, dataFim);
+            LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
+        return avaliacaoDao.contarComFiltros(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas);
     }
 
     @RolesAllowed({ "ADMINISTRADOR", "ANALISTA" })

@@ -17,13 +17,15 @@
                     </h:selectOneMenu>
                 </div>
 
-                <div class="form-check mb-0">
-                    <h:selectBooleanCheckbox id="mostrarInativos" styleClass="form-check-input"
-                                             value="#{bean.mostrarInativos}">
-                        <f:ajax render="@form" listener="#{bean.alternarInativos}" />
-                    </h:selectBooleanCheckbox>
-                    <h:outputLabel for="mostrarInativos" value="Mostrar inativos" styleClass="form-check-label small" />
-                </div>
+                <ui:fragment rendered="#{not ocultarFiltroInativos}">
+                    <div class="form-check mb-0">
+                        <h:selectBooleanCheckbox id="mostrarInativos" styleClass="form-check-input"
+                                                 value="#{bean.mostrarInativos}">
+                            <f:ajax render="@form" listener="#{bean.alternarInativos}" />
+                        </h:selectBooleanCheckbox>
+                        <h:outputLabel for="mostrarInativos" value="Mostrar inativos" styleClass="form-check-label small" />
+                    </div>
+                </ui:fragment>
             </div>
 
             <div class="pid-table__responsive table-responsive">

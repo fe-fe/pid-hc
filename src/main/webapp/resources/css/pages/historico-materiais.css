@@ -1,4 +1,7 @@
 .material-history {
+    --history-brand-bg: #eef2ff;
+    --history-brand-border: #c7d2fe;
+    --history-brand-icon-bg: #e0e7ff;
     --history-success-bg: #dcfae6;
     --history-success-text: #067647;
     --history-success-border: #abefc6;
@@ -9,6 +12,9 @@
 }
 
 :root[data-bs-theme="dark"] .material-history {
+    --history-brand-bg: #263354;
+    --history-brand-border: #435582;
+    --history-brand-icon-bg: #34446e;
     --history-success-bg: #183b31;
     --history-success-text: #86efac;
     --history-success-border: #2f6650;
@@ -25,10 +31,52 @@
     font-size: 0.8125rem;
 }
 
-.material-history__brand-title{
+.material-history__brand + .material-history__brand {
+    margin-top: 24px;
+}
+
+.material-history__brand-card {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 20px;
+    background-color: var(--history-brand-bg);
+    border: 1px solid var(--history-brand-border);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 4%);
+}
+
+.material-history__brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    color: var(--pid-link);
+    background-color: var(--history-brand-icon-bg);
+    border-radius: 8px;
+}
+
+.material-history__brand-details {
+    min-width: 0;
+}
+
+.material-history__brand-label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--pid-muted);
+    font-size: 0.75rem;
+}
+
+.material-history__brand-title {
+    margin: 0;
+    color: var(--pid-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
 
 .material-history__button {

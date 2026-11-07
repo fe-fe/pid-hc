@@ -2,6 +2,7 @@ package br.ufpr.pid.hc.dao;
 
 import br.ufpr.pid.hc.entity.Avaliacao;
 import br.ufpr.pid.hc.entity.Fabricante;
+import br.ufpr.pid.hc.entity.Marca;
 import br.ufpr.pid.hc.entity.Material;
 import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import br.ufpr.pid.hc.enumeration.ResultadoTecnico;
@@ -87,48 +88,66 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
                         "ORDER BY f.nome",
                 Fabricante.class)
                 .setParameter("termo", "%" + termo.trim().toLowerCase() + "%")
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    public List<Marca> buscarMarcasAvaliadasPorNome(String termo) {
+        return entityManager.createQuery(
+                "SELECT DISTINCT ma FROM Avaliacao a JOIN a.marca ma " +
+                        "WHERE (a.ativo IS NULL OR a.ativo = true) AND lower(ma.nome) LIKE :termo " +
+                        "ORDER BY ma.nome",
+                Marca.class)
+                .setParameter("termo", "%" + termo.trim().toLowerCase() + "%")
+                .setMaxResults(10)
                 .getResultList();
     }
 
     public List<Avaliacao> buscarComFiltros(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao,
             String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim) {
-        if (fabricantes != null && fabricantes.isEmpty()) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
+        if ((fabricantes != null && fabricantes.isEmpty()) || (marcas != null && marcas.isEmpty())) {
             return List.of();
         }
         TypedQuery<Avaliacao> query = entityManager.createQuery(
                 "SELECT a FROM Avaliacao a JOIN a.material m JOIN a.fabricante f LEFT JOIN a.marca ma " +
-                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim) +
+                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas) +
                         "ORDER BY " + campoOrdenacao.getCampoBanco(),
                 Avaliacao.class);
-        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim);
+        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas);
         return query
                 .setFirstResult(pagina * tamanhoPagina)
                 .setMaxResults(tamanhoPagina)
                 .getResultList();
     }
 
-    public long contarComFiltros(String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim) {
-        if (fabricantes != null && fabricantes.isEmpty()) {
+    public long contarComFiltros(String termoMaterial, List<UUID> fabricantes, LocalDate dataInicio,
+            LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
+        if ((fabricantes != null && fabricantes.isEmpty()) || (marcas != null && marcas.isEmpty())) {
             return 0;
         }
         TypedQuery<Long> query = entityManager.createQuery(
-                "SELECT count(a) FROM Avaliacao a JOIN a.material m JOIN a.fabricante f " +
-                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim),
+                "SELECT count(a) FROM Avaliacao a JOIN a.material m JOIN a.fabricante f LEFT JOIN a.marca ma " +
+                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas),
                 Long.class);
-        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim);
+        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas);
         return query.getSingleResult();
     }
 
     private String filtrosMaterialFabricante(String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
         StringBuilder where = new StringBuilder("WHERE (a.ativo IS NULL OR a.ativo = true) ");
+        if (codigoMaterial != null && !codigoMaterial.isBlank()) {
+            where.append("AND m.codigo = :codigoMaterial ");
+        }
         if (termoMaterial != null && !termoMaterial.isBlank()) {
             where.append("AND (lower(m.codigo) LIKE :termoMaterial OR lower(m.nome) LIKE :termoMaterial) ");
         }
         if (fabricantes != null) {
             where.append("AND f.id IN :fabricantes ");
+        }
+        if (marcas != null) {
+            where.append("AND ma.id IN :marcas ");
         }
         if (dataInicio != null) {
             where.append("AND a.data >= :dataInicio ");
@@ -140,12 +159,18 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
     }
 
     private void aplicarFiltrosMaterialFabricante(TypedQuery<?> query, String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
+        if (codigoMaterial != null && !codigoMaterial.isBlank()) {
+            query.setParameter("codigoMaterial", codigoMaterial.trim());
+        }
         if (termoMaterial != null && !termoMaterial.isBlank()) {
             query.setParameter("termoMaterial", "%" + termoMaterial.trim().toLowerCase() + "%");
         }
         if (fabricantes != null) {
             query.setParameter("fabricantes", fabricantes);
+        }
+        if (marcas != null) {
+            query.setParameter("marcas", marcas);
         }
         if (dataInicio != null) {
             query.setParameter("dataInicio", dataInicio);

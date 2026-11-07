@@ -69,7 +69,9 @@
                             aria-expanded="#{request.requestURI.contains('/pages/controle/') or request.requestURI.contains('/pages/admin/users')}" aria-controls="sidebarGestao">
                         <i class="bi bi-database" aria-hidden="true"></i>
                         Gestão
-                        <i class="bi bi-chevron-down ms-auto" aria-hidden="true"></i>
+                        <svg class="sidebar__chevron ms-auto" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true" focusable="false">
+                            <path d="M0.21967 0.21967C0.512563 -0.0732233 0.987437 -0.0732233 1.28033 0.21967L4 2.93934L6.71967 0.219671C7.01256 -0.0732222 7.48744 -0.0732221 7.78033 0.219671C8.07322 0.512564 8.07322 0.987438 7.78033 1.28033L4.53033 4.53033C4.23744 4.82322 3.76256 4.82322 3.46967 4.53033L0.21967 1.28033C-0.0732233 0.987437 -0.0732233 0.512563 0.21967 0.21967Z" fill-rule="evenodd" clip-rule="evenodd" fill="#99A1AF"/>
+                        </svg>
                     </button>
 
                     <div class="collapse #{request.requestURI.contains('/pages/controle/') or request.requestURI.contains('/pages/admin/users') ? 'show' : ''}" id="sidebarGestao">

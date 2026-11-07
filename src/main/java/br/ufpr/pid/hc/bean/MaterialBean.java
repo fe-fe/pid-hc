@@ -10,6 +10,7 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Named
@@ -21,8 +22,27 @@ public class MaterialBean extends AbstractCadastroBean<Material, MaterialOrdenac
     @Inject
     private MaterialService materialService;
 
+    private String termoPesquisa;
+    private String termoFiltrado;
+
     public MaterialBean() {
         super(MaterialOrdenacao.CODIGO);
+    }
+
+    public void pesquisar() {
+        termoFiltrado = termoPesquisa == null || termoPesquisa.isBlank() ? null : termoPesquisa.trim();
+        reordenar();
+    }
+
+    @Override
+    protected long contarRegistros() {
+        return materialService.contarPorTermo(termoFiltrado, true);
+    }
+
+    @Override
+    protected List<Material> buscarRegistros() {
+        return materialService.buscarPorTermo(paginaAtual, tamanhoPagina, ordenacaoAtual,
+                termoFiltrado, true);
     }
 
     @Override
