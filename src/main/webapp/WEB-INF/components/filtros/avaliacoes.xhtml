@@ -1,0 +1,172 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="jakarta.faces.core"
+    xmlns:h="jakarta.faces.html"
+    xmlns:pt="jakarta.faces.passthrough"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
+        <ui:param name="filtroId" value="avaliacoesFilters" />
+        <ui:define name="formulario">
+            <h:form id="formFiltrosAvaliacao" styleClass="d-flex flex-column gap-2 flex-grow-1">
+                <div>
+                    <h:outputLabel for="termoMaterial" value="Material" styleClass="form-label" />
+                    <h:inputText id="termoMaterial" type="search" styleClass="form-control"
+                                 value="#{avaliacaoBean.termoMaterial}"
+                                 pt:placeholder="Código ou nome" pt:autocomplete="off"
+                                 pt:onkeydown="return event.key !== 'Enter';" />
+                </div>
+
+                <fieldset>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <h:outputLabel for="dataInicio" value="De" styleClass="form-label small mb-1" />
+                            <h:inputText id="dataInicio" pt:type="date" styleClass="form-control"
+                                         value="#{avaliacaoBean.dataInicio}">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                        </div>
+                        <div class="col-6">
+                            <h:outputLabel for="dataFim" value="Até" styleClass="form-label small mb-1" />
+                            <h:inputText id="dataFim" pt:type="date" styleClass="form-control"
+                                         value="#{avaliacaoBean.dataFim}">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                        </div>
+                    </div>
+                    <h:message for="dataFim" styleClass="text-danger small" />
+                </fieldset>
+
+                <div>
+                    <h:outputLabel for="termoMarca" value="Marca" styleClass="form-label" />
+                    <div class="filters-panel__autocomplete">
+                        <h:inputText id="termoMarca" pt:type="search" styleClass="form-control"
+                                     value="#{avaliacaoBean.termoMarca}"
+                                     pt:placeholder="Digite o nome da marca" pt:autocomplete="off"
+                                     pt:aria-describedby="marcaAjuda"
+                                     pt:onkeydown="return event.key !== 'Enter';">
+                            <f:ajax event="keyup" execute="@this" delay="400" listener="#{avaliacaoBean.buscarMarcas}"
+                                    render="opcoesMarca" />
+                            <f:ajax event="change" execute="@this" delay="400" listener="#{avaliacaoBean.buscarMarcas}"
+                                    render="opcoesMarca" />
+                        </h:inputText>
+                        <h:panelGroup id="opcoesMarca" layout="block" styleClass="position-relative small pt-2">
+                            <ui:fragment rendered="#{avaliacaoBean.buscaMarcaValida}">
+                                <div class="filters-panel__dropdown dropdown-menu shadow-sm p-1" aria-label="Sugestões de marcas">
+                                    <ui:fragment rendered="#{empty avaliacaoBean.marcasEncontradas}">
+                                        <p class="text-body-secondary p-2 mb-0" role="status">Nenhuma marca encontrada para “#{avaliacaoBean.termoMarca}”.</p>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{not empty avaliacaoBean.marcasEncontradas and empty avaliacaoBean.sugestoesMarcasFiltro}">
+                                        <p class="text-body-secondary p-2 mb-0" role="status">As marcas encontradas já estão selecionadas.</p>
+                                    </ui:fragment>
+                                    <div class="filters-panel__suggestions">
+                                        <ui:repeat value="#{avaliacaoBean.sugestoesMarcasFiltro}" var="marcaEncontrada">
+                                            <h:commandLink action="#{avaliacaoBean.adicionarMarca(marcaEncontrada)}"
+                                                           styleClass="filters-panel__suggestion dropdown-item d-flex align-items-center justify-content-between gap-2 rounded p-2"
+                                                           pt:aria-label="Adicionar marca #{marcaEncontrada.nome}">
+                                                <h:outputText value="#{marcaEncontrada.nome}" styleClass="text-break text-wrap" />
+                                                <i class="bi bi-plus-lg flex-shrink-0" aria-hidden="true"></i>
+                                                <f:ajax execute="@this" render=":formFiltrosAvaliacao:termoMarca :formFiltrosAvaliacao:opcoesMarca"
+                                                        resetValues="true" />
+                                            </h:commandLink>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                            <small id="marcaAjuda" class="form-text form-helper d-block mt-0 mb-0">
+                                Digite 2 caracteres para sugestões
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-slash preview-icon"><path d="m13.5 8.5-5 5"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </small>
+                            <ui:fragment rendered="#{not empty avaliacaoBean.marcasSelecionadas}">
+                                <div class="d-flex flex-wrap gap-2 mt-2 mb-3">
+                                    <ui:repeat value="#{avaliacaoBean.marcasSelecionadas}" var="marcaSelecionada">
+                                        <h:commandLink action="#{avaliacaoBean.removerMarca(marcaSelecionada)}"
+                                                       styleClass="filters-panel__selection badge rounded-pill d-inline-flex align-items-center gap-2 text-start text-decoration-none"
+                                                       pt:aria-label="Remover marca #{marcaSelecionada.nome}">
+                                            <h:outputText value="#{marcaSelecionada.nome}" styleClass="text-break text-wrap" />
+                                            <i class="bi bi-x-lg flex-shrink-0" aria-hidden="true"></i>
+                                            <f:ajax execute="@this" render=":formFiltrosAvaliacao:opcoesMarca" />
+                                        </h:commandLink>
+                                    </ui:repeat>
+                                </div>
+                            </ui:fragment>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <div>
+                    <h:outputLabel for="termoFabricante" value="Fabricante" styleClass="form-label" />
+                    <div class="filters-panel__autocomplete">
+                        <h:inputText id="termoFabricante" pt:type="search" styleClass="form-control"
+                                     value="#{avaliacaoBean.termoFabricante}"
+                                     pt:placeholder="Digite o nome do fabricante" pt:autocomplete="off"
+                                     pt:aria-describedby="fabricanteAjuda"
+                                     pt:onkeydown="return event.key !== 'Enter';">
+                            <f:ajax event="keyup" execute="@this" delay="400" listener="#{avaliacaoBean.buscarFabricantes}"
+                                    render="opcoesFabricante" />
+                            <f:ajax event="change" execute="@this" delay="400" listener="#{avaliacaoBean.buscarFabricantes}"
+                                    render="opcoesFabricante" />
+                        </h:inputText>
+                        <h:panelGroup id="opcoesFabricante" layout="block" styleClass="position-relative small pt-2">
+                            <ui:fragment rendered="#{avaliacaoBean.buscaFabricanteValida}">
+                                <div class="filters-panel__dropdown dropdown-menu shadow-sm p-1" aria-label="Sugestões de fabricantes">
+                                    <ui:fragment rendered="#{empty avaliacaoBean.fabricantesEncontrados}">
+                                        <p class="text-body-secondary p-2 mb-0" role="status">Nenhum fabricante encontrado para “#{avaliacaoBean.termoFabricante}”.</p>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{not empty avaliacaoBean.fabricantesEncontrados and empty avaliacaoBean.sugestoesFabricantesFiltro}">
+                                        <p class="text-body-secondary p-2 mb-0" role="status">Os fabricantes encontrados já estão selecionados.</p>
+                                    </ui:fragment>
+                                    <div class="filters-panel__suggestions">
+                                        <ui:repeat value="#{avaliacaoBean.sugestoesFabricantesFiltro}" var="fabricanteEncontrado">
+                                            <h:commandLink action="#{avaliacaoBean.adicionarFabricante(fabricanteEncontrado)}"
+                                                           styleClass="filters-panel__suggestion dropdown-item d-flex align-items-center justify-content-between gap-2 rounded p-2"
+                                                           pt:aria-label="Adicionar fabricante #{fabricanteEncontrado.nome}">
+                                                <h:outputText value="#{fabricanteEncontrado.nome}" styleClass="text-break text-wrap" />
+                                                <i class="bi bi-plus-lg flex-shrink-0" aria-hidden="true"></i>
+                                                <f:ajax execute="@this" render=":formFiltrosAvaliacao:termoFabricante :formFiltrosAvaliacao:opcoesFabricante"
+                                                        resetValues="true" />
+                                            </h:commandLink>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                            <small id="fabricanteAjuda" class="form-text form-helper d-block mt-0 mb-0">
+                                Digite 2 caracteres para sugestões
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-slash preview-icon"><path d="m13.5 8.5-5 5"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </small>
+                            <ui:fragment rendered="#{not empty avaliacaoBean.fabricantesSelecionados}">
+                                <div class="d-flex flex-wrap gap-2 mt-2 mb-3">
+                                    <ui:repeat value="#{avaliacaoBean.fabricantesSelecionados}" var="fabricanteSelecionado">
+                                        <h:commandLink action="#{avaliacaoBean.removerFabricante(fabricanteSelecionado)}"
+                                                       styleClass="filters-panel__selection badge rounded-pill d-inline-flex align-items-center gap-2 text-start text-decoration-none"
+                                                       pt:aria-label="Remover fabricante #{fabricanteSelecionado.nome}">
+                                            <h:outputText value="#{fabricanteSelecionado.nome}" styleClass="text-break text-wrap" />
+                                            <i class="bi bi-x-lg flex-shrink-0" aria-hidden="true"></i>
+                                            <f:ajax execute="@this" render=":formFiltrosAvaliacao:opcoesFabricante" />
+                                        </h:commandLink>
+                                    </ui:repeat>
+                                </div>
+                            </ui:fragment>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
+                    <h:commandButton value="Limpar" styleClass="btn btn-outline-secondary"
+                                     action="#{avaliacaoBean.limparFiltros}">
+                        <f:ajax execute="@this" render="@form :formPesquisaAvaliacoes :formTabelaAvaliacoes" resetValues="true" />
+                    </h:commandButton>
+                    <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary"
+                                     action="#{avaliacaoBean.aplicarFiltros}">
+                        <f:ajax execute="@form" render="@form :formTabelaAvaliacoes" onevent="fecharFiltrosAvaliacao" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </ui:define>
+        <ui:define name="acoes" />
+    </ui:decorate>
+    <h:outputScript target="body">
+            function fecharFiltrosAvaliacao(data) {
+            if (data.status !== "success" || !formSemErros("formFiltrosAvaliacao")) return;
+            bootstrap.Offcanvas.getOrCreateInstance(document.getElementById("avaliacoesFilters")).hide();
+            }
+    </h:outputScript>
+</ui:composition>

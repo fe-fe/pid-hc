@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
+        <ui:param name="modalId" value="modalEditarCadastro" />
+        <ui:param name="modalTitulo" value="Editar material" />
+        <ui:param name="modalTamanho" value="" />
+        <ui:define name="conteudo">
+            <h:form id="formEditarCadastro">
+                <div class="modal-body">
+                    <h:messages globalOnly="true" styleClass="text-danger small list-unstyled mb-2" />
+                    <div class="d-flex flex-column mb-3">
+                        <h:outputLabel styleClass="form-label" for="codigo" value="Código" />
+                        <h:inputText styleClass="form-control" id="codigo" value="#{materialBean.entidadeSelecionada.codigo}"
+                            required="true" requiredMessage="Informe o código" />
+                        <h:message for="codigo" styleClass="text-danger small" />
+                    </div>
+                    <div class="d-flex flex-column mb-3">
+                        <h:outputLabel styleClass="form-label" for="nome" value="Nome" />
+                        <h:inputText styleClass="form-control" id="nome" value="#{materialBean.entidadeSelecionada.nome}"
+                            required="true" requiredMessage="Informe o nome" />
+                        <h:message for="nome" styleClass="text-danger small" />
+                    </div>
+                    <div class="form-check">
+                        <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input"
+                            value="#{materialBean.entidadeSelecionada.ativo}" />
+                        <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{materialBean.atualizar}">
+                        <f:ajax execute="@form" render="@form :formTabelaCadastro"
+                            onevent="fecharModalEditarCadastro" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+    <h:outputScript target="body">
+        function cadastroSemErros(formId) {
+        return !Array.from(document.querySelectorAll("#" + formId + " .text-danger"))
+        .some(function (el) { return el.textContent.trim() !== ""; });
+        }
+        function fecharModalCadastroSeValido(data, modalId, formId) {
+        if (data.status !== "success" || !cadastroSemErros(formId)) return;
+        bootstrap.Modal.getOrCreateInstance(document.getElementById(modalId)).hide();
+        }
+        function abrirModalEditarCadastro(data) {
+        if (data.status === "success") bootstrap.Modal.getOrCreateInstance(document.getElementById("modalEditarCadastro")).show();
+        }
+        function fecharModalIncluirCadastro(data) { fecharModalCadastroSeValido(data, "modalIncluirCadastro", "formIncluirCadastro"); }
+        function fecharModalEditarCadastro(data) { fecharModalCadastroSeValido(data, "modalEditarCadastro", "formEditarCadastro"); }
+    </h:outputScript>
+</ui:composition>

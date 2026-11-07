@@ -48,6 +48,10 @@ public class LoginBean {
         return session.isAutenticado() ? session.getPaginaInicial() + "?faces-redirect=true" : null;
     }
 
+    public String redirecionarParaPaginaInicial() {
+        return session.getPaginaInicial() + "?faces-redirect=true";
+    }
+
     public String login() {
 
         Credential credenciais = new UsernamePasswordCredential(email, senha);

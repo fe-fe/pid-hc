@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets">
+            <footer class="pid-table__footer row align-items-center gx-2 gy-0 m-0 px-3 py-2 border-top bg-body">
+                <div class="col-12 col-sm-4 text-center text-sm-start">
+                    <small class="text-body-secondary">
+                        #{bean.totalRegistros}
+                        #{bean.totalRegistros == 1 ? registroSingular : registroPlural}
+                    </small>
+                </div>
+
+                <nav class="col-12 col-sm-4 d-flex justify-content-center"
+                    aria-label="Paginação de #{tabelaDescricao}">
+                    <div class="btn-group btn-group-sm">
+                        <h:commandButton styleClass="btn btn-outline-secondary" value="&#8249;"
+                            action="#{bean.paginaAnterior}"
+                            disabled="#{bean.paginaAtual == 0}"
+                            title="Página anterior">
+                            <f:ajax render="@form" />
+                        </h:commandButton>
+
+                        <span class="btn btn-primary disabled" aria-current="page">
+                            #{bean.paginaAtual + 1}
+                        </span>
+
+                        <h:commandButton styleClass="btn btn-outline-secondary" value="&#8250;"
+                            action="#{bean.proximaPagina}"
+                            disabled="#{bean.ultimaPagina}"
+                            title="Próxima página">
+                            <f:ajax render="@form" />
+                        </h:commandButton>
+                    </div>
+                </nav>
+
+                <div class="d-none d-sm-block col-sm-4" aria-hidden="true"></div>
+            </footer>
+</ui:composition>

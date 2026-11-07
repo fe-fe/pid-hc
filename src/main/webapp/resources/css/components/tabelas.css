@@ -1,0 +1,99 @@
+/* Base compartilhada das tabelas, sobre os componentes do Bootstrap. */
+.pid-table {
+    min-width: 0;
+    border: 1px solid var(--pid-border);
+    border-radius: 0.625rem;
+    background-color: var(--pid-surface);
+}
+
+.pid-table__responsive {
+    overflow-y: hidden;
+    border-radius: inherit;
+}
+
+.pid-table__responsive:focus-visible {
+    outline: 2px solid var(--pid-link);
+    outline-offset: 3px;
+}
+
+.pid-table__scroll-controls .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+}
+
+[data-table-scroll-viewport].is-scrollable {
+    cursor: grab;
+}
+
+[data-table-scroll-viewport].is-dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
+.pid-table__table {
+    --bs-table-bg: var(--pid-surface);
+    --bs-table-color: var(--pid-text-secondary);
+    --bs-table-border-color: var(--pid-border);
+    --bs-table-hover-bg: var(--pid-hover);
+    --bs-table-hover-color: var(--pid-text);
+    width: 100%;
+    min-width: 760px;
+    font-size: 0.8125rem;
+}
+
+.pid-table__table > :not(caption) > * > * {
+    padding: 0.75rem 0.875rem;
+    overflow-wrap: anywhere;
+}
+
+.pid-table__table--anvisa tr > *,
+.pid-table__table--avaliacoes tr > :is(:nth-child(2), :nth-child(3), :nth-child(4)) {
+    width: 200px;
+    min-width: 200px;
+}
+
+.pid-table__table--anvisa tr > :is(:nth-child(2), :nth-child(3), :nth-child(5), :nth-child(6)),
+.pid-table__table--avaliacoes tr > :is(:nth-child(8), :nth-child(9)) {
+    width: 300px;
+    min-width: 300px;
+}
+
+.pid-table__head {
+    --bs-table-bg: var(--pid-surface-subtle);
+    --bs-table-color: var(--pid-muted);
+}
+
+.pid-table__head th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+.pid-table__table tbody tr:last-child > * {
+    border-bottom: 0;
+}
+
+.pid-table__toolbar,
+.pid-table__footer {
+    background-color: var(--pid-surface);
+    border-color: var(--pid-border);
+}
+
+.pid-table__actions {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.pid-table__description {
+    min-width: 260px;
+}
+
+/* O histórico reserva espaço para o parecer e os botões de cada marca. */
+.pid-table__table--history {
+    min-width: 960px;
+    table-layout: fixed;
+}

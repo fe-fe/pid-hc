@@ -40,7 +40,7 @@ public abstract class AbstractService<T extends Auditavel, ID> {
         return getDao().contarTotal(incluirInativos);
     }
 
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public T salvar(T entidade) {
         return getDao().salvar(entidade, null);
     }

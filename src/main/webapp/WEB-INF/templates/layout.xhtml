@@ -8,10 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title><ui:insert name="title">PID</ui:insert></title>
     <h:outputScript library="js" name="theme.js" target="head"/>
+    <h:outputScript library="jakarta.faces" name="faces.js" target="head"/>
     <h:outputStylesheet library="webjars" name="bootstrap/5.3.8/css/bootstrap.min-jsf.css"/>
     <link rel="stylesheet"
           href="#{request.contextPath}/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"/>
     <h:outputStylesheet library="css" name="global.css"/>
+    <h:outputStylesheet library="css" name="components/tabelas.css"/>
     <ui:insert name="head"/>
 </h:head>
 
@@ -39,8 +41,17 @@
         </div>
     </div>
 
+    <div class="layout__loading" role="status">
+        <div id="indicadorCarregamento" class="layout__loading-message" hidden="hidden">
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            Carregando informações…
+        </div>
+    </div>
+
     <ui:insert name="scripts"/>
 
+    <h:outputScript library="js" name="components/loading.js" target="body"/>
+    <h:outputScript library="js" name="components/table-scroll.js" target="body"/>
     <h:outputScript library="webjars" name="bootstrap/5.3.8/js/bootstrap.bundle.min.js" target="body"/>
 </h:body>
 </html>

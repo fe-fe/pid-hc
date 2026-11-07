@@ -1,34 +1,7 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="jakarta.faces.html"
-    xmlns:ui="jakarta.faces.facelets"
-    template="/WEB-INF/templates/layout.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:p="jakarta.faces.passthrough" xmlns:f="jakarta.faces.core" template="/WEB-INF/templates/pagina.xhtml">
 
-    <ui:param name="contentClass" value="layout__content--material-history" />
-
-    <!-- Dados ilustrativos para a apresentação visual, sem vínculo com persistência. -->
-    <ui:param name="materiaisHistorico" value="#{[
-        {'codigo': 'MAT-001', 'nome': 'Cateter intravenoso periférico 20G', 'local': 'Laboratório de avaliação',
-         'historicos': [
-            {'marca': 'Insyte Autoguard', 'fabricante': 'BD', 'data': '26/09/2026', 'dataIso': '2026-09-26', 'aprovado': true,
-             'parecer': 'Boa estabilidade durante a punção e dispositivo de segurança adequado.'},
-            {'marca': 'Safe Cath', 'fabricante': 'Descarpack', 'data': '11/08/2026', 'dataIso': '2026-08-11', 'aprovado': false,
-             'parecer': 'O dispositivo apresentou resistência acima do esperado na progressão.'}
-         ]},
-        {'codigo': 'MAT-003', 'nome': 'Equipo para infusão macrogotas', 'local': 'Centro Cirúrgico',
-         'historicos': [
-            {'marca': 'FluxCare', 'fabricante': 'Hospitalar Brasil', 'data': '18/09/2026', 'dataIso': '2026-09-18', 'aprovado': true,
-             'parecer': 'Amostra conforme os requisitos técnicos.'},
-            {'marca': 'MedFlow', 'fabricante': 'Medix Brasil', 'data': '22/07/2026', 'dataIso': '2026-07-22', 'aprovado': true,
-             'parecer': 'Fluxo regular e conexões compatíveis com os equipamentos avaliados.'}
-         ]},
-        {'codigo': 'MAT-004', 'nome': 'Luva de procedimento sem pó', 'local': 'Pronto Atendimento',
-         'historicos': [
-            {'marca': 'ProtecPlus', 'fabricante': 'BioSupply', 'data': '15/09/2026', 'dataIso': '2026-09-15', 'aprovado': false,
-             'parecer': 'Resistência abaixo do especificado no lote avaliado.'},
-            {'marca': 'Supermax Premium', 'fabricante': 'Medix Brasil', 'data': '29/08/2026', 'dataIso': '2026-08-29', 'aprovado': true,
-             'parecer': 'Material íntegro, com bom ajuste e resistência durante o uso simulado.'}
-         ]}
-    ]}" />
+    <ui:param name="pageClass" value="material-history" />
 
     <ui:define name="title">Histórico de materiais - PID</ui:define>
 
@@ -36,164 +9,132 @@
         <h:outputStylesheet library="css" name="pages/historico-materiais.css" />
     </ui:define>
 
-    <ui:define name="content">
-        <div class="material-history">
-            <header class="material-history__header d-flex flex-column flex-md-row align-items-md-center gap-1 gap-md-3 px-3 px-sm-4 py-3">
-                <h1 class="mb-0">Histórico de materiais</h1>
-                <span class="material-history__subtitle">Consulte as marcas já analisadas</span>
-            </header>
+    <ui:define name="pageTitle">Histórico de materiais</ui:define>
 
-            <section class="material-history__toolbar d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 px-3 px-sm-4 py-3"
-                aria-label="Pesquisa e ações de materiais">
-                <div class="material-history__search input-group input-group-sm">
-                    <span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
-                    <label class="visually-hidden" for="historySearch">Pesquisa livre</label>
-                    <input id="historySearch" class="form-control" type="search" autocomplete="off"
-                        placeholder="Pesquisar material, marca ou fabricante" />
-                </div>
-                <div class="d-flex justify-content-end gap-2">
-                    <button class="btn material-history__button material-history__button--secondary" type="button"
-                        data-bs-toggle="offcanvas" data-bs-target="#historyFilters" aria-controls="historyFilters">
-                        <i class="bi bi-sliders" aria-hidden="true"></i> Filtrar
-                    </button>
-                    <button class="btn material-history__button material-history__button--primary" type="button"
-                        data-bs-toggle="modal" data-bs-target="#historyMaterialModal" data-mode="material">
-                        <i class="bi bi-plus-lg" aria-hidden="true"></i> Novo avaliação
-                    </button>
-                </div>
-            </section>
+    <ui:define name="pageActions">
 
-            <section class="material-history__list d-flex flex-column gap-3 p-3 p-sm-4" aria-labelledby="historyListTitle">
-                <h2 id="historyListTitle" class="visually-hidden">Histórico de análises por material</h2>
-                <ui:repeat value="#{materiaisHistorico}" var="material">
-                    <ui:include src="/WEB-INF/components/cardHistoricoMaterial.xhtml" />
-                </ui:repeat>
-                <footer class="material-history__footer d-flex flex-wrap justify-content-between gap-2">
-                    <span>3 materiais</span>
-                    <span>6 históricos exibidos</span>
-                </footer>
-            </section>
+        <h:form id="formPesquisa" styleClass="page__search input-group input-group-sm">
+            <h:inputText 
+                id="codigo" 
+                value="#{consultaMaterialBean.codigo}"
+                styleClass="page__search-input form-control"
+                p:placeholder="Pesquisar material por código"
+                p:type="search" />
 
-            <aside class="offcanvas offcanvas-end material-history__filters" tabindex="-1" id="historyFilters"
-                aria-labelledby="historyFiltersTitle">
-                <div class="offcanvas-header border-bottom">
-                    <div>
-                        <h2 class="offcanvas-title fs-5" id="historyFiltersTitle">Filtros</h2>
-                        <p class="material-history__subtitle mt-1">Refine os materiais exibidos</p>
-                    </div>
-                    <button class="btn-close" type="button" data-bs-dismiss="offcanvas" aria-label="Fechar filtros"></button>
-                </div>
-                <div class="offcanvas-body d-flex flex-column gap-4">
-                    <form id="historyFiltersForm" class="d-flex flex-column gap-3">
-                        <div>
-                            <label class="form-label" for="historyManufacturerFilter">Fabricante</label>
-                            <select class="form-select" id="historyManufacturerFilter">
-                                <option value="">Todos os fabricantes</option>
-                                <option>BD</option><option>BioSupply</option><option>Descarpack</option>
-                                <option>Hospitalar Brasil</option><option>Medix Brasil</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="form-label" for="historyStatusFilter">Status</label>
-                            <select class="form-select" id="historyStatusFilter">
-                                <option value="">Todos os status</option>
-                                <option>Aprovado</option><option>Reprovado</option>
-                            </select>
-                        </div>
-                    </form>
-                    <div class="d-flex justify-content-end gap-2 mt-auto">
-                        <button class="btn material-history__button material-history__button--secondary" type="reset" form="historyFiltersForm">Limpar</button>
-                        <button class="btn material-history__button material-history__button--primary" type="button" data-bs-dismiss="offcanvas">Aplicar filtros</button>
-                    </div>
-                </div>
-            </aside>
+                <h:commandButton 
+                    value="Consultar"
+                    action="#{consultaMaterialBean.consultar}"
+                    styleClass="btn btn-primary">
+                    <f:ajax execute="@form" render=":resultado" />
+                </h:commandButton>
+        </h:form>
 
-            <!-- Uma modal visual compartilhada pelos modos criar material, adicionar e editar histórico. -->
-            <div class="modal fade material-history__modal" id="historyMaterialModal" tabindex="-1"
-                aria-labelledby="historyMaterialModalTitle" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header align-items-start">
-                            <div>
-                                <h2 class="modal-title fs-5" id="historyMaterialModalTitle">Novo avaliação</h2>
-                                <p class="material-history__subtitle mt-1" id="historyMaterialModalDescription">Cadastre uma avaliação</p>
-                            </div>
-                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Fechar cadastro"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="historyMaterialForm" class="row g-3">
-                                <div class="col-12 col-sm-6">
-                                    <label class="form-label" for="historyMaterialCode">Código <span class="material-history__required">*</span></label>
-                                    <input class="form-control" id="historyMaterialCode" name="codigo" placeholder="Ex.: MAT-005" />
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <label class="form-label" for="historyAnalysisDate">Data <span class="material-history__required">*</span></label>
-                                    <input class="form-control" id="historyAnalysisDate" name="data" type="date" />
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label" for="historyMaterialName">Nome <span class="material-history__required">*</span></label>
-                                    <input class="form-control" id="historyMaterialName" name="nome" placeholder="Nome do material" />
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <label class="form-label" for="historyManufacturer">Fabricante <span class="material-history__required">*</span></label>
-                                    <input class="form-control" id="historyManufacturer" name="fabricante" placeholder="Nome do fabricante" />
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <label class="form-label" for="historyBrand">Marca <span class="material-history__required">*</span></label>
-                                    <input class="form-control" id="historyBrand" name="marca" placeholder="Marca analisada" />
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <label class="form-label" for="historyLocation">Local <span class="material-history__required">*</span></label>
-                                    <input class="form-control" id="historyLocation" name="local" placeholder="Local da avaliação" />
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <label class="form-label" for="historyStatus">Status <span class="material-history__required">*</span></label>
-                                    <select class="form-select" id="historyStatus" name="status">
-                                        <option value="aprovado">Aprovado</option>
-                                        <option value="reprovado">Reprovado</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label" for="historyOpinion">Parecer <span class="material-history__required">*</span></label>
-                                    <textarea class="form-control" id="historyOpinion" name="parecer" rows="4" placeholder="Descreva o parecer da análise"></textarea>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn material-history__button material-history__button--secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-                            <button class="btn material-history__button material-history__button--primary" id="historyMaterialModalAction"
-                                type="button" data-bs-dismiss="modal">Criar material</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="page__action-buttons">
+            <ui:include 
+                src="/WEB-INF/components/filtros/botao.xhtml">
+                <ui:param name="filtroId" value="historyFilters" />
+            </ui:include>
 
-            <div class="modal fade material-history__modal" id="historyDeleteModal" tabindex="-1"
-                aria-labelledby="historyDeleteModalTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h2 class="modal-title fs-5" id="historyDeleteModalTitle">Excluir histórico</h2>
-                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Fechar confirmação de exclusão"></button>
-                        </div>
-                        <div class="modal-body">
-                            <span class="material-history__delete-icon d-inline-flex align-items-center justify-content-center mb-3">
-                                <i class="bi bi-trash3" aria-hidden="true"></i>
-                            </span>
-                            <p>Deseja excluir o histórico da marca <strong id="historyDeleteBrand"></strong>?</p>
-                            <p class="material-history__subtitle mt-2" id="historyDeleteMaterial"></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn material-history__button material-history__button--secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-                            <button class="btn btn-danger material-history__button" type="button" data-bs-dismiss="modal">Excluir histórico</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h:link outcome="/pages/avaliacoes" styleClass="page__button page__button--primary text-decoration-none">
+                Nova avaliação <i class="bi bi-plus-lg" aria-hidden="true"></i>
+            </h:link>
         </div>
+
     </ui:define>
 
-    <ui:define name="scripts">
-        <h:outputScript library="js" name="pages/historico-materiais.js" target="body" />
+    <ui:define name="pageContent">
+
+        <section class="material-history">
+            <h:panelGroup id="resultado" layout="block">
+                <h:panelGroup 
+                    layout="block" 
+                    styleClass="card material-history__material overflow-hidden"
+                    rendered="#{not empty consultaMaterialBean.material}">
+
+                    <header class="card-header material-history__material-header p-3 p-sm-4">
+                        <div class="d-flex justify-content-between flex-wrap align-items-center gap-2">
+                            <h2 class="material-history__material-title mb-0 fs-1">
+                                <h:outputText value="#{consultaMaterialBean.material.nome}" />
+                            </h2>
+
+                            <span
+                                class="material-history__code fs-6 badge rounded-pill d-inline-flex align-items-center gap-1">
+                                <i class="bi bi-hash" aria-hidden="true"></i>
+                                Código:
+                                <h:outputText value="#{consultaMaterialBean.material.codigo}" />
+                            </span>
+                        </div>
+                    </header>
+
+                    <div class="card-body p-3 p-sm-4">
+                        <h:panelGroup layout="block" styleClass="text-body-secondary" p:role="status"
+                            rendered="#{empty consultaMaterialBean.avaliacoesPorMarca}">
+                            Nenhuma avaliação encontrada para este material com os filtros aplicados.
+                        </h:panelGroup>
+                        <ui:repeat value="#{consultaMaterialBean.avaliacoesPorMarca.entrySet().toArray()}" var="grupo">
+
+                            <section class="material-history__brand">
+
+                                <div class="material-history__brand-card">
+                                    <span class="material-history__brand-icon" aria-hidden="true">
+                                        <i class="bi bi-tag"></i>
+                                    </span>
+                                    <div class="material-history__brand-details">
+                                        <span class="material-history__brand-label">Marca</span>
+                                        <h3 class="material-history__brand-title">
+                                            <h:outputText value="#{grupo.key}" />
+                                        </h3>
+                                    </div>
+                                </div>
+
+                                <div class="pid-table pid-table__responsive table-responsive mb-3" tabindex="0"
+                                    role="region" aria-label="Histórico de avaliações da marca #{grupo.key}">
+
+                                    <h:dataTable value="#{grupo.value}" var="avaliacao"
+                                        styleClass="pid-table__table pid-table__table--history table table-hover align-middle mb-0"
+                                        headerClass="pid-table__head">
+
+                                        <h:column headerClass="pid-table__head material-history__column-limited"
+                                            styleClass="material-history__column-limited">
+                                            <f:facet name="header">Data</f:facet>
+                                            <h:outputText value="#{avaliacao.data}" />
+                                        </h:column>
+
+                                        <h:column headerClass="pid-table__head material-history__column-limited"
+                                            styleClass="material-history__column-limited">
+                                            <f:facet name="header">Resultado</f:facet>
+
+                                            <h:outputText value="#{avaliacao.resultado}"
+                                                styleClass="badge rounded-pill #{avaliacao.resultado eq 'APROVADO' ? 'bg-success' : 'bg-danger'}" />
+                                        </h:column>
+
+                                        <h:column>
+                                            <f:facet name="header">Descrição</f:facet>
+                                            <h:outputText value="#{avaliacao.descricao}" />
+                                        </h:column>
+
+                                        <h:column styleClass="material-history__table-opinion">
+                                            <f:facet name="header">Parecer</f:facet>
+                                            <h:outputText value="#{avaliacao.parecer}" />
+                                        </h:column>
+
+                                    </h:dataTable>
+
+                                </div>
+
+                            </section>
+
+                        </ui:repeat>
+                    </div>
+                </h:panelGroup>
+
+                <h:outputText value="Material não encontrado." rendered="#{empty consultaMaterialBean.material}" />
+            </h:panelGroup>
+        </section>
+
+    </ui:define>
+
+    <ui:define name="pageOverlays">
+        <ui:include src="/WEB-INF/components/filtros/historicoMateriais.xhtml" />
     </ui:define>
 </ui:composition>

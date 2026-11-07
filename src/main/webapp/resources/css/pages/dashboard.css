@@ -1,0 +1,39 @@
+.material-lookup-page {
+    display: grid;
+    place-items: center;
+}
+
+.material-lookup-page .material-lookup__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 560px;
+    padding-block: 32px;
+    text-align: center;
+}
+
+.material-lookup-page .material-lookup__empty > i {
+    color: var(--pid-muted);
+    font-size: 3rem;
+}
+
+.material-lookup-page .material-lookup__empty > h2 {
+    margin: 0;
+    color: var(--pid-heading);
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.material-lookup-page .material-lookup__empty > .form-control {
+    width: 100%;
+    max-width: 440px;
+    min-height: 48px;
+}
+
+.material-lookup-page .material-lookup__empty > p {
+    max-width: 480px;
+    margin: 0;
+    color: var(--pid-muted);
+    line-height: 1.6;
+}

@@ -3,6 +3,7 @@ package br.ufpr.pid.hc.service;
 import br.ufpr.pid.hc.dao.AbstractDao;
 import br.ufpr.pid.hc.dao.MarcaDao;
 import br.ufpr.pid.hc.entity.Marca;
+import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import br.ufpr.pid.hc.exception.DuplicateRecordException;
@@ -23,11 +24,22 @@ public class MarcaService extends AbstractService<Marca, UUID> {
     protected AbstractDao<Marca, UUID> getDao() { return marcaDao; }
 
     @PermitAll
+    public List<Marca> buscarPorTermo(int pagina, int tamanhoPagina, CampoOrdenacao ordenacao,
+            String termo, boolean incluirInativos) {
+        return marcaDao.buscarPorTermo(pagina, tamanhoPagina, ordenacao, termo, incluirInativos);
+    }
+
+    @PermitAll
+    public long contarPorTermo(String termo, boolean incluirInativos) {
+        return marcaDao.contarPorTermo(termo, incluirInativos);
+    }
+
+    @PermitAll
     public List<String> listarNomes() {
         return marcaDao.listarNomes();
     }
 
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Marca obterOuCriar(String nome) {
         String nomePadronizado = padronizarNome(nome);
         return marcaDao.buscarPorNome(nomePadronizado).orElseGet(() -> {
@@ -38,7 +50,7 @@ public class MarcaService extends AbstractService<Marca, UUID> {
     }
 
     @Override
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Marca salvar(Marca marca) {
         if (marca.getNome() == null || marca.getNome().isBlank()) {
             throw new MissingRequiredFieldsException();

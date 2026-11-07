@@ -26,8 +26,39 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
     @Inject
     private UsuarioService usuarioService;
 
+    private String nomePesquisa;
+    private String nomeFiltrado;
+
     public UsuarioBean() {
         super(15, UsuarioOrdenacao.NOME);
+    }
+
+    public void limparFiltros() {
+        nomePesquisa = null;
+        nomeFiltrado = null;
+        ordenacaoAtual = UsuarioOrdenacao.NOME;
+        mostrarInativos = false;
+        reordenar();
+    }
+
+    public void pesquisarPorNome() {
+        nomeFiltrado = nomePesquisa == null || nomePesquisa.isBlank() ? null : nomePesquisa.trim();
+        reordenar();
+    }
+
+    @Override
+    protected long contarRegistros() {
+        return nomeFiltrado == null
+                ? super.contarRegistros()
+                : usuarioService.contarPorNome(nomeFiltrado, mostrarInativos);
+    }
+
+    @Override
+    protected List<Usuario> buscarRegistros() {
+        return nomeFiltrado == null
+                ? super.buscarRegistros()
+                : usuarioService.buscarPorNome(paginaAtual, tamanhoPagina, ordenacaoAtual,
+                        nomeFiltrado, mostrarInativos);
     }
 
     @Override

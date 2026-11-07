@@ -3,6 +3,7 @@ package br.ufpr.pid.hc.service;
 import br.ufpr.pid.hc.dao.AbstractDao;
 import br.ufpr.pid.hc.dao.MaterialDao;
 import br.ufpr.pid.hc.entity.Material;
+import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import br.ufpr.pid.hc.exception.DuplicateRecordException;
 import br.ufpr.pid.hc.exception.MissingRequiredFieldsException;
 import jakarta.annotation.security.PermitAll;
@@ -10,6 +11,7 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,6 +25,17 @@ public class MaterialService extends AbstractService<Material, UUID> {
     protected AbstractDao<Material, UUID> getDao() { return materialDao; }
 
     @PermitAll
+    public List<Material> buscarPorTermo(int pagina, int tamanhoPagina, CampoOrdenacao ordenacao,
+            String termo, boolean incluirInativos) {
+        return materialDao.buscarPorTermo(pagina, tamanhoPagina, ordenacao, termo, incluirInativos);
+    }
+
+    @PermitAll
+    public long contarPorTermo(String termo, boolean incluirInativos) {
+        return materialDao.contarPorTermo(termo, incluirInativos);
+    }
+
+    @PermitAll
     public Optional<Material> buscarPorCodigo(String codigo) {
         if (codigo == null || codigo.isBlank()) {
             return Optional.empty();
@@ -30,7 +43,7 @@ public class MaterialService extends AbstractService<Material, UUID> {
         return materialDao.buscarPorCodigo(codigo.trim());
     }
 
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Material obterOuCriar(String codigo, String nome) {
         return buscarPorCodigo(codigo).orElseGet(() -> {
             Material novo = new Material();
@@ -41,7 +54,7 @@ public class MaterialService extends AbstractService<Material, UUID> {
     }
 
     @Override
-    @RolesAllowed({"ADMINISTRADOR", "CONSULTOR", "AVALIADOR", "ANALISTA"})
+    @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Material salvar(Material material) {
         if (material.getCodigo() == null || material.getCodigo().isBlank()
                 || material.getNome() == null || material.getNome().isBlank()) {

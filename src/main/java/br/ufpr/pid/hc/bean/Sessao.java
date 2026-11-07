@@ -33,7 +33,7 @@ public class Sessao implements Serializable {
 
         return switch (usuarioLogado.getPerfil()) {
             case ADMINISTRADOR -> "/pages/admin/dashboard";
-            case ANALISTA, AVALIADOR, CONSULTOR -> "/pages/analista/dashboard";
+            case ANALISTA -> "/pages/analista/dashboard";
         };
     }
 }

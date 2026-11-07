@@ -10,6 +10,7 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Named
@@ -21,8 +22,27 @@ public class MarcaBean extends AbstractCadastroBean<Marca, NomeOrdenacao> {
     @Inject
     private MarcaService marcaService;
 
+    private String termoPesquisa;
+    private String termoFiltrado;
+
     public MarcaBean() {
         super(NomeOrdenacao.NOME);
+    }
+
+    public void pesquisar() {
+        termoFiltrado = termoPesquisa == null || termoPesquisa.isBlank() ? null : termoPesquisa.trim();
+        reordenar();
+    }
+
+    @Override
+    protected long contarRegistros() {
+        return marcaService.contarPorTermo(termoFiltrado, mostrarInativos);
+    }
+
+    @Override
+    protected List<Marca> buscarRegistros() {
+        return marcaService.buscarPorTermo(paginaAtual, tamanhoPagina, ordenacaoAtual,
+                termoFiltrado, mostrarInativos);
     }
 
     @Override
