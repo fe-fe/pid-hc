@@ -150,7 +150,7 @@
                 <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
                     <h:commandButton value="Limpar" styleClass="btn btn-outline-secondary"
                                      action="#{avaliacaoBean.limparFiltros}">
-                        <f:ajax execute="@this" render="@form :formTabelaAvaliacoes" resetValues="true" />
+                        <f:ajax execute="@this" render="@form :formPesquisaAvaliacoes :formTabelaAvaliacoes" resetValues="true" />
                     </h:commandButton>
                     <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary"
                                      action="#{avaliacaoBean.aplicarFiltros}">

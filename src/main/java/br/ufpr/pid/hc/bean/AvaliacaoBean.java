@@ -244,6 +244,8 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     }
 
     public void limparFiltros() {
+        codigoPesquisa = null;
+        codigoFiltrado = null;
         dataInicio = null;
         dataFim = null;
         dataInicioFiltrada = null;
