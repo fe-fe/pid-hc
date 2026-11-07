@@ -190,6 +190,8 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         if (fabricanteSelecionado != null && fabricantesSelecionados.stream()
                 .noneMatch(selecionado -> selecionado.getId().equals(fabricanteSelecionado.getId()))) {
             fabricantesSelecionados.add(fabricanteSelecionado);
+            termoFabricante = null;
+            fabricantesEncontrados = List.of();
         }
     }
 
@@ -218,6 +220,8 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         if (marcaSelecionada != null && marcasSelecionadas.stream()
                 .noneMatch(selecionada -> selecionada.getId().equals(marcaSelecionada.getId()))) {
             marcasSelecionadas.add(marcaSelecionada);
+            termoMarca = null;
+            marcasEncontradas = List.of();
         }
     }
 

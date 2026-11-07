@@ -95,6 +95,8 @@ public class ConsultaMaterialBean implements Serializable {
         if (fabricanteSelecionado != null && fabricantesSelecionados.stream()
                 .noneMatch(selecionado -> selecionado.getId().equals(fabricanteSelecionado.getId()))) {
             fabricantesSelecionados.add(fabricanteSelecionado);
+            termoFabricante = null;
+            fabricantesEncontrados = List.of();
         }
     }
 
@@ -123,6 +125,8 @@ public class ConsultaMaterialBean implements Serializable {
         if (marcaSelecionada != null && marcasSelecionadas.stream()
                 .noneMatch(selecionada -> selecionada.getId().equals(marcaSelecionada.getId()))) {
             marcasSelecionadas.add(marcaSelecionada);
+            termoMarca = null;
+            marcasEncontradas = List.of();
         }
     }
 

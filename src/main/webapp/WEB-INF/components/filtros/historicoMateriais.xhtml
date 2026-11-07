@@ -37,7 +37,8 @@
                                                            pt:aria-label="Adicionar marca #{marcaEncontrada.nome}">
                                                 <h:outputText value="#{marcaEncontrada.nome}" styleClass="text-break text-wrap" />
                                                 <i class="bi bi-plus-lg flex-shrink-0" aria-hidden="true"></i>
-                                                <f:ajax execute="@this" render=":formFiltrosHistoricoMateriais:opcoesMarca" />
+                                                <f:ajax execute="@this" render=":formFiltrosHistoricoMateriais:termoMarca :formFiltrosHistoricoMateriais:opcoesMarca"
+                                                        resetValues="true" />
                                             </h:commandLink>
                                         </ui:repeat>
                                     </div>
@@ -93,7 +94,8 @@
                                                            pt:aria-label="Adicionar fabricante #{fabricanteEncontrado.nome}">
                                                 <h:outputText value="#{fabricanteEncontrado.nome}" styleClass="text-break text-wrap" />
                                                 <i class="bi bi-plus-lg flex-shrink-0" aria-hidden="true"></i>
-                                                <f:ajax execute="@this" render=":formFiltrosHistoricoMateriais:opcoesFabricante" />
+                                                <f:ajax execute="@this" render=":formFiltrosHistoricoMateriais:termoFabricante :formFiltrosHistoricoMateriais:opcoesFabricante"
+                                                        resetValues="true" />
                                             </h:commandLink>
                                         </ui:repeat>
                                     </div>
