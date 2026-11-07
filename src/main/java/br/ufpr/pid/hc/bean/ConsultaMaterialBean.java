@@ -81,7 +81,7 @@ public class ConsultaMaterialBean implements Serializable {
     }
 
     public boolean isBuscaFabricanteValida() {
-        return termoFabricante != null && termoFabricante.trim().length() >= 3;
+        return termoFabricante != null && termoFabricante.trim().length() >= 2;
     }
 
     public List<Fabricante> getSugestoesFabricantesFiltro() {
@@ -109,7 +109,7 @@ public class ConsultaMaterialBean implements Serializable {
     }
 
     public boolean isBuscaMarcaValida() {
-        return termoMarca != null && termoMarca.trim().length() >= 3;
+        return termoMarca != null && termoMarca.trim().length() >= 2;
     }
 
     public List<Marca> getSugestoesMarcasFiltro() {

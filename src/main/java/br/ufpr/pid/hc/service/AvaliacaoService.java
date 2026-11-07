@@ -36,7 +36,7 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
 
     @PermitAll
     public List<Fabricante> buscarFabricantesPorNome(String termo) {
-        if (termo == null || termo.trim().length() < 3) {
+        if (termo == null || termo.trim().length() < 2) {
             return List.of();
         }
         return avaliacaoDao.buscarFabricantesAvaliadosPorNome(termo.trim());
@@ -44,7 +44,7 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
 
     @PermitAll
     public List<Marca> buscarMarcasPorNome(String termo) {
-        if (termo == null || termo.trim().length() < 3) {
+        if (termo == null || termo.trim().length() < 2) {
             return List.of();
         }
         return avaliacaoDao.buscarMarcasAvaliadasPorNome(termo.trim());
