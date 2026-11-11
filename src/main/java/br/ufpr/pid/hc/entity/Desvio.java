@@ -2,7 +2,6 @@ package br.ufpr.pid.hc.entity;
 
 import br.ufpr.pid.hc.enumeration.Desfecho;
 import br.ufpr.pid.hc.enumeration.EnvioAmostra;
-import br.ufpr.pid.hc.enumeration.FormaEntrada;
 import br.ufpr.pid.hc.enumeration.GrauDano;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -40,8 +39,7 @@ public class Desvio extends Auditavel {
     private String lote;
     private LocalDate validade;
 
-    @Enumerated(EnumType.STRING)
-    private FormaEntrada formaEntrada;
+    private String formaEntrada;
 
     @Enumerated(EnumType.STRING)
     private EnvioAmostra amostra;
@@ -65,4 +63,8 @@ public class Desvio extends Auditavel {
 
     private String notificacaoAnvisa;
     private String processoSei;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "importacao_id")
+    private ImportacaoTecnovigilancia importacao;
 }

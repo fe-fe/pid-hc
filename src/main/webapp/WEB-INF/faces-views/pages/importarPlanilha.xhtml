@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
-    xmlns:f="jakarta.faces.core" template="/WEB-INF/templates/layout.xhtml">
+    xmlns:f="jakarta.faces.core" xmlns:pt="jakarta.faces.passthrough" template="/WEB-INF/templates/layout.xhtml">
 
     <ui:define name="title">
         Importar Planilha - PID
@@ -13,31 +13,114 @@
 
         <header>
             <h1>Importar Tecnovigilância</h1>
-        </header>   
+        </header>
 
 
         <section>
             <h2>Envie sua planilha</h2>
-            <p>Selecione a planilha da tecnovigilância.</p>
+            <p>Selecione a planilha da tecnovigilância preenchida no modelo do PID.</p>
 
-            <div class="dragDrop">
-                <div class="dragDrop__icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folders preview-icon"><path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z"/><path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1"/></svg></div>
-                <h3>Arraste e solte a planilha aqui</h3>
-                <small>ou selecione um arquivo do seu computador</small>
-                <button class="bt__selecionar btn btn-light">Selecionar o arquivo</button>
-            </div>
-            <div class="infos">
-                <small>
-                    Formatos aceitos: XLSX, XLS e CSV 
-                </small>
+            <h:form id="formModelo" styleClass="modelo">
+                <span class="modelo__texto">
+                    Baixe o modelo, preencha a aba <strong>Desvios</strong> e envie aqui.
+                </span>
+                <h:commandLink styleClass="bt__modelo btn btn-light" action="#{importacaoTecnovigilanciaBean.baixarModelo}">
+                    <i class="bi bi-download" aria-hidden="true"></i>
+                    Baixar modelo
+                </h:commandLink>
+            </h:form>
 
-                <small>Tamanho máximo: 10 MB</small>
-            </div>
+            <h:form id="formImportacao" enctype="multipart/form-data" styleClass="importacao">
+                <label class="dragDrop" for="formImportacao:arquivo" data-drop-zone="">
+                    <div class="dragDrop__icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folders preview-icon"><path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z"/><path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1"/></svg></div>
+                    <h3>Arraste e solte a planilha aqui</h3>
+                    <small data-drop-file="">ou selecione um arquivo do seu computador</small>
+                    <span class="bt__selecionar btn btn-light">Selecionar o arquivo</span>
+                    <h:inputFile id="arquivo" value="#{importacaoTecnovigilanciaBean.arquivo}" styleClass="visually-hidden"
+                                 pt:accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                </label>
+                <div class="infos">
+                    <small>
+                        Formato aceito: XLSX do modelo
+                    </small>
 
-            <button class="bt__importar btn btn-success">Importar Planilha</button>
+                    <small>Tamanho máximo: 10 MB</small>
+                </div>
+
+                <h:commandButton styleClass="bt__importar btn btn-success" value="Importar Planilha"
+                                 action="#{importacaoTecnovigilanciaBean.importar}" />
+
+                <ui:fragment rendered="#{not empty facesContext.messageList}">
+                    <button type="button" class="bt__resultado btn btn-link" data-bs-toggle="modal"
+                            data-bs-target="#modalResultadoImportacao">Ver resultado da importação</button>
+                </ui:fragment>
+            </h:form>
         </section>
-        
-        <!-- <h:outputScript target="body"></h:outputScript> -->
+
+        <ui:fragment rendered="#{not empty facesContext.messageList}">
+            <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
+                <ui:param name="modalId" value="modalResultadoImportacao" />
+                <ui:param name="modalTitulo"
+                          value="#{importacaoTecnovigilanciaBean.importados ne null ? 'Importação concluída' : 'Importação não realizada'}" />
+                <ui:param name="modalTamanho" value="#{empty importacaoTecnovigilanciaBean.erros ? '' : 'modal-xl'}" />
+                <ui:define name="conteudo">
+                    <div class="modal-body">
+                        <h:messages globalOnly="true" infoClass="text-success" warnClass="text-warning-emphasis"
+                                    errorClass="text-danger" styleClass="importacao__mensagens list-unstyled" />
+                        <ui:fragment rendered="#{not empty importacaoTecnovigilanciaBean.erros}">
+                            <p>Corrija os pontos abaixo na planilha e envie de novo. Nenhuma linha foi gravada. Erros na linha 1 são do cabeçalho.</p>
+
+                            <div class="pid-table card border shadow-sm overflow-hidden w-100">
+                                <div class="pid-table__responsive table-responsive">
+                                    <table class="pid-table__table table align-middle mb-0">
+                                        <caption class="visually-hidden">Erros da planilha por linha e coluna.</caption>
+                                        <thead class="pid-table__head">
+                                            <tr>
+                                                <th scope="col">Linha</th>
+                                                <th scope="col">Coluna</th>
+                                                <th scope="col">Valor</th>
+                                                <th scope="col">Problema</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ui:repeat value="#{importacaoTecnovigilanciaBean.errosExibidos}" var="erro">
+                                                <tr>
+                                                    <td class="fw-semibold text-body text-nowrap">
+                                                        <h:outputText value="#{erro.linha}" />
+                                                    </td>
+                                                    <td class="text-nowrap">
+                                                        <h:outputText value="#{erro.coluna}" />
+                                                    </td>
+                                                    <td class="erros__valor">
+                                                        <h:outputText value="#{empty erro.valor ? '—' : erro.valor}" />
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText value="#{erro.mensagem}" />
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <ui:fragment rendered="#{importacaoTecnovigilanciaBean.errosOcultos gt 0}">
+                                <small class="erros__ocultos">
+                                    E mais #{importacaoTecnovigilanciaBean.errosOcultos} erros. Corrija os primeiros e envie de novo para ver o restante.
+                                </small>
+                            </ui:fragment>
+                        </ui:fragment>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </ui:define>
+            </ui:decorate>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="scripts">
+        <h:outputScript library="js" name="pages/importarPlanilha.js" target="body" />
     </ui:define>
 
 </ui:composition>

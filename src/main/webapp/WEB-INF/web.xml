@@ -19,6 +19,10 @@
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
+        <multipart-config>
+            <max-file-size>10485760</max-file-size>
+            <max-request-size>11534336</max-request-size>
+        </multipart-config>
     </servlet>
 
     <servlet-mapping>
