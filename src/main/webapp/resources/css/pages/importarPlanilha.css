@@ -57,6 +57,9 @@ small {
 }
 
 .bt__selecionar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 16px;
     min-height: 36px;
     padding: 0 13px;
@@ -101,4 +104,97 @@ small {
     width: 100%;
     margin-top: 8px;
     justify-content: space-between;
+}
+
+.dragDrop {
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s;
+}
+
+.dragDrop--over,
+.dragDrop--selected {
+    border-color: #3346c4;
+    border-style: solid;
+}
+
+.dragDrop--selected [data-drop-file] {
+    color: var(--pid-text);
+    font-weight: 600;
+}
+
+.modelo {
+    display: flex;
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px 16px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background-color: var(--pid-input);
+    border: 1px solid var(--pid-border);
+    border-radius: 8px;
+}
+
+.modelo__texto {
+    color: var(--pid-muted);
+    font-size: 12px;
+}
+
+.bt__modelo {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 0 13px;
+    color: var(--pid-text-secondary);
+    background-color: var(--pid-surface);
+    border: 1px solid var(--pid-control-border);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.importacao {
+    display: flex;
+    width: 100%;
+    margin-top: 8px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.importacao__mensagens {
+    margin: 0 0 16px;
+    font-size: 14px;
+}
+
+.importacao__mensagens li + li {
+    margin-top: 8px;
+}
+
+.bt__resultado {
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.importacao .bt__importar {
+    margin-top: 16px;
+}
+
+.erros__valor {
+    max-width: 280px;
+    overflow-wrap: anywhere;
+}
+
+.erros__ocultos {
+    display: block;
+    margin-top: 12px;
+}
+
+@media (max-width: 575.98px) {
+    .modelo {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
