@@ -21,8 +21,9 @@
         if (status === "complete") carregar(false);
     });
 
-    window.navigation?.addEventListener("navigate", ({ destination, downloadRequest, signal }) => {
+    window.navigation?.addEventListener("navigate", ({ destination, downloadRequest, sourceElement, signal }) => {
         if (destination.sameDocument || downloadRequest != null) return;
+        if (sourceElement?.closest("[data-download]")) return;
         if (new URL(destination.url).origin !== location.origin) return;
 
         carregar(true);
