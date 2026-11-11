@@ -2,17 +2,24 @@
                 xmlns:h="jakarta.faces.html"
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:f="jakarta.faces.core"
+                xmlns:pt="jakarta.faces.passthrough"
                 template="/WEB-INF/templates/pagina.xhtml">
 
     <ui:define name="title">Usuários - PID</ui:define>
 
     <ui:define name="pageTitle">Usuários cadastrados</ui:define>
 
-    <ui:define name="pageSubtitle">
-        <span class="page__subtitle">Gerencie os dados e os perfis de acesso dos usuários</span>
-    </ui:define>
-
     <ui:define name="pageActions">
+        <h:form id="formPesquisaUsuarios" styleClass="page__search input-group input-group-sm">
+            <h:outputLabel for="nome" value="Nome do usuário" styleClass="visually-hidden" />
+            <h:inputText id="nome" value="#{usuarioBean.nomePesquisa}"
+                         styleClass="page__search-input form-control"
+                         pt:type="search" pt:placeholder="Pesquisar usuário por nome" />
+            <h:commandButton value="Consultar" action="#{usuarioBean.pesquisarPorNome}"
+                             styleClass="btn btn-primary">
+                <f:ajax execute="@form" render=":formLista" />
+            </h:commandButton>
+        </h:form>
         <div class="page__action-buttons ms-auto">
             <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
                 <ui:param name="filtroId" value="usuariosFilters" />

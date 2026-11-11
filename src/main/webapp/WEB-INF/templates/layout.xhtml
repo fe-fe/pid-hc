@@ -41,8 +41,17 @@
         </div>
     </div>
 
+    <div class="layout__loading" role="status">
+        <div id="indicadorCarregamento" class="layout__loading-message" hidden="hidden">
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            Carregando informações…
+        </div>
+    </div>
+
     <ui:insert name="scripts"/>
 
+    <h:outputScript library="js" name="components/loading.js" target="body"/>
+    <h:outputScript library="js" name="components/table-scroll.js" target="body"/>
     <h:outputScript library="webjars" name="bootstrap/5.3.8/js/bootstrap.bundle.min.js" target="body"/>
 </h:body>
 </html>
