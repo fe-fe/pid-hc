@@ -50,7 +50,11 @@
 
     <ui:insert name="scripts"/>
 
-    <h:outputScript library="js" name="components/loading.js" target="body"/>
+    <ui:insert name="loadingScript">
+        <h:outputScript library="js" name="components/loading.js" target="body"/>
+    </ui:insert>
+    <!-- deixando a view escolher se quer ou não carregar o script de loading, caso não queira, basta sobrescrever a tag ui:define com um conteúdo vazio -->
+    <!-- <h:outputScript library="js" name="components/loading.js" target="body"/> -->
     <h:outputScript library="js" name="components/table-scroll.js" target="body"/>
     <h:outputScript library="webjars" name="bootstrap/5.3.8/js/bootstrap.bundle.min.js" target="body"/>
 </h:body>
