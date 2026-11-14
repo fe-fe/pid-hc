@@ -77,8 +77,7 @@
                     <div class="collapse #{request.requestURI.contains('/pages/controle/') or request.requestURI.contains('/pages/admin/users') ? 'show' : ''}" id="sidebarGestao">
                         <div class="d-flex flex-column gap-1 ps-3">
                             <h:link outcome="/pages/admin/users" styleClass="btn btn-light link"
-                                    pt:aria-current="#{view.viewId.endsWith('/pages/admin/users.xhtml') ? 'page' : null}"
-                                    rendered="#{sessao.contemPerfil('ADMINISTRADOR')}">
+                                    pt:aria-current="#{view.viewId.endsWith('/pages/admin/users.xhtml') ? 'page' : null}">
                                 <i class="bi bi-people" aria-hidden="true"></i>
                                 Usuários
                             </h:link>
