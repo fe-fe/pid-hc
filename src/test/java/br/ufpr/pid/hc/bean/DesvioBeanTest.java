@@ -5,6 +5,7 @@ import br.ufpr.pid.hc.entity.Fabricante;
 import br.ufpr.pid.hc.entity.Marca;
 import br.ufpr.pid.hc.entity.Material;
 import br.ufpr.pid.hc.enumeration.Desfecho;
+import br.ufpr.pid.hc.enumeration.DesvioOrdenacao;
 import br.ufpr.pid.hc.enumeration.EnvioAmostra;
 import br.ufpr.pid.hc.enumeration.GrauDano;
 import br.ufpr.pid.hc.exception.DuplicateRecordException;
@@ -41,6 +42,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -104,6 +106,48 @@ class DesvioBeanTest {
     @AfterEach
     void fechar() {
         bootstrap.close();
+    }
+
+    @Test
+    void pesquisarReiniciaPaginacaoEMantemFiltroNaProximaPagina() {
+        when(desvioService.contarPorTermo("VIG-1", false)).thenReturn(16L);
+        when(desvioService.buscarPorTermo(0, 15, DesvioOrdenacao.DATA, "VIG-1", false))
+                .thenReturn(List.of(original));
+        when(desvioService.buscarPorTermo(1, 15, DesvioOrdenacao.DATA, "VIG-1", false))
+                .thenReturn(List.of(original));
+        bean.setPaginaAtual(3);
+        bean.setTermoPesquisa("  VIG-1  ");
+
+        bean.pesquisar();
+
+        assertEquals(0, bean.getPaginaAtual());
+        assertEquals(16, bean.getTotalRegistros());
+        assertEquals(List.of(original), bean.getDesvios());
+        assertFalse(bean.isUltimaPagina());
+
+        bean.proximaPagina();
+
+        assertEquals(1, bean.getPaginaAtual());
+        assertTrue(bean.isUltimaPagina());
+        verify(desvioService).buscarPorTermo(1, 15, DesvioOrdenacao.DATA, "VIG-1", false);
+    }
+
+    @Test
+    void limparPesquisaRemoveFiltroEReiniciaPaginacao() {
+        bean.setTermoPesquisa("123");
+        bean.pesquisar();
+        bean.setPaginaAtual(2);
+        when(desvioService.contarPorTermo(null, false)).thenReturn(1L);
+        when(desvioService.buscarPorTermo(0, 15, DesvioOrdenacao.DATA, null, false))
+                .thenReturn(List.of(original));
+        bean.setTermoPesquisa(" ");
+
+        bean.pesquisar();
+
+        assertEquals(0, bean.getPaginaAtual());
+        assertEquals(1, bean.getTotalRegistros());
+        assertEquals(List.of(original), bean.getDesvios());
+        verify(desvioService).contarPorTermo(null, false);
     }
 
     @Test

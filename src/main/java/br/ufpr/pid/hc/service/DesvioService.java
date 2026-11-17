@@ -3,14 +3,17 @@ package br.ufpr.pid.hc.service;
 import br.ufpr.pid.hc.dao.AbstractDao;
 import br.ufpr.pid.hc.dao.DesvioDao;
 import br.ufpr.pid.hc.entity.Desvio;
+import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import br.ufpr.pid.hc.exception.DomainException;
 import br.ufpr.pid.hc.exception.DuplicateRecordException;
 import br.ufpr.pid.hc.exception.MissingRequiredFieldsException;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Stateless
@@ -29,6 +32,17 @@ public class DesvioService extends AbstractService<Desvio, UUID> {
 
     @Override
     protected AbstractDao<Desvio, UUID> getDao() { return desvioDao; }
+
+    @PermitAll
+    public List<Desvio> buscarPorTermo(int pagina, int tamanhoPagina, CampoOrdenacao ordenacao,
+            String termo, boolean incluirInativos) {
+        return desvioDao.buscarPorTermo(pagina, tamanhoPagina, ordenacao, termo, incluirInativos);
+    }
+
+    @PermitAll
+    public long contarPorTermo(String termo, boolean incluirInativos) {
+        return desvioDao.contarPorTermo(termo, incluirInativos);
+    }
 
     @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Desvio atualizar(Desvio desvio, String codigoMaterial, String nomeMaterial,

@@ -52,6 +52,8 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
     private List<Material> materiais = List.of();
     private List<String> fabricantes = List.of();
     private List<String> marcas = List.of();
+    private String termoPesquisa;
+    private String termoFiltrado;
 
     public DesvioBean() {
         super(15, DesvioOrdenacao.DATA);
@@ -61,6 +63,23 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
     protected AbstractService<Desvio, UUID> getService() { return desvioService; }
 
     public List<Desvio> getDesvios() { return getLista(); }
+
+    public void pesquisar() {
+        termoFiltrado = termoPesquisa == null || termoPesquisa.isBlank() ? null : termoPesquisa.trim();
+        paginaAtual = 0;
+        carregarPagina();
+    }
+
+    @Override
+    protected long contarRegistros() {
+        return desvioService.contarPorTermo(termoFiltrado, mostrarInativos);
+    }
+
+    @Override
+    protected List<Desvio> buscarRegistros() {
+        return desvioService.buscarPorTermo(paginaAtual, tamanhoPagina, ordenacaoAtual,
+                termoFiltrado, mostrarInativos);
+    }
 
     public Desfecho[] getDesfechos() { return Desfecho.values(); }
 
