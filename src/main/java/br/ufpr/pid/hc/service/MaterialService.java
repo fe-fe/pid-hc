@@ -67,6 +67,6 @@ public class MaterialService extends AbstractService<Material, UUID> {
                 .ifPresent(existente -> {
                     throw new DuplicateRecordException("Já existe um material com o código " + existente.getCodigo());
                 });
-        return materialDao.salvar(material, null);
+        return materialDao.salvar(material);
     }
 }

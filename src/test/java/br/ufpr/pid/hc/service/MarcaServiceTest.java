@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,7 +33,7 @@ class MarcaServiceTest {
     @Test
     void padronizaONomeAoSalvar() {
         when(marcaDao.buscarPorNome("SERINGA BD")).thenReturn(Optional.empty());
-        when(marcaDao.salvar(any(), isNull())).thenAnswer(chamada -> chamada.getArgument(0));
+        when(marcaDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
 
         Marca salva = service.salvar(marca(null, "  seringa   bd "));
 
@@ -51,14 +50,14 @@ class MarcaServiceTest {
         when(marcaDao.buscarPorNome("ALFA")).thenReturn(Optional.of(marca(UUID.randomUUID(), "ALFA")));
 
         assertThrows(DuplicateRecordException.class, () -> service.salvar(marca(null, "alfa")));
-        verify(marcaDao, never()).salvar(any(), any());
+        verify(marcaDao, never()).salvar(any());
     }
 
     @Test
     void edicaoAceitaOProprioNome() {
         UUID id = UUID.randomUUID();
         when(marcaDao.buscarPorNome("ALFA")).thenReturn(Optional.of(marca(id, "ALFA")));
-        when(marcaDao.salvar(any(), isNull())).thenAnswer(chamada -> chamada.getArgument(0));
+        when(marcaDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
 
         assertEquals("ALFA", service.salvar(marca(id, "Alfa")).getNome());
     }
@@ -69,13 +68,13 @@ class MarcaServiceTest {
         when(marcaDao.buscarPorNome("ALFA")).thenReturn(Optional.of(existente));
 
         assertSame(existente, service.obterOuCriar(" alfa "));
-        verify(marcaDao, never()).salvar(any(), any());
+        verify(marcaDao, never()).salvar(any());
     }
 
     @Test
     void obterOuCriarCadastraNova() {
         when(marcaDao.buscarPorNome("BETA")).thenReturn(Optional.empty());
-        when(marcaDao.salvar(any(), isNull())).thenAnswer(chamada -> chamada.getArgument(0));
+        when(marcaDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
 
         assertEquals("BETA", service.obterOuCriar("beta").getNome());
     }

@@ -6,6 +6,7 @@ import br.ufpr.pid.hc.enumeration.GrauDano;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Audited
 public class Desvio extends Auditavel {
 
     public Desvio() {}

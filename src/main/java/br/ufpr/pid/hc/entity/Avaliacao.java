@@ -4,6 +4,7 @@ import br.ufpr.pid.hc.enumeration.ResultadoTecnico;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Audited
 public class Avaliacao extends Auditavel {
 
     public Avaliacao() {}

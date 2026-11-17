@@ -45,7 +45,7 @@ public class FabricanteService extends AbstractService<Fabricante, UUID> {
         return fabricanteDao.buscarPorNome(nomePadronizado).orElseGet(() -> {
             Fabricante novo = new Fabricante();
             novo.setNome(nomePadronizado);
-            return fabricanteDao.salvar(novo, null);
+            return fabricanteDao.salvar(novo);
         });
     }
 
@@ -61,6 +61,6 @@ public class FabricanteService extends AbstractService<Fabricante, UUID> {
                 .ifPresent(existente -> {
                     throw new DuplicateRecordException("Já existe um cadastro com o nome " + existente.getNome());
                 });
-        return fabricanteDao.salvar(fabricante, null);
+        return fabricanteDao.salvar(fabricante);
     }
 }
