@@ -78,7 +78,8 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
     private static final int LINHAS_COM_VALIDACAO = 5000;
     private static final int TAMANHO_MAXIMO_TEXTO = 255;
     private static final int TAMANHO_MAXIMO_VALOR_EXIBIDO = 80;
-    private static final DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd/MM/uuuu")
+    private static final DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+    private static final DateTimeFormatter LEITURA_DATA = DateTimeFormatter.ofPattern("d/M/uuuu")
             .withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter FORMATO_DATA_HORA = DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm");
     private static final Pattern REGISTRO_ANVISA_VALIDO = Pattern.compile("\\d{11}");
@@ -468,7 +469,7 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
                 case STRING -> {
                     String valor = normalizar(celula.getStringCellValue());
                     try {
-                        return LocalDate.parse(valor, FORMATO_DATA);
+                        return LocalDate.parse(valor, LEITURA_DATA);
                     } catch (DateTimeParseException e) {
                         erro(coluna, valor, "Data inválida; use dd/mm/aaaa");
                     }
@@ -553,8 +554,6 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
         XSSFCellStyle estiloTextoLongo = estiloTexto(planilha);
         estiloTextoLongo.setWrapText(true);
         estiloTextoLongo.setVerticalAlignment(VerticalAlignment.TOP);
-        XSSFCellStyle estiloData = planilha.createCellStyle();
-        estiloData.setDataFormat(planilha.createDataFormat().getFormat("dd/mm/yyyy"));
 
         XSSFDataValidationHelper ajudante = new XSSFDataValidationHelper(aba);
         XSSFRow cabecalho = aba.createRow(0);
@@ -564,11 +563,8 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
             celula.setCellValue(coluna.getTitulo());
             celula.setCellStyle(coluna.isObrigatoria() ? estiloObrigatoria : estiloOpcional);
             aba.setColumnWidth(indice, coluna.getLargura() * 256);
-            aba.setDefaultColumnStyle(indice, switch (coluna.getTipo()) {
-                case DATA -> estiloData;
-                case TEXTO_LONGO -> estiloTextoLongo;
-                default -> estiloTexto;
-            });
+            aba.setDefaultColumnStyle(indice,
+                    coluna.getTipo() == ColunaTecnovigilancia.Tipo.TEXTO_LONGO ? estiloTextoLongo : estiloTexto);
 
             DataValidationConstraint restricao = restricao(ajudante, coluna, faixasDasListas.get(coluna));
             if (restricao == null) {
@@ -593,8 +589,6 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
     private DataValidationConstraint restricao(XSSFDataValidationHelper ajudante, ColunaTecnovigilancia coluna,
             String faixaDaLista) {
         return switch (coluna) {
-            case DATA -> ajudante.createDateConstraint(OperatorType.LESS_OR_EQUAL, "TODAY()", null, null);
-            case VALIDADE -> ajudante.createDateConstraint(OperatorType.GREATER_OR_EQUAL, "DATE(1900,1,1)", null, null);
             case REGISTRO_ANVISA -> ajudante.createTextLengthConstraint(OperatorType.EQUAL, "11", null);
             case PROCESSO_SEI -> ajudante.createTextLengthConstraint(OperatorType.EQUAL, "20", null);
             default -> switch (coluna.getTipo()) {
