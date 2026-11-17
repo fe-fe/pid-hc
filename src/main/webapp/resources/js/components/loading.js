@@ -21,9 +21,18 @@
         if (status === "complete") carregar(false);
     });
 
-    window.navigation?.addEventListener("navigate", ({ destination, downloadRequest, sourceElement, signal }) => {
+    let baixando = false;
+
+    document.addEventListener("click", ({ target }) => {
+        if (target.closest?.("[data-download] :is(a, button, [type=submit])")) baixando = true;
+    }, true);
+
+    window.navigation?.addEventListener("navigate", ({ destination, downloadRequest, signal }) => {
+        if (baixando) {
+            baixando = false;
+            return;
+        }
         if (destination.sameDocument || downloadRequest != null) return;
-        if (sourceElement?.closest("[data-download]")) return;
         if (new URL(destination.url).origin !== location.origin) return;
 
         carregar(true);
