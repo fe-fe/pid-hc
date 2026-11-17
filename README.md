@@ -43,7 +43,11 @@ O `configure.cli` roda durante o build da imagem e:
 - liga a substituição de `${env.VAR:padrão}` no `web.xml` e no `persistence.xml`, que leem as
   variáveis opcionais do `.env`.
 
-O schema é criado/atualizado pelo Hibernate (`hbm2ddl.auto=update`).
+O schema é criado e atualizado pelo Flyway quando o WildFly sobe, com as migrations de
+`src/main/resources/db/migration` (`V2__descricao.sql`, `V3__...`). O Hibernate não altera o
+banco (`hbm2ddl.auto=none`). Banco que já existia sem histórico do Flyway entra na versão 1 sem
+rodar o `V1__esquema_inicial.sql`. Mudança em entidade precisa de uma migration nova; o
+`MigracoesTest` falha se as migrations não baterem com as entidades.
 
 ## Subir (normal)
 
