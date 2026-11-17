@@ -5,7 +5,7 @@
     xmlns:ui="jakarta.faces.facelets">
     <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
         <ui:param name="modalId" value="modalAvaliacao" />
-        <ui:param name="modalTitulo" value="Criar avaliação" />
+        <ui:param name="modalTitulo" value="#{avaliacaoBean.tituloModal}" />
         <ui:param name="modalTamanho" value="modal-lg" />
         <ui:define name="conteudo">
             <h:form id="formAvaliacao">

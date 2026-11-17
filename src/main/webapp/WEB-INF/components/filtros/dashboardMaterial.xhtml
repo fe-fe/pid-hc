@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+    xmlns:pt="jakarta.faces.passthrough" xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
+        <ui:param name="filtroId" value="dashboardMaterialFilters" />
+        <ui:define name="formulario">
+            <h:form id="formFiltrosMaterial" styleClass="d-flex flex-column gap-3 flex-grow-1">
+                <fieldset>
+                    <legend class="visually-hidden">Período do histórico</legend>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <h:outputLabel for="dataInicio" value="De" styleClass="form-label" />
+                            <h:inputText id="dataInicio" value="#{dashboardMaterialBean.dataInicio}" pt:type="date" styleClass="form-control">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                            <h:message for="dataInicio" styleClass="text-danger small" />
+                        </div>
+                        <div class="col-6">
+                            <h:outputLabel for="dataFim" value="Até" styleClass="form-label" />
+                            <h:inputText id="dataFim" value="#{dashboardMaterialBean.dataFim}" pt:type="date" styleClass="form-control">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                            <h:message for="dataFim" styleClass="text-danger small" />
+                        </div>
+                    </div>
+                </fieldset>
+                <div>
+                    <h:outputLabel for="fabricante" value="Fabricante" styleClass="form-label" />
+                    <h:selectOneMenu id="fabricante" value="#{dashboardMaterialBean.fabricanteId}" styleClass="form-select">
+                        <f:selectItem itemLabel="Todos os fabricantes" noSelectionOption="true" itemValue="#{null}" />
+                        <f:selectItems value="#{dashboardMaterialBean.fabricantes}" var="fabricante" itemValue="#{fabricante.id}" itemLabel="#{fabricante.nome}" />
+                    </h:selectOneMenu>
+                    <h:message for="fabricante" styleClass="text-danger small" />
+                </div>
+                <div>
+                    <h:outputLabel for="marca" value="Marca" styleClass="form-label" />
+                    <h:selectOneMenu id="marca" value="#{dashboardMaterialBean.marcaId}" styleClass="form-select">
+                        <f:selectItem itemLabel="Todas as marcas" noSelectionOption="true" itemValue="#{null}" />
+                        <f:selectItems value="#{dashboardMaterialBean.marcas}" var="marca" itemValue="#{marca.id}" itemLabel="#{marca.nome}" />
+                    </h:selectOneMenu>
+                    <h:message for="marca" styleClass="text-danger small" />
+                </div>
+                <p class="text-body-secondary small">Os filtros se aplicam ao gráfico, aos indicadores e às duas abas.</p>
+                <h:panelGroup rendered="#{facesContext.validationFailed}" pt:data-filter-error="true" styleClass="visually-hidden">
+                    Há erros nos filtros.
+                </h:panelGroup>
+                <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
+                    <h:commandButton value="Limpar" action="#{dashboardMaterialBean.limparFiltros}" styleClass="btn btn-outline-secondary">
+                        <f:ajax execute="@this" render="@form :resumoMaterial :abasMaterial :historicoMaterial :estadoFiltroMaterial"
+                            resetValues="true" onevent="fecharFiltrosMaterial" />
+                    </h:commandButton>
+                    <h:commandButton value="Aplicar filtros" action="#{dashboardMaterialBean.aplicarFiltros}" styleClass="btn btn-primary">
+                        <f:ajax execute="@form" render="@form :resumoMaterial :abasMaterial :historicoMaterial :estadoFiltroMaterial"
+                            onevent="fecharFiltrosMaterial" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </ui:define>
+        <ui:define name="acoes" />
+    </ui:decorate>
+    <h:outputScript target="body">
+        function fecharFiltrosMaterial(data) {
+            if (data.status !== "success") return;
+            const form = document.getElementById("formFiltrosMaterial");
+            if (!form || form.querySelector("[data-filter-error]")) return;
+            bootstrap.Offcanvas.getInstance(document.getElementById("dashboardMaterialFilters"))?.hide();
+        }
+    </h:outputScript>
+</ui:composition>

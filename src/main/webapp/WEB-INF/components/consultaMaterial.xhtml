@@ -1,11 +1,140 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets">
-    <section id="materialLookupEmpty" class="material-lookup__empty" aria-labelledby="materialLookupEmptyTitle">
-        <i class="bi bi-box-seam" aria-hidden="true"></i>
-        <h2 id="materialLookupEmptyTitle">Qual material você quer consultar?</h2>
-        <label for="materialLookupInput" class="visually-hidden">Código ou nome do material</label>
-        <input type="text" id="materialLookupInput" class="form-control"
-            placeholder="Digite o código ou nome do material" aria-describedby="materialLookupEmptyText" />
-        <p id="materialLookupEmptyText">Pesquise pelo código ou nome para reunir o histórico de avaliações e os
-            incidentes em um só lugar.</p>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+    xmlns:pt="jakarta.faces.passthrough" xmlns:ui="jakarta.faces.facelets">
+    <section class="d-flex flex-column flex-grow-1">
+        <h:panelGroup id="resumoMaterial" layout="block"
+            styleClass="#{empty dashboardMaterialBean.material ? 'd-flex flex-grow-1 align-items-center justify-content-center' : ''}">
+            <ui:fragment rendered="#{empty dashboardMaterialBean.material}">
+                <div class="d-flex flex-column align-items-center gap-3 text-center w-100">
+
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-open preview-icon"><path d="M12 22v-9"/><path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z"/><path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13"/><path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z"/></svg>
+
+                    <h1 class="display-6 fw-bold">Qual material você quer consultar?</h1>
+
+                    <h:form id="formBuscaMaterial" styleClass="col-12 col-lg-10 col-xl-8 col-xxl-7 position-relative text-start">
+                        <div class="input-group flex-nowrap gap-2 gap-sm-3" style="height: 50px;">
+                            <h:outputLabel for="termo" value="Código ou nome do material" styleClass="visually-hidden" />
+                            
+                            <h:inputText id="termo" value="#{dashboardMaterialBean.termo}" styleClass="form-control rounded-3 h-100 py-0 px-3" pt:type="search" pt:placeholder="Código ou nome do material" pt:autocomplete="off">
+                                
+                                <f:ajax event="keyup" delay="350" execute="@this" listener="#{dashboardMaterialBean.buscarSugestoes}" render="sugestoes" />
+                                <f:ajax event="change" delay="350" execute="@this" listener="#{dashboardMaterialBean.buscarSugestoes}" render="sugestoes" />
+                            
+                            </h:inputText>
+
+                            <h:commandButton value="Consultar" action="#{dashboardMaterialBean.pesquisar}" styleClass="btn btn-primary rounded-3 h-100 py-0 px-3 px-sm-4 ms-0" pt:aria-label="Consultar material">
+
+                                <f:ajax
+                                    execute="@form"
+                                    render="@form :resumoMaterial :abasMaterial :historicoMaterial :estadoFiltroMaterial :formFiltrosMaterial"
+                                    resetValues="true"
+                                />
+
+                            </h:commandButton>
+                        </div>
+
+                        <h:panelGroup id="sugestoes" layout="block" pt:aria-live="polite">
+
+                            <ui:fragment rendered="#{dashboardMaterialBean.buscaRealizada}">
+                                <div class="list-group position-absolute top-100 start-0 end-0 z-3 mt-2 shadow-sm" aria-label="Materiais encontrados">
+                                    <ui:repeat value="#{dashboardMaterialBean.sugestoes}" var="opcao">
+
+                                        <h:commandLink action="#{dashboardMaterialBean.selecionar(opcao)}" styleClass="list-group-item list-group-item-action small">
+                                            
+                                            <h:outputText value="#{opcao.codigo} — #{opcao.nome}" />
+
+                                            <ui:fragment rendered="#{opcao.inativo}">
+                                                <span class="badge text-bg-secondary">Inativo</span>
+                                            </ui:fragment>
+
+                                            <f:ajax 
+                                                execute="@this"
+                                                render="@form :resumoMaterial :abasMaterial :historicoMaterial :estadoFiltroMaterial :formFiltrosMaterial"
+                                                resetValues="true" 
+                                            />
+                                        </h:commandLink>
+
+                                    </ui:repeat>
+
+                                    <ui:fragment rendered="#{empty dashboardMaterialBean.sugestoes}">
+                                        <p class="list-group-item text-body-secondary small">Nenhum material encontrado. Tente outro código ou nome.</p>
+                                    </ui:fragment>
+
+                                    <ui:fragment rendered="#{dashboardMaterialBean.maisSugestoes}">
+                                        <p class="list-group-item text-body-secondary small">Exibindo os primeiros 10 materiais. Refine a pesquisa.</p>
+                                    </ui:fragment>
+                                </div>
+                            </ui:fragment>
+                        </h:panelGroup>
+                    </h:form>
+
+                    <p class="text-body-secondary">Pesquise pelo código ou nome para reunir as avaliações e os incidentes em um só lugar.</p>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{not empty dashboardMaterialBean.material}">
+                <ui:include src="/WEB-INF/components/dashboard/resumo.xhtml" />
+            </ui:fragment>
+        </h:panelGroup>
+
+        <div class="d-flex flex-wrap align-items-start gap-3">
+            <h:panelGroup id="abasMaterial" layout="block">
+
+                <ui:fragment rendered="#{not empty dashboardMaterialBean.material}">
+                    <h:form id="formAbasMaterial" styleClass="mt-4">
+
+                        <nav class="nav nav-pills flex-nowrap bg-body-tertiary border rounded-3 p-1"
+                            style="height: 36px;
+                                --bs-nav-link-color: var(--pid-muted);
+                                --bs-nav-link-hover-color: var(--pid-text);
+                                --bs-nav-link-font-size: 0.8125rem;
+                                --bs-nav-pills-link-active-color: var(--bs-emphasis-color);
+                                --bs-nav-pills-link-active-bg: var(--pid-accent-soft);"
+                            aria-label="Históricos do material">
+                            
+                            <h:commandButton 
+                                value="Avaliações"
+                                action="#{dashboardMaterialBean.mostrarAvaliacoes}"
+                                styleClass="nav-link h-100 py-0 px-3 rounded-2 fw-semibold #{dashboardMaterialBean.abaAvaliacoes ? 'active shadow-sm' : ''}"
+                                pt:aria-pressed="#{dashboardMaterialBean.abaAvaliacoes}">
+                                <f:ajax execute="@this" render=":abasMaterial :historicoMaterial" />
+                            </h:commandButton>
+
+                            <h:commandButton 
+                                value="Tecnovigilância"
+                                action="#{dashboardMaterialBean.mostrarTecnovigilancia}"
+                                styleClass="nav-link h-100 py-0 px-3 rounded-2 fw-semibold #{dashboardMaterialBean.abaAvaliacoes ? '' : 'active shadow-sm'}"
+                                pt:aria-pressed="#{not dashboardMaterialBean.abaAvaliacoes}">
+                                <f:ajax execute="@this" render=":abasMaterial :historicoMaterial" />
+                            </h:commandButton>
+                        </nav>
+                    </h:form>
+                </ui:fragment>
+            </h:panelGroup>
+
+            <h:panelGroup id="estadoFiltroMaterial" layout="block" styleClass="ms-auto">
+                <ui:fragment rendered="#{not empty dashboardMaterialBean.material}">
+                    <div class="d-flex align-items-center gap-2 mt-4">
+
+                        <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
+                            <ui:param name="filtroId" value="dashboardMaterialFilters" />
+                        </ui:include>
+
+                        <ui:fragment rendered="#{dashboardMaterialBean.filtroAplicado}">
+                            <span class="badge text-bg-secondary">Filtros aplicados</span>
+                        </ui:fragment>
+                        
+                    </div>
+                </ui:fragment>
+            </h:panelGroup>
+        </div>
+
+        <h:panelGroup id="historicoMaterial" layout="block"
+            styleClass="#{not empty dashboardMaterialBean.material ? 'mt-4' : ''}">
+            <ui:fragment rendered="#{not empty dashboardMaterialBean.material}">
+                <ui:include src="/WEB-INF/components/dashboard/historico.xhtml" />
+            </ui:fragment>
+        </h:panelGroup>
     </section>
+
+    <ui:include src="/WEB-INF/components/filtros/dashboardMaterial.xhtml" />
 </ui:composition>

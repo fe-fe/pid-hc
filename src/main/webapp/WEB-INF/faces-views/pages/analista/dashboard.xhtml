@@ -1,20 +1,8 @@
-<ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="jakarta.faces.html"
-    xmlns:ui="jakarta.faces.facelets"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="jakarta.faces.facelets"
     template="/WEB-INF/templates/layout.xhtml">
-
-    <ui:param name="contentClass" value="material-lookup-page" />
-
-    <ui:define name="title">
-        Dashboard Analista de Qualidade
-    </ui:define>
-
-    <ui:define name="head">
-        <h:outputStylesheet library="css" name="pages/dashboard.css" />
-    </ui:define>
+    <ui:define name="title">Dashboard Analista de Qualidade</ui:define>
+    <ui:param name="contentClass" value="d-flex flex-column" />
     <ui:define name="content">
         <ui:include src="/WEB-INF/components/consultaMaterial.xhtml" />
     </ui:define>
-
 </ui:composition>

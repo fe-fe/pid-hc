@@ -46,6 +46,7 @@
                             <th scope="col">Registro ANVISA</th>
                             <th scope="col">Descrição</th>
                             <th scope="col">Parecer</th>
+                            <th scope="col">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,12 +83,20 @@
                                 <td>
                                     <span class="materials-table__texto" title="#{avaliacao.parecer}">#{empty avaliacao.parecer ? '—' : avaliacao.parecer}</span>
                                 </td>
+                                <td>
+                                    <h:commandLink styleClass="btn btn-sm btn-outline-primary" title="Editar avaliação"
+                                        action="#{bean.editar(avaliacao)}">
+                                        <f:ajax execute="@this" render=":modalAvaliacaoConteudo" resetValues="true" />
+                                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                                        <span class="visually-hidden">Editar avaliação</span>
+                                    </h:commandLink>
+                                </td>
                             </tr>
                         </ui:repeat>
 
                         <ui:fragment rendered="#{empty bean.avaliacoes}">
                             <tr>
-                                <td class="text-center text-body-secondary py-5" colspan="9">
+                                <td class="text-center text-body-secondary py-5" colspan="10">
                                     #{bean.filtroAtivo ? 'Nenhuma avaliação encontrada com esses filtros.' : 'Nenhuma avaliação cadastrada.'}
                                 </td>
                             </tr>
