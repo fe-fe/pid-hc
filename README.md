@@ -11,6 +11,14 @@ DB_PASSWORD=<senha>
 DOMAIN=pid.maria.qa   # só usado com o Caddy
 ```
 
+Opcionais, com o padrão de produção quando ausentes (o `docker-compose.dev.yml` define os de dev):
+
+| Variável | Padrão | Dev |
+|---|---|---|
+| `PROJECT_STAGE` | `Production` | `Development` |
+| `SHOW_SQL` | `false` | `true` |
+| `FACELETS_REFRESH_PERIOD` | `-1` | `0` |
+
 ## Arquivos
 
 | Arquivo | Uso |
@@ -31,7 +39,9 @@ O `configure.cli` roda durante o build da imagem e:
   `DB_PASSWORD` do ambiente do container quando o WildFly sobe (`DB_HOST` e `DB_PORT` vêm do
   `docker-compose.yml`, o resto do `.env`);
 - liga `proxy-address-forwarding`, para o WildFly respeitar os cabeçalhos `X-Forwarded-*` de um
-  proxy reverso (Caddy, Nginx, Apache).
+  proxy reverso (Caddy, Nginx, Apache);
+- liga a substituição de `${env.VAR:padrão}` no `web.xml` e no `persistence.xml`, que leem as
+  variáveis opcionais do `.env`.
 
 O schema é criado/atualizado pelo Hibernate (`hbm2ddl.auto=update`).
 
