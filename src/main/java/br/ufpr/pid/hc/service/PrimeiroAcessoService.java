@@ -4,6 +4,7 @@ import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.exception.DomainException;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.DependsOn;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import jakarta.inject.Inject;
@@ -16,6 +17,7 @@ import java.util.Locale;
 
 @Singleton
 @Startup
+@DependsOn("MigracaoService")
 @PermitAll
 @Slf4j
 public class PrimeiroAcessoService {

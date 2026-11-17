@@ -30,6 +30,7 @@ Opcionais, com o padrão de produção quando ausentes (o `docker-compose.dev.ym
 | `docker-compose.dev.yml` | Override de dev. |
 | `docker-compose.caddy.yml` | Override que adiciona o Caddy (HTTPS). |
 | `Caddyfile` | Configuração do Caddy. |
+| `Makefile` | Atalhos: `make dev`, `make test`, `make migration nome=...`. |
 
 ## WildFly
 
@@ -43,7 +44,21 @@ O `configure.cli` roda durante o build da imagem e:
 - liga a substituição de `${env.VAR:padrão}` no `web.xml` e no `persistence.xml`, que leem as
   variáveis opcionais do `.env`.
 
-O schema é criado/atualizado pelo Hibernate (`hbm2ddl.auto=update`).
+O schema é criado e atualizado pelo Flyway quando o WildFly sobe, com as migrations de
+`src/main/resources/db/migration` (`V2__descricao.sql`, `V3__...`). O Hibernate não altera o
+banco (`hbm2ddl.auto=none`). Banco que já existia sem histórico do Flyway entra na versão 1 sem
+rodar o `V1__esquema_inicial.sql`. Mudança em entidade precisa de uma migration nova; o
+`MigracoesTest` falha se as migrations não baterem com as entidades.
+
+Para gerar a migration de uma mudança em entidade (precisa de JDK 21 e Docker):
+
+```bash
+make migration nome=marca_site
+```
+
+Ele sobe um Postgres temporário, aplica as migrations existentes, compara com as entidades e grava
+o SQL que falta no próximo `V<n>__marca_site.sql`. Revise o arquivo: renomear coluna sai como
+apagar e criar, e coluna obrigatória em tabela com dados precisa ser preenchida antes do `NOT NULL`.
 
 ## Subir (normal)
 
@@ -58,7 +73,7 @@ proxy para `127.0.0.1:8080`.
 ## Subir (dev)
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+make dev   # ou: docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
 
 Usa o `Dockerfile.dev` e monta por bind `faces-views`, `templates`, `components` e `resources`
