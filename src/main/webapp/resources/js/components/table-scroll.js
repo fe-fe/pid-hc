@@ -3,7 +3,6 @@
     "use strict";
 
     const tabelas = new Map();
-    const seletorInterativo = "a, button, input, select, textarea, label, [contenteditable], [role='button']";
 
     const resizeObserver = new ResizeObserver(() => {
         tabelas.forEach(({ atualizar }) => atualizar());
@@ -15,9 +14,6 @@
 
         const table = viewport.querySelector("table");
         const botoes = container.querySelectorAll("[data-table-scroll-direction]");
-
-        let arraste = null;
-        let arrastou = false;
 
         function atualizar() {
             const maximo = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
@@ -44,67 +40,6 @@
                     behavior: movimentoReduzido ? "auto" : "smooth"
                 });
             });
-        });
-
-        // Início do arraste
-        viewport.addEventListener("pointerdown", event => {
-            arrastou = false;
-
-            if (event.pointerType !== "mouse" || event.button !== 0) return;
-            if (event.target.closest(seletorInterativo)) return;
-            if (viewport.scrollWidth <= viewport.clientWidth) return;
-
-            event.preventDefault();
-
-            arraste = {
-                id: event.pointerId,
-                x: event.clientX,
-                scroll: viewport.scrollLeft
-            };
-
-            viewport.focus({ preventScroll: true });
-            viewport.setPointerCapture(event.pointerId);
-        });
-
-        // Movimento do arraste
-        viewport.addEventListener("pointermove", event => {
-            if (!arraste || event.pointerId !== arraste.id) return;
-
-            const distancia = event.clientX - arraste.x;
-            if (!arrastou && Math.abs(distancia) < 5) return;
-
-            arrastou = true;
-            viewport.classList.add("is-dragging");
-            viewport.scrollLeft = arraste.scroll - distancia;
-        });
-
-        function finalizarArraste(event) {
-            if (!arraste || event.pointerId !== arraste.id) return;
-
-            const id = arraste.id;
-            arraste = null;
-
-            viewport.classList.remove("is-dragging");
-
-            if (viewport.hasPointerCapture(id)) {
-                viewport.releasePointerCapture(id);
-            }
-        }
-
-        ["pointerup", "pointercancel", "lostpointercapture"].forEach(evento => {
-            viewport.addEventListener(evento, finalizarArraste);
-        });
-
-        viewport.addEventListener("click", event => {
-            if (!arrastou) return;
-
-            event.preventDefault();
-            event.stopPropagation();
-            arrastou = false;
-        }, true);
-
-        viewport.addEventListener("dragstart", event => {
-            if (arraste) event.preventDefault();
         });
 
         viewport.addEventListener("scroll", atualizar, { passive: true });

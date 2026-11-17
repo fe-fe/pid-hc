@@ -13,21 +13,15 @@
 
     <ui:define name="pageActions">
 
-        <h:form id="formPesquisa" styleClass="page__search input-group input-group-sm">
-            <h:inputText 
-                id="codigo" 
-                value="#{consultaMaterialBean.codigo}"
-                styleClass="page__search-input form-control"
-                p:placeholder="Pesquisar material por código"
-                p:type="search" />
-
-                <h:commandButton 
-                    value="Consultar"
-                    action="#{consultaMaterialBean.consultar}"
-                    styleClass="btn btn-primary">
-                    <f:ajax execute="@form" render=":resultado" />
-                </h:commandButton>
-        </h:form>
+        <ui:include src="/WEB-INF/components/pesquisa.xhtml">
+            <ui:param name="formId" value="formPesquisa" />
+            <ui:param name="bean" value="#{consultaMaterialBean}" />
+            <ui:param name="metodo" value="consultar" />
+            <ui:param name="valor" value="#{consultaMaterialBean.codigo}" />
+            <ui:param name="render" value=":resultado" />
+            <ui:param name="placeholder" value="Pesquisar material por código" />
+            <ui:param name="rotulo" value="Código do material" />
+        </ui:include>
 
         <div class="page__action-buttons">
             <ui:include 

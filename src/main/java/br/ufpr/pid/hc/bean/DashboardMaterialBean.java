@@ -30,7 +30,7 @@ import java.util.UUID;
 @ViewScoped
 @Getter
 @Setter
-public class DashboardMaterialBean implements Serializable {
+public class DashboardMaterialBean implements Serializable, Paginavel {
     private static final long serialVersionUID = 1L;
     private static final int TAMANHO_PAGINA = 10;
     private static final int MAX_SUGESTOES = 10;
@@ -133,18 +133,10 @@ public class DashboardMaterialBean implements Serializable {
         carregarPagina();
     }
 
-    public void paginaAnterior() {
-        if (pagina > 0) {
-            pagina--;
-            carregarPagina();
-        }
-    }
-
-    public void proximaPagina() {
-        if (isTemProximaPagina()) {
-            pagina++;
-            carregarPagina();
-        }
+    @Override
+    public void irParaPagina(int pagina) {
+        this.pagina = Math.max(0, Math.min(pagina, getTotalPaginas() - 1));
+        carregarPagina();
     }
 
     private void carregarPagina() {
@@ -159,16 +151,19 @@ public class DashboardMaterialBean implements Serializable {
         return valor == null || valor.isBlank() ? null : UUID.fromString(valor);
     }
 
+    @Override
     public long getTotalRegistros() {
         return abaAvaliacoes ? resumo.avaliacoes() : resumo.notificacoes();
     }
 
+    @Override
     public int getPaginaAtual() {
         return pagina;
     }
 
-    public boolean isUltimaPagina() {
-        return !isTemProximaPagina();
+    @Override
+    public int getTamanhoPagina() {
+        return TAMANHO_PAGINA;
     }
 
     public long getEscalaGrafico() {
@@ -195,9 +190,6 @@ public class DashboardMaterialBean implements Serializable {
                 .divide(BigDecimal.valueOf(escala), 2, RoundingMode.HALF_UP).toPlainString();
     }
 
-    public boolean isTemProximaPagina() {
-        return ((long) pagina + 1) * TAMANHO_PAGINA < getTotalRegistros();
-    }
 
     public long getPrimeiroRegistro() {
         return getTotalRegistros() == 0 ? 0 : (long) pagina * TAMANHO_PAGINA + 1;

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E> & CampoOrdenacao> implements Serializable {
+public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E> & CampoOrdenacao> implements Serializable, Paginavel {
 
     protected List<T> lista;
 
@@ -50,22 +50,10 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E
         }
     }
 
-    public void proximaPagina() {
-        if (!isUltimaPagina()) {
-            paginaAtual++;
-            carregarPagina();
-        }
-    }
-
-    public void paginaAnterior() {
-        if (paginaAtual > 0) {
-            paginaAtual--;
-            carregarPagina();
-        }
-    }
-
-    public boolean isUltimaPagina() {
-        return (long) (paginaAtual + 1) * tamanhoPagina >= totalRegistros;
+    @Override
+    public void irParaPagina(int pagina) {
+        paginaAtual = Math.max(0, Math.min(pagina, getTotalPaginas() - 1));
+        carregarPagina();
     }
 
     public void reordenar() {

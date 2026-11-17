@@ -1,38 +1,50 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="jakarta.faces.html"
     xmlns:f="jakarta.faces.core"
+    xmlns:pt="jakarta.faces.passthrough"
     xmlns:ui="jakarta.faces.facelets">
-            <footer class="pid-table__footer row align-items-center gx-2 gy-0 m-0 px-3 py-2 border-top bg-body">
-                <div class="col-12 col-sm-4 text-center text-sm-start">
-                    <small class="text-body-secondary">
-                        #{bean.totalRegistros}
-                        #{bean.totalRegistros == 1 ? registroSingular : registroPlural}
-                    </small>
-                </div>
+            <footer class="pid-table__footer d-flex flex-wrap align-items-center justify-content-between gap-2 m-0 px-3 py-2 border-top">
+                <small class="text-body-secondary">
+                    <ui:fragment rendered="#{bean.variasPaginas}">
+                        #{bean.primeiroRegistro}–#{bean.ultimoRegistro} de
+                    </ui:fragment>
+                    #{bean.totalRegistros}
+                    #{bean.totalRegistros == 1 ? registroSingular : registroPlural}
+                </small>
 
-                <nav class="col-12 col-sm-4 d-flex justify-content-center"
-                    aria-label="Paginação de #{tabelaDescricao}">
-                    <div class="btn-group btn-group-sm">
-                        <h:commandButton styleClass="btn btn-outline-secondary" value="&#8249;"
-                            action="#{bean.paginaAnterior}"
-                            disabled="#{bean.paginaAtual == 0}"
-                            title="Página anterior">
-                            <f:ajax render="@form" />
-                        </h:commandButton>
-
-                        <span class="btn btn-primary disabled" aria-current="page">
-                            #{bean.paginaAtual + 1}
-                        </span>
-
-                        <h:commandButton styleClass="btn btn-outline-secondary" value="&#8250;"
-                            action="#{bean.proximaPagina}"
-                            disabled="#{bean.ultimaPagina}"
-                            title="Próxima página">
-                            <f:ajax render="@form" />
-                        </h:commandButton>
-                    </div>
+                <nav aria-label="Paginação de #{tabelaDescricao}" class="pid-table__pagination">
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item #{bean.paginaAtual == 0 ? 'disabled' : ''}">
+                            <h:commandLink styleClass="page-link" action="#{bean.paginaAnterior}"
+                                disabled="#{bean.paginaAtual == 0}" title="Página anterior">
+                                <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                                <span class="visually-hidden">Página anterior</span>
+                                <f:ajax render="@form" />
+                            </h:commandLink>
+                        </li>
+                        <ui:repeat value="#{bean.paginas}" var="pagina">
+                            <ui:fragment rendered="#{empty pagina}">
+                                <li class="page-item disabled"><span class="page-link">…</span></li>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{not empty pagina}">
+                                <li class="page-item #{pagina == bean.paginaAtual ? 'active' : ''}">
+                                    <h:commandLink styleClass="page-link" action="#{bean.irParaPagina(pagina)}"
+                                        pt:aria-current="#{pagina == bean.paginaAtual ? 'page' : null}">
+                                        #{pagina + 1}
+                                        <f:ajax render="@form" />
+                                    </h:commandLink>
+                                </li>
+                            </ui:fragment>
+                        </ui:repeat>
+                        <li class="page-item #{bean.ultimaPagina ? 'disabled' : ''}">
+                            <h:commandLink styleClass="page-link" action="#{bean.proximaPagina}"
+                                disabled="#{bean.ultimaPagina}" title="Próxima página">
+                                <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                                <span class="visually-hidden">Próxima página</span>
+                                <f:ajax render="@form" />
+                            </h:commandLink>
+                        </li>
+                    </ul>
                 </nav>
-
-                <div class="d-none d-sm-block col-sm-4" aria-hidden="true"></div>
             </footer>
 </ui:composition>
