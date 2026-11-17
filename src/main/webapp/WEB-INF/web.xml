@@ -43,6 +43,10 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
 
+    <error-page>
+        <location>/erro.xhtml</location>
+    </error-page>
+
     <session-config>
         <session-timeout>480</session-timeout>
     </session-config>
