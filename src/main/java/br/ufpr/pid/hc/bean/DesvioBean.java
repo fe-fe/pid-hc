@@ -54,6 +54,10 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
     private List<String> marcas = List.of();
     private String termoPesquisa;
     private String termoFiltrado;
+    private LocalDate dataInicial;
+    private LocalDate dataFinal;
+    private LocalDate dataInicialFiltrada;
+    private LocalDate dataFinalFiltrada;
 
     public DesvioBean() {
         super(15, DesvioOrdenacao.DATA);
@@ -70,15 +74,39 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
         carregarPagina();
     }
 
+    public void aplicarFiltros() {
+        if (dataInicial != null && dataFinal != null && dataInicial.isAfter(dataFinal)) {
+            FacesContext contexto = FacesContext.getCurrentInstance();
+            contexto.addMessage("formFiltrosTecnovigilancia:dataFinal",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "A data final deve ser igual ou posterior à inicial", null));
+            contexto.validationFailed();
+            return;
+        }
+        dataInicialFiltrada = dataInicial;
+        dataFinalFiltrada = dataFinal;
+        reordenar();
+        Bootstrap.fecharOffcanvas("tecnovigilanciaFilters");
+    }
+
+    public void limparFiltros() {
+        dataInicial = null;
+        dataFinal = null;
+        dataInicialFiltrada = null;
+        dataFinalFiltrada = null;
+        reordenar();
+    }
+
     @Override
     protected long contarRegistros() {
-        return desvioService.contarPorTermo(termoFiltrado, mostrarInativos);
+        return desvioService.contarComFiltros(termoFiltrado, dataInicialFiltrada, dataFinalFiltrada,
+                mostrarInativos);
     }
 
     @Override
     protected List<Desvio> buscarRegistros() {
-        return desvioService.buscarPorTermo(paginaAtual, tamanhoPagina, ordenacaoAtual,
-                termoFiltrado, mostrarInativos);
+        return desvioService.buscarComFiltros(paginaAtual, tamanhoPagina, ordenacaoAtual,
+                termoFiltrado, dataInicialFiltrada, dataFinalFiltrada, mostrarInativos);
     }
 
     public Desfecho[] getDesfechos() { return Desfecho.values(); }

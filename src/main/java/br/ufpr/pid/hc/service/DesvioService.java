@@ -34,14 +34,16 @@ public class DesvioService extends AbstractService<Desvio, UUID> {
     protected AbstractDao<Desvio, UUID> getDao() { return desvioDao; }
 
     @PermitAll
-    public List<Desvio> buscarPorTermo(int pagina, int tamanhoPagina, CampoOrdenacao ordenacao,
-            String termo, boolean incluirInativos) {
-        return desvioDao.buscarPorTermo(pagina, tamanhoPagina, ordenacao, termo, incluirInativos);
+    public List<Desvio> buscarComFiltros(int pagina, int tamanhoPagina, CampoOrdenacao ordenacao,
+            String termo, LocalDate dataInicial, LocalDate dataFinal, boolean incluirInativos) {
+        return desvioDao.buscarComFiltros(pagina, tamanhoPagina, ordenacao, termo,
+                dataInicial, dataFinal, incluirInativos);
     }
 
     @PermitAll
-    public long contarPorTermo(String termo, boolean incluirInativos) {
-        return desvioDao.contarPorTermo(termo, incluirInativos);
+    public long contarComFiltros(String termo, LocalDate dataInicial, LocalDate dataFinal,
+            boolean incluirInativos) {
+        return desvioDao.contarComFiltros(termo, dataInicial, dataFinal, incluirInativos);
     }
 
     @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
