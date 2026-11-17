@@ -1,0 +1,201 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:pt="jakarta.faces.passthrough"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
+        <ui:param name="modalId" value="modalEditarTecnovigilancia" />
+        <ui:param name="modalTitulo" value="Editar tecnovigilância" />
+        <ui:param name="modalTamanho" value="modal-lg" />
+        <ui:define name="conteudo">
+            <h:form id="formEditarTecnovigilancia">
+                <div class="modal-body">
+                    <h:messages globalOnly="true" styleClass="text-danger small list-unstyled mb-2" />
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="vigihosp" value="Nº VigiHosp" />
+                            <h:inputText id="vigihosp" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.entidadeSelecionada.vigihosp}"
+                                required="true" requiredMessage="Informe o número VigiHosp" />
+                            <h:message for="vigihosp" styleClass="text-danger small" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="data" value="Data da notificação" />
+                            <h:inputText id="data" styleClass="form-control" pt:type="date" pt:max="#{desvioBean.dataMaxima}"
+                                value="#{desvioBean.entidadeSelecionada.data}"
+                                required="true" requiredMessage="Informe a data da notificação">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                            <h:message for="data" styleClass="text-danger small" />
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="codigoMaterial" value="Código do material" />
+                            <h:inputText id="codigoMaterial" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.codigoMaterial}" pt:list="materiaisEditarTecnovigilancia" pt:autocomplete="off"
+                                required="true" requiredMessage="Informe o código do material">
+                                <f:ajax event="change" execute="@this" render="grupoNomeMaterial"
+                                    listener="#{desvioBean.buscarMaterial}" />
+                            </h:inputText>
+                            <datalist id="materiaisEditarTecnovigilancia">
+                                <ui:repeat value="#{desvioBean.materiais}" var="materialSugerido">
+                                    <option value="#{materialSugerido.codigo}" label="#{materialSugerido.nome}" />
+                                </ui:repeat>
+                            </datalist>
+                            <h:message for="codigoMaterial" styleClass="text-danger small" />
+                        </div>
+                        <h:panelGroup id="grupoNomeMaterial" layout="block" styleClass="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="nomeMaterial" value="Nome do material" />
+                            <h:inputText id="nomeMaterial" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.nomeMaterial}" readonly="#{desvioBean.materialExistente}"
+                                required="#{not desvioBean.materialExistente}" requiredMessage="Material novo: informe o nome" />
+                            <h:outputText rendered="#{not empty desvioBean.codigoMaterial and not desvioBean.materialExistente}"
+                                value="Código não cadastrado: o material será criado ao salvar."
+                                styleClass="text-body-secondary small" />
+                            <h:message for="nomeMaterial" styleClass="text-danger small" />
+                        </h:panelGroup>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="fabricante" value="Fabricante" />
+                            <h:inputText id="fabricante" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.fabricante}" pt:list="fabricantesEditarTecnovigilancia" pt:autocomplete="off"
+                                required="true" requiredMessage="Informe o fabricante" />
+                            <datalist id="fabricantesEditarTecnovigilancia">
+                                <ui:repeat value="#{desvioBean.fabricantes}" var="nomeFabricante">
+                                    <option value="#{nomeFabricante}" />
+                                </ui:repeat>
+                            </datalist>
+                            <h:message for="fabricante" styleClass="text-danger small" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="marca" value="Marca (opcional)" />
+                            <h:inputText id="marca" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.marca}" pt:list="marcasEditarTecnovigilancia" pt:autocomplete="off" />
+                            <datalist id="marcasEditarTecnovigilancia">
+                                <ui:repeat value="#{desvioBean.marcas}" var="nomeMarca">
+                                    <option value="#{nomeMarca}" />
+                                </ui:repeat>
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="registroAnvisa" value="Registro ANVISA" />
+                            <h:inputText id="registroAnvisa" styleClass="form-control" maxlength="11" pt:inputmode="numeric"
+                                value="#{desvioBean.entidadeSelecionada.registroAnvisa}"
+                                validatorMessage="Registro ANVISA deve ter 11 dígitos, só números">
+                                <f:validateRegex pattern="([0-9]{11})?" />
+                            </h:inputText>
+                            <h:message for="registroAnvisa" styleClass="text-danger small" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="lote" value="Lote" />
+                            <h:inputText id="lote" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.entidadeSelecionada.lote}" />
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="validade" value="Validade" />
+                            <h:inputText id="validade" styleClass="form-control" pt:type="date"
+                                value="#{desvioBean.entidadeSelecionada.validade}">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                            <h:message for="validade" styleClass="text-danger small" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="formaEntrada" value="Forma de entrada" />
+                            <h:inputText id="formaEntrada" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.entidadeSelecionada.formaEntrada}" />
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="amostra" value="Envio de amostra" />
+                            <h:selectOneMenu id="amostra" styleClass="form-select" value="#{desvioBean.entidadeSelecionada.amostra}">
+                                <f:selectItem itemLabel="Não informado" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{desvioBean.opcoesAmostra}" var="opcao"
+                                    itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
+                            </h:selectOneMenu>
+                            <h:message for="amostra" styleClass="text-danger small" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="tecnicoUsep" value="Técnico USEP" />
+                            <h:inputText id="tecnicoUsep" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.entidadeSelecionada.tecnicoUsep}" />
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="servico" value="Serviço" />
+                            <h:inputText id="servico" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.entidadeSelecionada.servico}" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="unidade" value="Unidade" />
+                            <h:inputText id="unidade" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.entidadeSelecionada.unidade}" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h:outputLabel styleClass="form-label" for="motivo" value="Motivo" />
+                        <h:inputTextarea id="motivo" styleClass="form-control" rows="3"
+                            value="#{desvioBean.entidadeSelecionada.motivo}"
+                            required="true" requiredMessage="Informe o motivo" />
+                        <h:message for="motivo" styleClass="text-danger small" />
+                    </div>
+                    <div class="mb-3">
+                        <h:outputLabel styleClass="form-label" for="providencias" value="Providências" />
+                        <h:inputTextarea id="providencias" styleClass="form-control" rows="3"
+                            value="#{desvioBean.entidadeSelecionada.providencias}" />
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="desfecho" value="Desfecho" />
+                            <h:selectOneMenu id="desfecho" styleClass="form-select" value="#{desvioBean.entidadeSelecionada.desfecho}">
+                                <f:selectItem itemLabel="Não informado" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{desvioBean.desfechos}" var="opcao"
+                                    itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
+                            </h:selectOneMenu>
+                            <h:message for="desfecho" styleClass="text-danger small" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="grauDano" value="Grau de dano" />
+                            <h:selectOneMenu id="grauDano" styleClass="form-select" value="#{desvioBean.entidadeSelecionada.grauDano}">
+                                <f:selectItem itemLabel="Não informado" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{desvioBean.grausDano}" var="opcao"
+                                    itemValue="#{opcao}" itemLabel="#{opcao.rotulo}" />
+                            </h:selectOneMenu>
+                            <h:message for="grauDano" styleClass="text-danger small" />
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="notificacaoAnvisa" value="Notificação ANVISA" />
+                            <h:inputText id="notificacaoAnvisa" styleClass="form-control" maxlength="255"
+                                value="#{desvioBean.entidadeSelecionada.notificacaoAnvisa}" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <h:outputLabel styleClass="form-label" for="processoSei" value="Processo SEI" />
+                            <h:inputText id="processoSei" styleClass="form-control" maxlength="20"
+                                pt:placeholder="00000.000000/0000-00" value="#{desvioBean.entidadeSelecionada.processoSei}"
+                                validatorMessage="Processo SEI deve estar no formato 00000.000000/0000-00">
+                                <f:validateRegex pattern="([0-9]{5}\.[0-9]{6}/[0-9]{4}-[0-9]{2})?" />
+                            </h:inputText>
+                            <h:message for="processoSei" styleClass="text-danger small" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{desvioBean.atualizar}">
+                        <f:ajax execute="@form" render="@form :formTabelaTecnovigilancia"
+                            onevent="fecharModalEditarTecnovigilanciaSeSucesso" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>

@@ -11,6 +11,15 @@ import java.util.UUID;
 public class DesvioDao extends AbstractDao<Desvio, UUID> {
     public DesvioDao() { super(Desvio.class); }
 
+    public boolean existeOutroVigihosp(String vigihosp, UUID id) {
+        return entityManager.createQuery(
+                        "SELECT count(d) FROM Desvio d WHERE upper(d.vigihosp) = upper(:vigihosp) AND d.id <> :id",
+                        Long.class)
+                .setParameter("vigihosp", vigihosp)
+                .setParameter("id", id)
+                .getSingleResult() > 0;
+    }
+
     public List<String> listarVigihospExistentes(Collection<String> vigihosps) {
         if (vigihosps.isEmpty()) {
             return List.of();

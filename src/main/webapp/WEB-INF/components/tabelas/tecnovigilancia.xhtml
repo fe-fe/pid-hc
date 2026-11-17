@@ -23,6 +23,7 @@
                             <th scope="col">Motivo</th>
                             <th scope="col">Desfecho</th>
                             <th scope="col">Grau de dano</th>
+                            <th scope="col">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,12 +58,21 @@
                                 <td class="text-nowrap">
                                     <h:outputText value="#{empty desvio.grauDano ? '—' : desvio.grauDano.rotulo}" />
                                 </td>
+                                <td>
+                                    <h:commandLink styleClass="btn btn-sm btn-outline-primary" title="Editar tecnovigilância"
+                                        action="#{bean.editarDesvio(desvio)}">
+                                        <f:ajax execute="@this" render=":formEditarTecnovigilancia" resetValues="true"
+                                            onevent="abrirModalEditarTecnovigilancia" />
+                                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                                        <span class="visually-hidden">Editar tecnovigilância</span>
+                                    </h:commandLink>
+                                </td>
                             </tr>
                         </ui:repeat>
 
                         <ui:fragment rendered="#{empty bean.desvios}">
                             <tr>
-                                <td class="text-center text-body-secondary py-5" colspan="9">
+                                <td class="text-center text-body-secondary py-5" colspan="10">
                                     Nenhum registro de tecnovigilância encontrado.
                                 </td>
                             </tr>
