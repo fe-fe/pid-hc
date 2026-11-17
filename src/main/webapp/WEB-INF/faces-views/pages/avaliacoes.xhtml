@@ -27,16 +27,20 @@
             <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
                 <ui:param name="filtroId" value="avaliacoesFilters" />
             </ui:include>
-            <button class="page__button page__button--primary" type="button" data-bs-toggle="modal"
-                data-bs-target="#modalAvaliacao">
-                Criar Avaliação
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M8 12h8" />
-                    <path d="M12 8v8" />
-                </svg>
-            </button>
+            <h:form id="formNovaAvaliacao">
+                <h:commandLink styleClass="page__button page__button--primary text-decoration-none"
+                    action="#{avaliacaoBean.novaAvaliacao}">
+                    <f:ajax execute="@this" render=":formAvaliacao" resetValues="true"
+                        onevent="abrirModalCriarAvaliacao" />
+                    Criar Avaliação
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M8 12h8" />
+                        <path d="M12 8v8" />
+                    </svg>
+                </h:commandLink>
+            </h:form>
         </div>
     </ui:define>
 
@@ -48,6 +52,8 @@
 
     <ui:define name="pageOverlays">
         <ui:include src="/WEB-INF/components/modais/avaliacoes/modalCriarAvaliacoes.xhtml" />
+        <ui:include src="/WEB-INF/components/modais/avaliacoes/modalEditarAvaliacoes.xhtml" />
+        <h:outputScript library="js" name="pages/avaliacoes.js" target="body" />
 
         <ui:include src="/WEB-INF/components/filtros/avaliacoes.xhtml" />
     </ui:define>

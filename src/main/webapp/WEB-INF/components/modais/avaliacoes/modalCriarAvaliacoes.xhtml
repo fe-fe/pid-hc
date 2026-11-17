@@ -15,12 +15,12 @@
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="codigoMaterial" value="Código do material" />
                             <h:inputText styleClass="form-control" id="codigoMaterial" value="#{avaliacaoBean.codigoMaterial}"
-                                pt:list="listaMateriais" pt:autocomplete="off"
+                                pt:list="listasCriarAvaliacaoMateriais" pt:autocomplete="off"
                                 required="true" requiredMessage="Informe o código do material">
                                 <f:ajax event="change" execute="@this" render="grupoNomeMaterial"
                                     listener="#{avaliacaoBean.buscarMaterial}" />
                             </h:inputText>
-                            <datalist id="listaMateriais">
+                            <datalist id="listasCriarAvaliacaoMateriais">
                                 <ui:repeat value="#{avaliacaoBean.materiais}" var="materialSugerido">
                                     <option value="#{materialSugerido.codigo}" label="#{materialSugerido.nome}" />
                                 </ui:repeat>
@@ -59,10 +59,10 @@
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="fabricante" value="Fabricante" />
                             <h:inputText styleClass="form-control" id="fabricante" value="#{avaliacaoBean.fabricante}"
-                                pt:list="listaFabricantes" pt:autocomplete="off"
+                                pt:list="listasCriarAvaliacaoFabricantes" pt:autocomplete="off"
                                 required="true" requiredMessage="Informe o fabricante" />
                             <h:panelGroup id="grupoListaFabricantes">
-                                <datalist id="listaFabricantes">
+                                <datalist id="listasCriarAvaliacaoFabricantes">
                                     <ui:repeat value="#{avaliacaoBean.sugestoesFabricante}" var="nomeFabricante">
                                         <option value="#{nomeFabricante}" />
                                     </ui:repeat>
@@ -73,9 +73,9 @@
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="marca" value="Marca (opcional)" />
                             <h:inputText styleClass="form-control" id="marca" value="#{avaliacaoBean.marca}"
-                                pt:list="listaMarcas" pt:autocomplete="off" />
+                                pt:list="listasCriarAvaliacaoMarcas" pt:autocomplete="off" />
                             <h:panelGroup id="grupoListaMarcas">
-                                <datalist id="listaMarcas">
+                                <datalist id="listasCriarAvaliacaoMarcas">
                                     <ui:repeat value="#{avaliacaoBean.sugestoesMarca}" var="nomeMarca">
                                         <option value="#{nomeMarca}" />
                                     </ui:repeat>
@@ -126,15 +126,4 @@
             </h:form>
         </ui:define>
     </ui:decorate>
-    <h:outputScript target="body">
-            function formSemErros(formId) {
-            return !Array.from(document.querySelectorAll("#" + formId + " .text-danger"))
-            .some(function (el) { return el.textContent.trim() !== ""; });
-            }
-            function fecharModalSeValido(data, modalId, formId) {
-            if (data.status !== "success" || !formSemErros(formId)) return;
-            bootstrap.Modal.getOrCreateInstance(document.getElementById(modalId)).hide();
-            }
-            function fecharModalAvaliacaoSeSucesso(data) { fecharModalSeValido(data, "modalAvaliacao", "formAvaliacao"); }
-    </h:outputScript>
 </ui:composition>

@@ -121,6 +121,31 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         marcasAnvisa = List.of();
     }
 
+    public void editarAvaliacao(Avaliacao selecionada) {
+        novaAvaliacao();
+        // O formulário não deve modificar o objeto da tabela antes de salvar.
+        avaliacao.setId(selecionada.getId());
+        avaliacao.setMaterial(selecionada.getMaterial());
+        avaliacao.setFabricante(selecionada.getFabricante());
+        avaliacao.setMarca(selecionada.getMarca());
+        avaliacao.setRegistroAnvisa(selecionada.getRegistroAnvisa());
+        avaliacao.setData(selecionada.getData());
+        avaliacao.setResultado(selecionada.getResultado());
+        avaliacao.setDescricao(selecionada.getDescricao());
+        avaliacao.setParecer(selecionada.getParecer());
+        avaliacao.setLocal(selecionada.getLocal());
+        avaliacao.setAtivo(selecionada.getAtivo());
+        avaliacao.setCriadoEm(selecionada.getCriadoEm());
+        avaliacao.setCriadoPor(selecionada.getCriadoPor());
+        avaliacao.setAtualizadoEm(selecionada.getAtualizadoEm());
+        avaliacao.setAtualizadoPor(selecionada.getAtualizadoPor());
+        codigoMaterial = selecionada.getMaterial().getCodigo();
+        nomeMaterial = selecionada.getMaterial().getNome();
+        materialExistente = true;
+        fabricante = selecionada.getFabricante().getNome();
+        marca = selecionada.getMarca() == null ? null : selecionada.getMarca().getNome();
+    }
+
     public void buscarRegistroAnvisa() {
         String registro = avaliacao.getRegistroAnvisa() == null ? "" : avaliacao.getRegistroAnvisa().replaceAll("\\D", "");
         List<ProdutoAnvisa> produtos = registro.isEmpty() ? List.of() : importacaoAnvisaService.buscarPorRegistro(registro);
