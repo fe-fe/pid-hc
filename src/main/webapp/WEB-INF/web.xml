@@ -63,7 +63,17 @@
         </auth-constraint>
     </security-constraint>
 
-    <!-- A regra mais específica mantém login e cadastro acessíveis sem sessão. -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Área do administrador</web-resource-name>
+            <url-pattern>/pages/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMINISTRADOR</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- A regra mais específica mantém login e primeiro acesso acessíveis sem sessão. -->
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Autenticação pública</web-resource-name>

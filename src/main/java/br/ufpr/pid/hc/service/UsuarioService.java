@@ -11,6 +11,7 @@ import br.ufpr.pid.hc.exception.LastActiveAdminException;
 import br.ufpr.pid.hc.exception.MissingRequiredFieldsException;
 import br.ufpr.pid.hc.exception.WeakPasswordException;
 import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
@@ -37,13 +38,13 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
         return usuarioDao.buscarPorEmail(email);
     }
 
-    @PermitAll
+    @RolesAllowed("ADMINISTRADOR")
     public List<Usuario> buscarPorNome(int pagina, int tamanhoPagina, CampoOrdenacao ordenacao,
             String nome, boolean incluirInativos) {
         return usuarioDao.buscarPorNome(pagina, tamanhoPagina, ordenacao, nome, incluirInativos);
     }
 
-    @PermitAll
+    @RolesAllowed("ADMINISTRADOR")
     public long contarPorNome(String nome, boolean incluirInativos) {
         return usuarioDao.contarPorNome(nome, incluirInativos);
     }
@@ -64,7 +65,7 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
     }
 
     @Override
-    @PermitAll
+    @RolesAllowed("ADMINISTRADOR")
     public Usuario salvar(Usuario usuario) {
         if (usuario.getId() == null) {
             return cadastrar(usuario);
