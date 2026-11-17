@@ -52,6 +52,12 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
     private List<Material> materiais = List.of();
     private List<String> fabricantes = List.of();
     private List<String> marcas = List.of();
+    private String termoPesquisa;
+    private String termoFiltrado;
+    private LocalDate dataInicial;
+    private LocalDate dataFinal;
+    private LocalDate dataInicialFiltrada;
+    private LocalDate dataFinalFiltrada;
 
     public DesvioBean() {
         super(15, DesvioOrdenacao.DATA);
@@ -61,6 +67,47 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
     protected AbstractService<Desvio, UUID> getService() { return desvioService; }
 
     public List<Desvio> getDesvios() { return getLista(); }
+
+    public void pesquisar() {
+        termoFiltrado = termoPesquisa == null || termoPesquisa.isBlank() ? null : termoPesquisa.trim();
+        paginaAtual = 0;
+        carregarPagina();
+    }
+
+    public void aplicarFiltros() {
+        if (dataInicial != null && dataFinal != null && dataInicial.isAfter(dataFinal)) {
+            FacesContext contexto = FacesContext.getCurrentInstance();
+            contexto.addMessage("formFiltrosTecnovigilancia:dataFinal",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "A data final deve ser igual ou posterior à inicial", null));
+            contexto.validationFailed();
+            return;
+        }
+        dataInicialFiltrada = dataInicial;
+        dataFinalFiltrada = dataFinal;
+        reordenar();
+        Bootstrap.fecharOffcanvas("tecnovigilanciaFilters");
+    }
+
+    public void limparFiltros() {
+        dataInicial = null;
+        dataFinal = null;
+        dataInicialFiltrada = null;
+        dataFinalFiltrada = null;
+        reordenar();
+    }
+
+    @Override
+    protected long contarRegistros() {
+        return desvioService.contarComFiltros(termoFiltrado, dataInicialFiltrada, dataFinalFiltrada,
+                mostrarInativos);
+    }
+
+    @Override
+    protected List<Desvio> buscarRegistros() {
+        return desvioService.buscarComFiltros(paginaAtual, tamanhoPagina, ordenacaoAtual,
+                termoFiltrado, dataInicialFiltrada, dataFinalFiltrada, mostrarInativos);
+    }
 
     public Desfecho[] getDesfechos() { return Desfecho.values(); }
 

@@ -1,57 +1,45 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="jakarta.faces.core"
+    xmlns:h="jakarta.faces.html"
+    xmlns:pt="jakarta.faces.passthrough"
     xmlns:ui="jakarta.faces.facelets">
     <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
         <ui:param name="filtroId" value="tecnovigilanciaFilters" />
         <ui:param name="filtroDescricao" value="Refine os registros de tecnovigilância" />
-        <ui:define name="campos">
-            <div>
-                <label class="form-label" for="tecnovigilanciaFilterVigihosp">VigiHosp</label>
-                <input class="form-control" type="text" id="tecnovigilanciaFilterVigihosp" name="vigihosp" />
-            </div>
-            <div>
-                <label class="form-label" for="tecnovigilanciaFilterFabricante">Fabricante</label>
-                <input class="form-control" type="text" id="tecnovigilanciaFilterFabricante" name="fabricante" />
-            </div>
-            <div>
-                <label class="form-label" for="tecnovigilanciaFilterMarca">Marca</label>
-                <input class="form-control" type="text" id="tecnovigilanciaFilterMarca" name="marca" />
-            </div>
-            <div>
-                <label class="form-label" for="tecnovigilanciaFilterDesfecho">Desfecho</label>
-                <select class="form-select" id="tecnovigilanciaFilterDesfecho" name="desfecho">
-                    <option value="">Todos os desfechos</option>
-                    <option value="QUEIXA_PONTUAL">Queixa pontual</option>
-                    <option value="ESCLARECIMENTO">Esclarecimento usuários e/ou serviços envolvidos</option>
-                    <option value="INCONCLUSIVO">Inconclusivo ou descartada queixa técnica</option>
-                    <option value="DESVIO_FINALIDADE">Desvio de finalidade</option>
-                    <option value="SUGESTAO_TROCA_LOTE">Sugestão de troca de lote</option>
-                    <option value="SUGESTAO_REPROVACAO_MARCA">Sugestão de reprovação marca</option>
-                    <option value="SUGESTAO_REVISAO_DESCRITIVO">Sugestão de revisão descritivo insumo</option>
-                    <option value="SUGESTAO_REPOSICAO">Sugestão de reposição do item pelo fornecedor</option>
-                    <option value="SUGESTAO_RECOLHIMENTO">Sugestão de recolhimento do produto pelo SAFS</option>
-                    <option value="SUGESTAO_CAPACITACAO">Sugestão de capacitação usuários</option>
-                </select>
-            </div>
-            <div>
-                <label class="form-label" for="tecnovigilanciaFilterGrauDano">Grau de dano</label>
-                <select class="form-select" id="tecnovigilanciaFilterGrauDano" name="grauDano">
-                    <option value="">Todos os graus de dano</option>
-                    <option value="AUSENTE">Ausente</option>
-                    <option value="POTENCIAL">Dano potencial</option>
-                    <option value="LEVE">Leve</option>
-                    <option value="MODERADO">Moderado</option>
-                    <option value="GRAVE">Grave</option>
-                    <option value="OBITO">Óbito</option>
-                </select>
-            </div>
-            <div>
-                <label class="form-label" for="tecnovigilanciaFilterDataInicial">Data inicial</label>
-                <input class="form-control" type="date" id="tecnovigilanciaFilterDataInicial" name="dataInicial" />
-            </div>
-            <div>
-                <label class="form-label" for="tecnovigilanciaFilterDataFinal">Data final</label>
-                <input class="form-control" type="date" id="tecnovigilanciaFilterDataFinal" name="dataFinal" />
-            </div>
+        <ui:define name="formulario">
+            <h:form id="formFiltrosTecnovigilancia" styleClass="d-flex flex-column gap-2 flex-grow-1">
+                <fieldset>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <h:outputLabel styleClass="form-label small mb-1" for="dataInicial" value="De" />
+                            <h:inputText styleClass="form-control" pt:type="date" id="dataInicial"
+                                value="#{desvioBean.dataInicial}">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                        </div>
+                        <div class="col-6">
+                            <h:outputLabel styleClass="form-label small mb-1" for="dataFinal" value="Até" />
+                            <h:inputText styleClass="form-control" pt:type="date" id="dataFinal"
+                                value="#{desvioBean.dataFinal}">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                        </div>
+                    </div>
+                    <h:message for="dataInicial" styleClass="text-danger small" />
+                    <h:message for="dataFinal" styleClass="text-danger small" />
+                </fieldset>
+                <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
+                    <h:commandButton value="Limpar" styleClass="btn btn-outline-secondary"
+                        action="#{desvioBean.limparFiltros}">
+                        <f:ajax execute="@this" render="@form :formTabelaTecnovigilancia" resetValues="true" />
+                    </h:commandButton>
+                    <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary"
+                        action="#{desvioBean.aplicarFiltros}">
+                        <f:ajax execute="@form" render="@form :formTabelaTecnovigilancia" />
+                    </h:commandButton>
+                </div>
+            </h:form>
         </ui:define>
+        <ui:define name="acoes" />
     </ui:decorate>
 </ui:composition>

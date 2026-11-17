@@ -5,6 +5,7 @@ import br.ufpr.pid.hc.entity.Fabricante;
 import br.ufpr.pid.hc.entity.Marca;
 import br.ufpr.pid.hc.entity.Material;
 import br.ufpr.pid.hc.enumeration.Desfecho;
+import br.ufpr.pid.hc.enumeration.DesvioOrdenacao;
 import br.ufpr.pid.hc.enumeration.EnvioAmostra;
 import br.ufpr.pid.hc.enumeration.GrauDano;
 import br.ufpr.pid.hc.exception.DuplicateRecordException;
@@ -12,12 +13,14 @@ import br.ufpr.pid.hc.service.DesvioService;
 import br.ufpr.pid.hc.service.FabricanteService;
 import br.ufpr.pid.hc.service.MarcaService;
 import br.ufpr.pid.hc.service.MaterialService;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,6 +44,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -104,6 +108,142 @@ class DesvioBeanTest {
     @AfterEach
     void fechar() {
         bootstrap.close();
+    }
+
+    @Test
+    void pesquisarReiniciaPaginacaoEMantemFiltroNaProximaPagina() {
+        when(desvioService.contarComFiltros("VIG-1", null, null, false)).thenReturn(16L);
+        when(desvioService.buscarComFiltros(0, 15, DesvioOrdenacao.DATA, "VIG-1", null, null, false))
+                .thenReturn(List.of(original));
+        when(desvioService.buscarComFiltros(1, 15, DesvioOrdenacao.DATA, "VIG-1", null, null, false))
+                .thenReturn(List.of(original));
+        bean.setPaginaAtual(3);
+        bean.setTermoPesquisa("  VIG-1  ");
+
+        bean.pesquisar();
+
+        assertEquals(0, bean.getPaginaAtual());
+        assertEquals(16, bean.getTotalRegistros());
+        assertEquals(List.of(original), bean.getDesvios());
+        assertFalse(bean.isUltimaPagina());
+
+        bean.proximaPagina();
+
+        assertEquals(1, bean.getPaginaAtual());
+        assertTrue(bean.isUltimaPagina());
+        verify(desvioService).buscarComFiltros(1, 15, DesvioOrdenacao.DATA, "VIG-1", null, null, false);
+    }
+
+    @Test
+    void limparPesquisaRemoveFiltroEReiniciaPaginacao() {
+        bean.setTermoPesquisa("123");
+        bean.pesquisar();
+        bean.setPaginaAtual(2);
+        when(desvioService.contarComFiltros(null, null, null, false)).thenReturn(1L);
+        when(desvioService.buscarComFiltros(0, 15, DesvioOrdenacao.DATA, null, null, null, false))
+                .thenReturn(List.of(original));
+        bean.setTermoPesquisa(" ");
+
+        bean.pesquisar();
+
+        assertEquals(0, bean.getPaginaAtual());
+        assertEquals(1, bean.getTotalRegistros());
+        assertEquals(List.of(original), bean.getDesvios());
+        verify(desvioService).contarComFiltros(null, null, null, false);
+    }
+
+    @Test
+    void datasCombinamComPesquisaEPersistemAoPaginarETrocarCodigo() {
+        LocalDate inicio = LocalDate.of(2026, 1, 1);
+        LocalDate fim = LocalDate.of(2026, 1, 31);
+        bean.setTermoPesquisa("VIG-1");
+        bean.pesquisar();
+        bean.setDataInicial(inicio);
+        bean.setDataFinal(fim);
+        bean.setPaginaAtual(3);
+        when(desvioService.contarComFiltros("VIG-1", inicio, fim, false)).thenReturn(16L);
+        when(desvioService.buscarComFiltros(0, 15, DesvioOrdenacao.DATA, "VIG-1", inicio, fim, false))
+                .thenReturn(List.of(original));
+        when(desvioService.buscarComFiltros(1, 15, DesvioOrdenacao.DATA, "VIG-1", inicio, fim, false))
+                .thenReturn(List.of(original));
+
+        bean.aplicarFiltros();
+
+        assertEquals(0, bean.getPaginaAtual());
+        assertEquals(16, bean.getTotalRegistros());
+        assertEquals(List.of(original), bean.getDesvios());
+        bootstrap.verify(() -> Bootstrap.fecharOffcanvas("tecnovigilanciaFilters"));
+        bean.proximaPagina();
+        assertEquals(1, bean.getPaginaAtual());
+        verify(desvioService).buscarComFiltros(1, 15, DesvioOrdenacao.DATA, "VIG-1", inicio, fim, false);
+
+        bean.setTermoPesquisa("123");
+        bean.pesquisar();
+        verify(desvioService).buscarComFiltros(0, 15, DesvioOrdenacao.DATA, "123", inicio, fim, false);
+
+        bean.setTermoPesquisa("");
+        bean.pesquisar();
+        verify(desvioService).buscarComFiltros(0, 15, DesvioOrdenacao.DATA, null, inicio, fim, false);
+    }
+
+    @Test
+    void limparDatasPreservaPesquisaRapida() {
+        bean.setTermoPesquisa("123");
+        bean.pesquisar();
+        bean.setDataInicial(LocalDate.of(2026, 1, 1));
+        bean.setDataFinal(LocalDate.of(2026, 1, 31));
+        bean.aplicarFiltros();
+        bean.setPaginaAtual(2);
+
+        bean.limparFiltros();
+
+        assertNull(bean.getDataInicial());
+        assertNull(bean.getDataFinal());
+        assertNull(bean.getDataInicialFiltrada());
+        assertNull(bean.getDataFinalFiltrada());
+        assertEquals("123", bean.getTermoPesquisa());
+        assertEquals("123", bean.getTermoFiltrado());
+        assertEquals(0, bean.getPaginaAtual());
+    }
+
+    @Test
+    void periodoInvalidoMantemFiltroAplicadoEModalAberta() {
+        LocalDate inicio = LocalDate.of(2026, 1, 1);
+        bean.setDataInicial(inicio);
+        bean.aplicarFiltros();
+        bootstrap.clearInvocations();
+        bean.setDataFinal(inicio.minusDays(1));
+        bean.setPaginaAtual(2);
+        FacesContext contexto = mock(FacesContext.class);
+
+        try (MockedStatic<FacesContext> faces = mockStatic(FacesContext.class)) {
+            faces.when(FacesContext::getCurrentInstance).thenReturn(contexto);
+            bean.aplicarFiltros();
+        }
+
+        assertEquals(inicio, bean.getDataInicialFiltrada());
+        assertNull(bean.getDataFinalFiltrada());
+        assertEquals(2, bean.getPaginaAtual());
+        ArgumentCaptor<FacesMessage> mensagem = ArgumentCaptor.forClass(FacesMessage.class);
+        verify(contexto).addMessage(eq("formFiltrosTecnovigilancia:dataFinal"), mensagem.capture());
+        assertEquals(FacesMessage.SEVERITY_ERROR, mensagem.getValue().getSeverity());
+        verify(contexto).validationFailed();
+        bootstrap.verify(() -> Bootstrap.fecharOffcanvas(any()), never());
+
+        bean.setTermoPesquisa("123");
+        bean.pesquisar();
+        verify(desvioService).buscarComFiltros(0, 15, DesvioOrdenacao.DATA, "123", inicio, null, false);
+    }
+
+    @Test
+    void datasEmEdicaoSoEntramNaPesquisaDepoisDeAplicar() {
+        bean.setDataInicial(LocalDate.of(2026, 1, 1));
+        bean.setDataFinal(LocalDate.of(2026, 1, 31));
+        bean.setTermoPesquisa("123");
+
+        bean.pesquisar();
+
+        verify(desvioService).buscarComFiltros(0, 15, DesvioOrdenacao.DATA, "123", null, null, false);
     }
 
     @Test
