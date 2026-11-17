@@ -156,17 +156,11 @@
                     </h:commandButton>
                     <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary"
                                      action="#{avaliacaoBean.aplicarFiltros}">
-                        <f:ajax execute="@form" render="@form :formTabelaAvaliacoes" onevent="fecharFiltrosAvaliacao" />
+                        <f:ajax execute="@form" render="@form :formTabelaAvaliacoes" />
                     </h:commandButton>
                 </div>
             </h:form>
         </ui:define>
         <ui:define name="acoes" />
     </ui:decorate>
-    <h:outputScript target="body">
-            function fecharFiltrosAvaliacao(data) {
-            if (data.status !== "success" || !formSemErros("formFiltrosAvaliacao")) return;
-            bootstrap.Offcanvas.getOrCreateInstance(document.getElementById("avaliacoesFilters")).hide();
-            }
-    </h:outputScript>
 </ui:composition>

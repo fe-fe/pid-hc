@@ -28,8 +28,8 @@
                         <f:ajax execute="@this" render="@form :formLista :formPesquisaUsuarios" resetValues="true" />
                     </h:commandButton>
                     <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary"
-                        action="#{usuarioBean.reordenar}">
-                        <f:ajax execute="@form" render=":formLista" onevent="fecharFiltrosUsuarios" />
+                        action="#{usuarioBean.aplicarFiltros}">
+                        <f:ajax execute="@form" render=":formLista" />
                     </h:commandButton>
                 </div>
             </h:form>
@@ -38,11 +38,4 @@
         <ui:define name="acoes" />
     </ui:decorate>
 
-    <h:outputScript target="body">
-        function fecharFiltrosUsuarios(data) {
-            if (data.status === "success") {
-                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById("usuariosFilters")).hide();
-            }
-        }
-    </h:outputScript>
 </ui:composition>

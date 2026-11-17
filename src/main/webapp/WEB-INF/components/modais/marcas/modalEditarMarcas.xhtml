@@ -25,26 +25,10 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
                     <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{marcaBean.atualizar}">
-                        <f:ajax execute="@form" render="@form :formTabelaCadastro"
-                            onevent="fecharModalEditarCadastro" />
+                        <f:ajax execute="@form" render="@form :formTabelaCadastro" />
                     </h:commandButton>
                 </div>
             </h:form>
         </ui:define>
     </ui:decorate>
-    <h:outputScript target="body">
-        function cadastroSemErros(formId) {
-        return !Array.from(document.querySelectorAll("#" + formId + " .text-danger"))
-        .some(function (el) { return el.textContent.trim() !== ""; });
-        }
-        function fecharModalCadastroSeValido(data, modalId, formId) {
-        if (data.status !== "success" || !cadastroSemErros(formId)) return;
-        bootstrap.Modal.getOrCreateInstance(document.getElementById(modalId)).hide();
-        }
-        function abrirModalEditarCadastro(data) {
-        if (data.status === "success") bootstrap.Modal.getOrCreateInstance(document.getElementById("modalEditarCadastro")).show();
-        }
-        function fecharModalIncluirCadastro(data) { fecharModalCadastroSeValido(data, "modalIncluirCadastro", "formIncluirCadastro"); }
-        function fecharModalEditarCadastro(data) { fecharModalCadastroSeValido(data, "modalEditarCadastro", "formEditarCadastro"); }
-    </h:outputScript>
 </ui:composition>

@@ -64,11 +64,4 @@
             </h:form>
         </ui:define>
     </ui:decorate>
-    <h:outputScript target="body">
-            function abrirModalEdicao(data) {
-                if (data.status === "success") {
-                    bootstrap.Modal.getOrCreateInstance(document.getElementById("modalEditarUsuario")).show();
-                }
-            }
-    </h:outputScript>
 </ui:composition>

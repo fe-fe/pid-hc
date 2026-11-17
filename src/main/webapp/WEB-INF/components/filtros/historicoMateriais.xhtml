@@ -129,17 +129,11 @@
                     </h:commandButton>
                     <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary"
                                      action="#{consultaMaterialBean.aplicarFiltros}">
-                        <f:ajax execute="@form" render="@form :resultado" onevent="fecharFiltrosHistoricoMateriais" />
+                        <f:ajax execute="@form" render="@form :resultado" />
                     </h:commandButton>
                 </div>
             </h:form>
         </ui:define>
         <ui:define name="acoes" />
     </ui:decorate>
-    <h:outputScript target="body">
-            function fecharFiltrosHistoricoMateriais(data) {
-            if (data.status !== "success") return;
-            bootstrap.Offcanvas.getOrCreateInstance(document.getElementById("historyFilters")).hide();
-            }
-    </h:outputScript>
 </ui:composition>

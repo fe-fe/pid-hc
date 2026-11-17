@@ -58,9 +58,8 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <h:commandLink styleClass="btn btn-sm btn-outline-primary" title="Editar">
-                                        <f:setPropertyActionListener target="#{bean.entidadeSelecionada}" value="#{item}" />
-                                        <f:ajax execute="@this" render=":formEditarCadastro" onevent="abrirModalEditarCadastro" />
+                                    <h:commandLink styleClass="btn btn-sm btn-outline-primary" title="Editar" action="#{bean.editar(item)}">
+                                        <f:ajax execute="@this" render=":formEditarCadastro" />
                                         Editar
                                     </h:commandLink>
                                 </td>

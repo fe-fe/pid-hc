@@ -119,22 +119,10 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
                     <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{avaliacaoBean.salvar}">
-                        <f:ajax execute="@form" render="@form :formTabelaAvaliacoes"
-                            onevent="fecharModalAvaliacaoSeSucesso" />
+                        <f:ajax execute="@form" render="@form :formTabelaAvaliacoes" />
                     </h:commandButton>
                 </div>
             </h:form>
         </ui:define>
     </ui:decorate>
-    <h:outputScript target="body">
-            function formSemErros(formId) {
-            return !Array.from(document.querySelectorAll("#" + formId + " .text-danger"))
-            .some(function (el) { return el.textContent.trim() !== ""; });
-            }
-            function fecharModalSeValido(data, modalId, formId) {
-            if (data.status !== "success" || !formSemErros(formId)) return;
-            bootstrap.Modal.getOrCreateInstance(document.getElementById(modalId)).hide();
-            }
-            function fecharModalAvaliacaoSeSucesso(data) { fecharModalSeValido(data, "modalAvaliacao", "formAvaliacao"); }
-    </h:outputScript>
 </ui:composition>

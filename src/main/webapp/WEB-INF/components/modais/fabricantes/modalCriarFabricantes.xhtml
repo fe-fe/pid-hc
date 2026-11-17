@@ -20,8 +20,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
                     <h:commandButton value="Incluir" styleClass="btn btn-primary" action="#{fabricanteBean.cadastrar}">
-                        <f:ajax execute="@form" render="@form :formTabelaCadastro"
-                            onevent="fecharModalIncluirCadastro" />
+                        <f:ajax execute="@form" render="@form :formTabelaCadastro" />
                     </h:commandButton>
                 </div>
             </h:form>

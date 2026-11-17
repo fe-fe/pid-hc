@@ -15,12 +15,21 @@ public abstract class AbstractCadastroBean<T extends Auditavel, E extends Enum<E
         super(15, ordenacaoPadrao);
     }
 
+    private static final String MODAL_INCLUIR = "modalIncluirCadastro";
+    private static final String MODAL_EDITAR = "modalEditarCadastro";
+
     public abstract E[] getOpcoesOrdenacao();
+
+    public void editar(T item) {
+        setEntidadeSelecionada(item);
+        Bootstrap.abrirModal(MODAL_EDITAR);
+    }
 
     @Override
     public void cadastrar() {
         try {
             super.cadastrar();
+            Bootstrap.fecharModal(MODAL_INCLUIR);
         } catch (DomainException e) {
             adicionarErro(e.getMessage());
         }
@@ -30,6 +39,7 @@ public abstract class AbstractCadastroBean<T extends Auditavel, E extends Enum<E
     public void atualizar() {
         try {
             super.atualizar();
+            Bootstrap.fecharModal(MODAL_EDITAR);
         } catch (DomainException e) {
             carregarPagina();
             adicionarErro(e.getMessage());

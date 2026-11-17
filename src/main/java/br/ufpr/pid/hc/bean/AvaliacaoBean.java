@@ -245,6 +245,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
                 ? null
                 : marcasSelecionadas.stream().map(Marca::getId).toList();
         reordenar();
+        Bootstrap.fecharOffcanvas("avaliacoesFilters");
     }
 
     public void limparFiltros() {
@@ -289,6 +290,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
             novaAvaliacao();
             carregarSugestoes();
             reordenar();
+            Bootstrap.fecharModal("modalAvaliacao");
         } catch (DomainException e) {
             FacesContext.getCurrentInstance().addMessage(
                     null,

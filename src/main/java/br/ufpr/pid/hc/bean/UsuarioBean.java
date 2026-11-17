@@ -41,6 +41,16 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
         reordenar();
     }
 
+    public void aplicarFiltros() {
+        reordenar();
+        Bootstrap.fecharOffcanvas("usuariosFilters");
+    }
+
+    public void editar(Usuario usuario) {
+        setUsuarioSelecionado(usuario);
+        Bootstrap.abrirModal("modalEditarUsuario");
+    }
+
     public void pesquisarPorNome() {
         nomeFiltrado = nomePesquisa == null || nomePesquisa.isBlank() ? null : nomePesquisa.trim();
         reordenar();
