@@ -74,6 +74,18 @@ no volume `caddy_data`.
 - Local: http://localhost:8080/
 - Com Caddy: https://$DOMAIN/
 
+## Primeiro acesso
+
+Com o banco sem nenhum administrador ativo, o WildFly escreve no log um código de primeiro
+acesso ao subir:
+
+```bash
+docker compose logs wildfly | grep -A4 "PRIMEIRO ACESSO"
+```
+
+Abra `/pages/auth/init` (a tela de login tem o link), informe o código e cadastre o
+administrador. O código muda a cada reinício e deixa de valer assim que o administrador existe.
+
 ## Derrubar
 
 ```bash

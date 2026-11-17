@@ -5,6 +5,7 @@ import br.ufpr.pid.hc.dao.UsuarioDao;
 import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.Perfil;
 import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
+import br.ufpr.pid.hc.exception.DomainException;
 import br.ufpr.pid.hc.exception.DuplicateEmailException;
 import br.ufpr.pid.hc.exception.LastActiveAdminException;
 import br.ufpr.pid.hc.exception.MissingRequiredFieldsException;
@@ -45,6 +46,21 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
     @PermitAll
     public long contarPorNome(String nome, boolean incluirInativos) {
         return usuarioDao.contarPorNome(nome, incluirInativos);
+    }
+
+    @PermitAll
+    public boolean existeAdministradorAtivo() {
+        return usuarioDao.contarAtivosPorPerfil(Perfil.ADMINISTRADOR) > 0;
+    }
+
+    @PermitAll
+    public Usuario cadastrarPrimeiroAdministrador(Usuario usuario) {
+        if (existeAdministradorAtivo()) {
+            throw new DomainException("O primeiro acesso já foi concluído");
+        }
+        usuario.setPerfil(Perfil.ADMINISTRADOR);
+        usuario.setAtivo(true);
+        return cadastrar(usuario);
     }
 
     @Override

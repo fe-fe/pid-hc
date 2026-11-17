@@ -81,6 +81,10 @@ body {
     list-style-position: inside;
 }
 
+.auth-form__message--info {
+    color: #15803d;
+}
+
 .auth-card > .btn {
     align-self: center;
 }
