@@ -3,11 +3,8 @@ package br.ufpr.pid.hc.bean;
 import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.Perfil;
 import br.ufpr.pid.hc.enumeration.UsuarioOrdenacao;
-import br.ufpr.pid.hc.exception.DomainException;
 import br.ufpr.pid.hc.service.AbstractService;
 import br.ufpr.pid.hc.service.UsuarioService;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -21,7 +18,7 @@ import java.util.UUID;
 @ViewScoped
 @Getter
 @Setter
-public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenacao> {
+public class UsuarioBean extends AbstractCadastroBean<Usuario, UsuarioOrdenacao> {
 
     @Inject
     private UsuarioService usuarioService;
@@ -30,7 +27,7 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
     private String nomeFiltrado;
 
     public UsuarioBean() {
-        super(15, UsuarioOrdenacao.NOME);
+        super(UsuarioOrdenacao.NOME, "usuário");
     }
 
     public void limparFiltros() {
@@ -39,6 +36,11 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
         ordenacaoAtual = UsuarioOrdenacao.NOME;
         mostrarInativos = false;
         reordenar();
+    }
+
+    public void aplicarFiltros() {
+        reordenar();
+        Bootstrap.fecharOffcanvas("usuariosFilters");
     }
 
     public void pesquisarPorNome() {
@@ -71,55 +73,15 @@ public class UsuarioBean extends AbstractCrudBean<Usuario, UUID, UsuarioOrdenaca
         return new Usuario();
     }
 
-    @Override
-    public void cadastrar() {
-        try {
-            super.cadastrar();
-            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuário cadastrado com sucesso");
-        } catch (DomainException | IllegalArgumentException e) {
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, e.getMessage());
-        }
-    }
-
-    @Override
-    public void atualizar() {
-        try {
-            super.atualizar();
-            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuário atualizado com sucesso");
-        } catch (DomainException | IllegalArgumentException e) {
-            // descarta as alterações feitas em memória na linha editada
-            carregarPagina();
-            adicionarMensagem(FacesMessage.SEVERITY_ERROR, e.getMessage());
-        }
-    }
-
-    private void adicionarMensagem(FacesMessage.Severity severidade, String mensagem) {
-        FacesContext.getCurrentInstance().addMessage(
-                null,
-                new FacesMessage(severidade, mensagem, null)
-        );
-    }
-
     public List<Usuario> getUsuarios() {
         return getLista();
-    }
-
-    public Usuario getUsuario() {
-        return getEntidade();
-    }
-
-    public Usuario getUsuarioSelecionado() {
-        return getEntidadeSelecionada();
-    }
-
-    public void setUsuarioSelecionado(Usuario usuario) {
-        setEntidadeSelecionada(usuario);
     }
 
     public Perfil[] getPerfis() {
         return Perfil.values();
     }
 
+    @Override
     public UsuarioOrdenacao[] getOpcoesOrdenacao() {
         return UsuarioOrdenacao.values();
     }

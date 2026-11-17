@@ -89,9 +89,6 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     protected AbstractService<Avaliacao, UUID> getService() { return avaliacaoService; }
 
     @Override
-    protected Avaliacao criarNovaEntidade() { return new Avaliacao(); }
-
-    @Override
     protected void posInit() {
         carregarSugestoes();
         novaAvaliacao();
@@ -107,7 +104,12 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         marcas = marcaService.listarNomes();
     }
 
-    public void novaAvaliacao() {
+    public void novo() {
+        novaAvaliacao();
+        Bootstrap.abrirModal("modalAvaliacao");
+    }
+
+    private void novaAvaliacao() {
         avaliacao = new Avaliacao();
         avaliacao.setData(LocalDate.now());
         avaliacao.setResultado(ResultadoTecnico.APROVADO);
@@ -119,6 +121,40 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         registroAnvisaEncontrado = null;
         fabricantesAnvisa = List.of();
         marcasAnvisa = List.of();
+    }
+
+    public void editar(Avaliacao selecionada) {
+        novaAvaliacao();
+        // O formulário não deve modificar o objeto da tabela antes de salvar.
+        avaliacao.setId(selecionada.getId());
+        avaliacao.setMaterial(selecionada.getMaterial());
+        avaliacao.setFabricante(selecionada.getFabricante());
+        avaliacao.setMarca(selecionada.getMarca());
+        avaliacao.setRegistroAnvisa(selecionada.getRegistroAnvisa());
+        avaliacao.setData(selecionada.getData());
+        avaliacao.setResultado(selecionada.getResultado());
+        avaliacao.setDescricao(selecionada.getDescricao());
+        avaliacao.setParecer(selecionada.getParecer());
+        avaliacao.setLocal(selecionada.getLocal());
+        avaliacao.setAtivo(selecionada.getAtivo());
+        avaliacao.setCriadoEm(selecionada.getCriadoEm());
+        avaliacao.setCriadoPor(selecionada.getCriadoPor());
+        avaliacao.setAtualizadoEm(selecionada.getAtualizadoEm());
+        avaliacao.setAtualizadoPor(selecionada.getAtualizadoPor());
+        codigoMaterial = selecionada.getMaterial().getCodigo();
+        nomeMaterial = selecionada.getMaterial().getNome();
+        materialExistente = true;
+        fabricante = selecionada.getFabricante().getNome();
+        marca = selecionada.getMarca() == null ? null : selecionada.getMarca().getNome();
+        Bootstrap.abrirModal("modalAvaliacao");
+    }
+
+    public boolean isNovo() {
+        return avaliacao.getId() == null;
+    }
+
+    public String getTituloModal() {
+        return isNovo() ? "Criar avaliação" : "Editar avaliação";
     }
 
     public void buscarRegistroAnvisa() {
@@ -245,6 +281,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
                 ? null
                 : marcasSelecionadas.stream().map(Marca::getId).toList();
         reordenar();
+        Bootstrap.fecharOffcanvas("avaliacoesFilters");
     }
 
     public void limparFiltros() {
@@ -284,11 +321,17 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     }
 
     public void salvar() {
+        boolean novo = isNovo();
         try {
             avaliacaoService.registrar(avaliacao, codigoMaterial, nomeMaterial, fabricante, marca);
             novaAvaliacao();
             carregarSugestoes();
-            reordenar();
+            if (novo) {
+                reordenar();
+            } else {
+                carregarPagina();
+            }
+            Bootstrap.fecharModal("modalAvaliacao");
         } catch (DomainException e) {
             FacesContext.getCurrentInstance().addMessage(
                     null,

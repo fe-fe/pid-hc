@@ -35,11 +35,8 @@
                             <td class="pid-table__actions">
                                 <div class="d-flex justify-content-center">
                                     <h:commandLink styleClass="btn btn-sm btn-outline-primary"
-                                                   title="Editar usuário">
-                                        <f:setPropertyActionListener target="#{usuarioBean.usuarioSelecionado}"
-                                                                     value="#{usuario}" />
-                                        <f:ajax execute="@this" render=":formEditarUsuario"
-                                                onevent="abrirModalEdicao" />
+                                                   title="Editar usuário" action="#{usuarioBean.editar(usuario.id)}">
+                                        <f:ajax execute="@this" render=":modalCadastroConteudo" resetValues="true" />
                                         <i class="bi bi-pencil-square" aria-hidden="true"></i>
                                     </h:commandLink>
                                 </div>

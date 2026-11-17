@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets">
+    <section class="card border shadow-sm rounded-4" aria-labelledby="materialSelecionadoTitulo">
+        <div class="card-body p-3 p-md-4">
+            
+            <header class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-4">
+                <div>
+                    <h2 id="materialSelecionadoTitulo" class="h5 mb-2 text-break"><h:outputText value="#{dashboardMaterialBean.material.nome}" /></h2>
+                    <p class="text-body-secondary small">
+                        Código <h:outputText value="#{dashboardMaterialBean.material.codigo}" />
+                        <ui:fragment rendered="#{dashboardMaterialBean.material.inativo}">
+                            <span class="badge text-bg-secondary ms-1">Inativo</span>
+                        </ui:fragment>
+                    </p>
+                </div>
+                <p class="text-body-secondary small" role="status">#{dashboardMaterialBean.periodoAplicado}</p>
+            </header>
+
+            <figure class="mb-4" aria-labelledby="graficoMaterialTitulo">
+                <figcaption id="graficoMaterialTitulo" class="small fw-semibold mb-3">Volume de registros</figcaption>
+                <ui:fragment rendered="#{dashboardMaterialBean.escalaGrafico gt 0}">
+                    <div class="d-flex gap-2 mb-3" role="img" aria-label="#{dashboardMaterialBean.resumo.aprovadas()} avaliações aprovadas, #{dashboardMaterialBean.resumo.reprovadas()} reprovadas e #{dashboardMaterialBean.resumo.notificacoes()} notificações de tecnovigilância">
+                        <ui:fragment rendered="#{dashboardMaterialBean.resumo.aprovadas() gt 0}">
+                            <div class="progress rounded-pill" style="flex: #{dashboardMaterialBean.resumo.aprovadas()} 1 0%">
+                                <div class="progress-bar bg-success w-100" title="#{dashboardMaterialBean.resumo.aprovadas()} aprovadas"></div>
+                            </div>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{dashboardMaterialBean.resumo.reprovadas() gt 0}">
+                            <div class="progress rounded-pill" style="flex: #{dashboardMaterialBean.resumo.reprovadas()} 1 0%">
+                                <div class="progress-bar bg-danger w-100" title="#{dashboardMaterialBean.resumo.reprovadas()} reprovadas"></div>
+                            </div>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{dashboardMaterialBean.resumo.notificacoes() gt 0}">
+                            <div class="progress rounded-pill" style="flex: #{dashboardMaterialBean.resumo.notificacoes()} 1 0%">
+                                <div class="progress-bar bg-primary w-100" title="#{dashboardMaterialBean.resumo.notificacoes()} notificações de tecnovigilância"></div>
+                            </div>
+                        </ui:fragment>
+                    </div>
+                    <div class="d-flex flex-wrap gap-3 small text-body-secondary">
+                        <span><i class="bi bi-circle-fill text-success me-1" aria-hidden="true"></i> Aprovadas</span>
+                        <span><i class="bi bi-circle-fill text-danger me-1" aria-hidden="true"></i> Reprovadas</span>
+                        <span><i class="bi bi-circle-fill text-primary me-1" aria-hidden="true"></i> Tecnovigilância</span>
+                    </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{dashboardMaterialBean.escalaGrafico == 0}">
+                    <p class="text-body-secondary small" role="status">Nenhum registro encontrado para este material com os filtros atuais.</p>
+                </ui:fragment>
+            </figure>
+
+            <dl class="row row-cols-2 row-cols-md-4 g-3 border-top pt-3 mb-0" aria-label="Indicadores do histórico filtrado">
+                <div class="col ps-3">
+                    <dd class="fs-4  fw-semibold mb-0">#{dashboardMaterialBean.resumo.avaliacoes()}</dd>
+                    <dt class="small  text-body-secondary fw-normal">Avaliações</dt>
+                </div>
+                <div class="col ps-3"> 
+                    <dd class="fs-4  fw-semibold mb-0">#{dashboardMaterialBean.resumo.aprovadas()}</dd>
+                    <dt class="small  text-body-secondary fw-normal">Aprovadas</dt>   
+                </div>
+                <div class="col ps-3">
+                    <dd class="fs-4  fw-semibold mb-0">#{dashboardMaterialBean.resumo.reprovadas()}</dd>
+                    <dt class="small  text-body-secondary fw-normal">Reprovadas</dt>
+                </div>
+                <div class="col ps-3">
+                    <dd class="fs-4  fw-semibold mb-0">#{dashboardMaterialBean.resumo.notificacoes()}</dd>
+                    <dt class="small  text-body-secondary fw-normal">Tecnovigilância</dt>              
+                </div>
+            </dl>
+        </div>
+    </section>
+</ui:composition>

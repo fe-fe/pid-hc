@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
+        <ui:param name="modalId" value="modalCadastro" />
+        <ui:param name="modalTitulo" value="#{bean.tituloModal}" />
+        <ui:param name="modalTamanho" value="" />
+        <ui:define name="conteudo">
+            <h:form id="formCadastro">
+                <div class="modal-body">
+                    <h:messages globalOnly="true" styleClass="text-danger small list-unstyled mb-2" />
+                    <ui:fragment rendered="#{comCodigo}">
+                        <div class="d-flex flex-column mb-3">
+                            <h:outputLabel styleClass="form-label" for="codigo" value="Código" />
+                            <h:inputText styleClass="form-control" id="codigo" value="#{bean.emEdicao.codigo}"
+                                required="true" requiredMessage="Informe o código" />
+                            <h:message for="codigo" styleClass="text-danger small" />
+                        </div>
+                    </ui:fragment>
+                    <div class="d-flex flex-column mb-3">
+                        <h:outputLabel styleClass="form-label" for="nome" value="Nome" />
+                        <h:inputText styleClass="form-control" id="nome" value="#{bean.emEdicao.nome}"
+                            required="true" requiredMessage="Informe o nome" />
+                        <h:message for="nome" styleClass="text-danger small" />
+                    </div>
+                    <h:panelGroup layout="block" styleClass="form-check" rendered="#{not bean.novo}">
+                        <h:selectBooleanCheckbox id="ativo" styleClass="form-check-input" value="#{bean.emEdicao.ativo}" />
+                        <h:outputLabel for="ativo" value="Ativo" styleClass="form-check-label" />
+                    </h:panelGroup>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{bean.salvar}">
+                        <f:ajax execute="@form" render="@form :formTabelaCadastro" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>

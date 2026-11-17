@@ -33,9 +33,9 @@
                         listener="#{materialBean.pesquisar}" render=":formTabelaCadastro" />
             </h:inputText>
         </h:form>
-        <div class="page__action-buttons ms-auto">
-            <button class="page__button page__button--primary" type="button" data-bs-toggle="modal"
-                data-bs-target="#modalIncluirCadastro">
+        <h:form id="formNovo" styleClass="page__action-buttons ms-auto">
+            <h:commandLink styleClass="page__button page__button--primary" action="#{materialBean.novo}">
+                <f:ajax execute="@this" render=":modalCadastroConteudo" resetValues="true" />
                 Incluir Material
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -43,8 +43,8 @@
                     <path d="M8 12h8" />
                     <path d="M12 8v8" />
                 </svg>
-            </button>
-        </div>
+            </h:commandLink>
+        </h:form>
     </ui:define>
 
     <ui:define name="pageContent">
@@ -58,8 +58,10 @@
     </ui:define>
 
     <ui:define name="pageOverlays">
-        <ui:include src="/WEB-INF/components/modais/materiais/modalCriarMateriais.xhtml" />
-        <ui:include src="/WEB-INF/components/modais/materiais/modalEditarMateriais.xhtml" />
+        <ui:include src="/WEB-INF/components/modais/cadastro.xhtml">
+            <ui:param name="bean" value="#{materialBean}" />
+            <ui:param name="comCodigo" value="#{true}" />
+        </ui:include>
     </ui:define>
 
 </ui:composition>

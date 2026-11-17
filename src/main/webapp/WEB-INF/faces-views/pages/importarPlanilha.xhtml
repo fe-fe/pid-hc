@@ -50,19 +50,18 @@
                 <h:commandButton styleClass="bt__importar btn btn-success" value="Importar Planilha"
                                  action="#{importacaoTecnovigilanciaBean.importar}" />
 
-                <ui:fragment rendered="#{not empty facesContext.messageList}">
+                <ui:fragment rendered="#{importacaoTecnovigilanciaBean.exibirResultado}">
                     <button type="button" class="bt__resultado btn btn-link" data-bs-toggle="modal"
                             data-bs-target="#modalResultadoImportacao">Ver resultado da importação</button>
                 </ui:fragment>
             </h:form>
         </section>
 
-        <ui:fragment rendered="#{not empty facesContext.messageList}">
+        <ui:fragment rendered="#{importacaoTecnovigilanciaBean.exibirResultado}">
             <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
                 <ui:param name="modalId" value="modalResultadoImportacao" />
-                <ui:param name="modalTitulo"
-                          value="#{importacaoTecnovigilanciaBean.importados ne null ? 'Importação concluída' : 'Importação não realizada'}" />
-                <ui:param name="modalTamanho" value="#{empty importacaoTecnovigilanciaBean.erros ? '' : 'modal-xl'}" />
+                <ui:param name="modalTitulo" value="#{importacaoTecnovigilanciaBean.tituloResultado}" />
+                <ui:param name="modalTamanho" value="#{importacaoTecnovigilanciaBean.tamanhoModalResultado}" />
                 <ui:define name="conteudo">
                     <div class="modal-body">
                         <h:messages globalOnly="true" infoClass="text-success" warnClass="text-warning-emphasis"

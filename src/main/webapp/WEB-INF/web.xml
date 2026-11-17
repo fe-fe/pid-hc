@@ -7,12 +7,12 @@
 
     <context-param>
         <param-name>jakarta.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
+        <param-value>${env.PROJECT_STAGE:Production}</param-value>
     </context-param>
 
     <context-param>
         <param-name>jakarta.faces.FACELETS_REFRESH_PERIOD</param-name>
-        <param-value>0</param-value>
+        <param-value>${env.FACELETS_REFRESH_PERIOD:-1}</param-value>
     </context-param>
 
     <servlet>
@@ -43,6 +43,10 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
 
+    <error-page>
+        <location>/erro.xhtml</location>
+    </error-page>
+
     <session-config>
         <session-timeout>480</session-timeout>
     </session-config>
@@ -50,6 +54,18 @@
     <welcome-file-list>
         <welcome-file>index</welcome-file>
     </welcome-file-list>
+
+    <!-- Administradores e analistas podem acessar todas as páginas de negócio após o login. -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Área autenticada</web-resource-name>
+            <url-pattern>/pages/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMINISTRADOR</role-name>
+            <role-name>ANALISTA</role-name>
+        </auth-constraint>
+    </security-constraint>
 
     <security-constraint>
         <web-resource-collection>
@@ -61,8 +77,20 @@
         </auth-constraint>
     </security-constraint>
 
+    <!-- A regra mais específica mantém login e primeiro acesso acessíveis sem sessão. -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Autenticação pública</web-resource-name>
+            <url-pattern>/pages/auth/*</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+
     <security-role>
         <role-name>ADMINISTRADOR</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>ANALISTA</role-name>
     </security-role>
 
 </web-app>

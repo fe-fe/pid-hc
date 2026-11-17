@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core" xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
+        <ui:param name="modalId" value="modalDetalhesAvaliacao-#{avaliacao.id}" />
+        <ui:param name="modalTitulo" value="Detalhes da avaliação" />
+        <ui:param name="modalTamanho" value="modal-lg" />
+        <ui:define name="descricao">
+            <p class="small text-body-secondary mt-1 mb-0 text-break">
+                <h:outputText value="#{avaliacao.material.codigo} — #{avaliacao.material.nome}" />
+            </p>
+        </ui:define>
+        <ui:define name="conteudo">
+            <div class="modal-body">
+                <dl class="row gy-3 small text-break mb-0">
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Data</dt>
+                        <dd class="mb-0"><h:outputText value="#{avaliacao.data}"><f:convertDateTime type="localDate" pattern="dd/MM/yyyy" /></h:outputText></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Resultado</dt>
+                        <dd class="mb-0"><span class="badge rounded-pill #{avaliacao.resultado == 'APROVADO' ? 'text-bg-success' : 'text-bg-danger'}">#{avaliacao.resultado.rotulo}</span></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Fabricante</dt>
+                        <dd class="mb-0"><h:outputText value="#{avaliacao.fabricante.nome}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Marca</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty avaliacao.marca ? 'Não informada' : avaliacao.marca.nome}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Registro ANVISA</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty avaliacao.registroAnvisa ? 'Não informado' : avaliacao.registroAnvisa}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Local</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty avaliacao.local ? 'Não informado' : avaliacao.local}" /></dd>
+                    </div>
+                    <div class="col-12">
+                        <dt class="text-body-secondary fw-normal">Descrição</dt>
+                        <dd class="mb-0" style="white-space: pre-wrap;"><h:outputText value="#{empty avaliacao.descricao ? 'Não informada' : avaliacao.descricao}" /></dd>
+                    </div>
+                    <div class="col-12">
+                        <dt class="text-body-secondary fw-normal">Parecer</dt>
+                        <dd class="mb-0" style="white-space: pre-wrap;"><h:outputText value="#{empty avaliacao.parecer ? 'Não informado' : avaliacao.parecer}" /></dd>
+                    </div>
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>

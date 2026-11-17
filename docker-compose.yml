@@ -27,6 +27,9 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      PROJECT_STAGE: ${PROJECT_STAGE:-Production}
+      SHOW_SQL: ${SHOW_SQL:-false}
+      FACELETS_REFRESH_PERIOD: ${FACELETS_REFRESH_PERIOD:--1}
     ports:
       - "127.0.0.1:8080:8080"
     volumes:

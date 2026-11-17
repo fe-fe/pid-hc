@@ -12,4 +12,8 @@ public enum ResultadoTecnico {
     ResultadoTecnico(String rotulo) {
         this.rotulo = rotulo;
     }
+
+    public boolean isAprovado() {
+        return this == APROVADO;
+    }
 }

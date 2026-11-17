@@ -24,16 +24,16 @@
             <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
                 <ui:param name="filtroId" value="usuariosFilters" />
             </ui:include>
-            <button type="button" class="page__button page__button--primary" data-bs-toggle="modal"
-                    data-bs-target="#modalCriarUsuario">
-                Novo usuário
-            </button>
+            <h:form id="formNovo">
+                <h:commandLink styleClass="page__button page__button--primary" action="#{usuarioBean.novo}">
+                    <f:ajax execute="@this" render=":modalCadastroConteudo" resetValues="true" />
+                    Novo usuário
+                </h:commandLink>
+            </h:form>
         </div>
     </ui:define>
 
     <ui:define name="pageContent">
-        <h:messages id="mensagens" globalOnly="true" showDetail="true" styleClass="mb-3" />
-
         <ui:include src="/WEB-INF/components/tabelas/usuarios.xhtml">
             <ui:param name="bean" value="#{usuarioBean}" />
         </ui:include>
@@ -41,10 +41,6 @@
 
     <ui:define name="pageOverlays">
         <ui:include src="/WEB-INF/components/filtros/usuarios.xhtml" />
-        <ui:include src="/WEB-INF/components/modais/usuarios/modalCriarUsuarios.xhtml" />
-
-        <ui:include src="/WEB-INF/components/modais/usuarios/modalEditarUsuarios.xhtml" />
-
-
+        <ui:include src="/WEB-INF/components/modais/usuario.xhtml" />
     </ui:define>
 </ui:composition>

@@ -137,6 +137,7 @@ public class ConsultaMaterialBean implements Serializable {
     public void aplicarFiltros() {
         fabricantesFiltrados = fabricantesSelecionados.stream().map(Fabricante::getId).toList();
         marcasFiltradas = marcasSelecionadas.stream().map(Marca::getId).toList();
+        Bootstrap.fecharOffcanvas("historyFilters");
     }
 
     public void limparFiltros() {

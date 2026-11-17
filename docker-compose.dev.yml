@@ -7,6 +7,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
+    environment:
+      PROJECT_STAGE: Development
+      SHOW_SQL: "true"
+      FACELETS_REFRESH_PERIOD: 0
     volumes:
       - type: bind
         source: ./src/main/webapp/WEB-INF/faces-views
