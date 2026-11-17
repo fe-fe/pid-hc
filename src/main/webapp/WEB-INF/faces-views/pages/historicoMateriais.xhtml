@@ -104,8 +104,8 @@
                                             styleClass="material-history__column-limited">
                                             <f:facet name="header">Resultado</f:facet>
 
-                                            <h:outputText value="#{avaliacao.resultado}"
-                                                styleClass="badge rounded-pill #{avaliacao.resultado eq 'APROVADO' ? 'bg-success' : 'bg-danger'}" />
+                                            <h:outputText value="#{avaliacao.resultado.rotulo}"
+                                                styleClass="badge rounded-pill #{avaliacao.resultado.aprovado ? 'text-bg-success' : 'text-bg-danger'}" />
                                         </h:column>
 
                                         <h:column>

@@ -69,7 +69,7 @@
                                     </h:outputText>
                                 </td>
                                 <td>
-                                    <span class="badge rounded-pill #{avaliacao.resultado == 'APROVADO' ? 'text-bg-success' : 'text-bg-danger'}">
+                                    <span class="badge rounded-pill #{avaliacao.resultado.aprovado ? 'text-bg-success' : 'text-bg-danger'}">
                                         #{avaliacao.resultado.rotulo}
                                     </span>
                                 </td>
