@@ -26,7 +26,7 @@ public class FabricanteBean extends AbstractCadastroBean<Fabricante, NomeOrdenac
     private String termoFiltrado;
 
     public FabricanteBean() {
-        super(NomeOrdenacao.NOME);
+        super(NomeOrdenacao.NOME, "fabricante");
     }
 
     public void pesquisar() {

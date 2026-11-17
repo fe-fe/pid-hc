@@ -26,7 +26,7 @@ public class MarcaBean extends AbstractCadastroBean<Marca, NomeOrdenacao> {
     private String termoFiltrado;
 
     public MarcaBean() {
-        super(NomeOrdenacao.NOME);
+        super(NomeOrdenacao.NOME, "marca");
     }
 
     public void pesquisar() {

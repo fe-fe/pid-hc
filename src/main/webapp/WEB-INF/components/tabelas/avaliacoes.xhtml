@@ -70,7 +70,7 @@
                                     </h:outputText>
                                 </td>
                                 <td>
-                                    <span class="badge rounded-pill #{avaliacao.resultado == 'APROVADO' ? 'text-bg-success' : 'text-bg-danger'}">
+                                    <span class="badge rounded-pill #{avaliacao.resultado.aprovado ? 'text-bg-success' : 'text-bg-danger'}">
                                         #{avaliacao.resultado.rotulo}
                                     </span>
                                 </td>
@@ -85,9 +85,8 @@
                                 </td>
                                 <td>
                                     <h:commandLink styleClass="btn btn-sm btn-outline-primary" title="Editar avaliação"
-                                        action="#{bean.editarAvaliacao(avaliacao)}">
-                                        <f:ajax execute="@this" render=":formEditarAvaliacao" resetValues="true"
-                                            onevent="abrirModalEditarAvaliacao" />
+                                        action="#{bean.editar(avaliacao)}">
+                                        <f:ajax execute="@this" render=":modalAvaliacaoConteudo" resetValues="true" />
                                         <i class="bi bi-pencil-square" aria-hidden="true"></i>
                                         <span class="visually-hidden">Editar avaliação</span>
                                     </h:commandLink>

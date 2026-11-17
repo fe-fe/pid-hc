@@ -40,6 +40,7 @@ public class ImportacaoTecnovigilanciaBean implements Serializable {
     private transient Part arquivo;
     private List<PlanilhaInvalidaException.Erro> erros = List.of();
     private Integer importados;
+    private boolean exibirResultado;
 
     public void baixarModelo() throws IOException {
         Faces.sendFile(importacaoTecnovigilanciaService.gerarModelo(),
@@ -49,6 +50,7 @@ public class ImportacaoTecnovigilanciaBean implements Serializable {
     public void importar() {
         erros = List.of();
         importados = null;
+        exibirResultado = true;
         if (arquivo == null || arquivo.getSize() == 0) {
             adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Selecione a planilha antes de importar.");
             return;
@@ -105,6 +107,14 @@ public class ImportacaoTecnovigilanciaBean implements Serializable {
         } finally {
             arquivo = null;
         }
+    }
+
+    public String getTituloResultado() {
+        return importados != null ? "Importação concluída" : "Importação não realizada";
+    }
+
+    public String getTamanhoModalResultado() {
+        return erros.isEmpty() ? "" : "modal-xl";
     }
 
     public List<PlanilhaInvalidaException.Erro> getErrosExibidos() {

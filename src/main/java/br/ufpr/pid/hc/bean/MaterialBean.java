@@ -26,7 +26,7 @@ public class MaterialBean extends AbstractCadastroBean<Material, MaterialOrdenac
     private String termoFiltrado;
 
     public MaterialBean() {
-        super(MaterialOrdenacao.CODIGO);
+        super(MaterialOrdenacao.CODIGO, "material");
     }
 
     public void pesquisar() {

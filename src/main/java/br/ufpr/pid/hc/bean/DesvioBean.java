@@ -43,6 +43,7 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
     @Inject
     private MarcaService marcaService;
 
+    private Desvio emEdicao;
     private String codigoMaterial;
     private String nomeMaterial;
     private boolean materialExistente;
@@ -59,9 +60,6 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
     @Override
     protected AbstractService<Desvio, UUID> getService() { return desvioService; }
 
-    @Override
-    protected Desvio criarNovaEntidade() { return new Desvio(); }
-
     public List<Desvio> getDesvios() { return getLista(); }
 
     public Desfecho[] getDesfechos() { return Desfecho.values(); }
@@ -72,7 +70,7 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
 
     public LocalDate getDataMaxima() { return LocalDate.now(); }
 
-    public void editarDesvio(Desvio selecionado) {
+    public void editar(Desvio selecionado) {
         // Edite uma cópia para que cancelar não altere os dados da tabela.
         Desvio copia = new Desvio();
         copia.setId(selecionado.getId());
@@ -95,7 +93,7 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
         copia.setGrauDano(selecionado.getGrauDano());
         copia.setNotificacaoAnvisa(selecionado.getNotificacaoAnvisa());
         copia.setProcessoSei(selecionado.getProcessoSei());
-        entidadeSelecionada = copia;
+        emEdicao = copia;
         codigoMaterial = selecionado.getMaterial().getCodigo();
         nomeMaterial = selecionado.getMaterial().getNome();
         materialExistente = true;
@@ -104,6 +102,7 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
         materiais = materialService.buscar(0, Integer.MAX_VALUE, MaterialOrdenacao.CODIGO, false);
         fabricantes = fabricanteService.listarNomes();
         marcas = marcaService.listarNomes();
+        Bootstrap.abrirModal("modalTecnovigilancia");
     }
 
     public void buscarMaterial() {
@@ -118,14 +117,15 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
         });
     }
 
-    @Override
-    public void atualizar() {
+    public void salvar() {
         try {
-            desvioService.atualizar(entidadeSelecionada, codigoMaterial, nomeMaterial, fabricante, marca);
-            carregarPagina();
+            desvioService.atualizar(emEdicao, codigoMaterial, nomeMaterial, fabricante, marca);
         } catch (DomainException e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+            return;
         }
+        carregarPagina();
+        Bootstrap.fecharModal("modalTecnovigilancia");
     }
 }

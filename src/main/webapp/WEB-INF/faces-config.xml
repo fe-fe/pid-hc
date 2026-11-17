@@ -7,6 +7,7 @@
 
     <!-- view expirada (logout, timeout, restart) redireciona para a mesma página em vez de estourar erro -->
     <factory>
+        <exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory>
         <exception-handler-factory>org.omnifaces.exceptionhandler.ViewExpiredExceptionHandlerFactory</exception-handler-factory>
     </factory>
 

@@ -23,7 +23,7 @@
                 <p>Nenhum administrador cadastrado. <h:link value="Fazer o primeiro acesso" outcome="/pages/auth/init"/></p>
             </ui:fragment>
             <ui:fragment rendered="#{not primeiroAcessoBean.pendente}">
-                <p>Sua primeira vez aqui? <h:link value="Cadastre-se" outcome="/pages/auth/cadastro"/></p>
+                <p>Não tem acesso? Peça a um administrador.</p>
             </ui:fragment>
 
             <div class="auth-field">

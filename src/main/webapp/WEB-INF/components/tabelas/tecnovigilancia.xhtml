@@ -60,9 +60,8 @@
                                 </td>
                                 <td>
                                     <h:commandLink styleClass="btn btn-sm btn-outline-primary" title="Editar tecnovigilância"
-                                        action="#{bean.editarDesvio(desvio)}">
-                                        <f:ajax execute="@this" render=":formEditarTecnovigilancia" resetValues="true"
-                                            onevent="abrirModalEditarTecnovigilancia" />
+                                        action="#{bean.editar(desvio)}">
+                                        <f:ajax execute="@this" render=":modalTecnovigilanciaConteudo" resetValues="true" />
                                         <i class="bi bi-pencil-square" aria-hidden="true"></i>
                                         <span class="visually-hidden">Editar tecnovigilância</span>
                                     </h:commandLink>

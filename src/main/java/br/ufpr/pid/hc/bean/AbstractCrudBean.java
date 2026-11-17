@@ -14,8 +14,6 @@ import java.util.List;
 @Setter
 public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E> & CampoOrdenacao> implements Serializable {
 
-    protected T entidade;
-    protected T entidadeSelecionada;
     protected List<T> lista;
 
     protected int paginaAtual = 0;
@@ -33,20 +31,6 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E
     }
 
     protected abstract AbstractService<T, ID> getService();
-    protected abstract T criarNovaEntidade();
-
-    private T novaEntidade() {
-        T nova = criarNovaEntidade();
-        nova.setAtivo(true);
-        return nova;
-    }
-
-    public void setEntidadeSelecionada(T entidade) {
-        if (entidade != null && entidade.getAtivo() == null) {
-            entidade.setAtivo(true);
-        }
-        this.entidadeSelecionada = entidade;
-    }
 
     protected long contarRegistros() {
         return getService().contarTotal(mostrarInativos);
@@ -64,18 +48,6 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E
             paginaAtual--;
             carregarPagina();
         }
-    }
-
-    public void cadastrar() {
-        getService().salvar(entidade);
-        entidade = novaEntidade();
-        paginaAtual = 0;
-        carregarPagina();
-    }
-
-    public void atualizar() {
-        getService().salvar(entidadeSelecionada);
-        carregarPagina();
     }
 
     public void proximaPagina() {
@@ -108,7 +80,6 @@ public abstract class AbstractCrudBean<T extends Auditavel, ID, E extends Enum<E
 
     @PostConstruct
     public void init() {
-        entidade = novaEntidade();
         carregarPagina();
         posInit();
     }

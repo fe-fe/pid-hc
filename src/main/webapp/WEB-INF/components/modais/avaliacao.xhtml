@@ -4,23 +4,23 @@
     xmlns:pt="jakarta.faces.passthrough"
     xmlns:ui="jakarta.faces.facelets">
     <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
-        <ui:param name="modalId" value="modalEditarAvaliacao" />
-        <ui:param name="modalTitulo" value="Editar avaliação" />
+        <ui:param name="modalId" value="modalAvaliacao" />
+        <ui:param name="modalTitulo" value="#{avaliacaoBean.tituloModal}" />
         <ui:param name="modalTamanho" value="modal-lg" />
         <ui:define name="conteudo">
-            <h:form id="formEditarAvaliacao">
+            <h:form id="formAvaliacao">
                 <div class="modal-body">
                     <h:messages globalOnly="true" styleClass="text-danger small list-unstyled px-2 pt-2 mb-0" />
                     <div class="row g-3 mb-3">
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="codigoMaterial" value="Código do material" />
                             <h:inputText styleClass="form-control" id="codigoMaterial" value="#{avaliacaoBean.codigoMaterial}"
-                                pt:list="listasEditarAvaliacaoMateriais" pt:autocomplete="off"
+                                pt:list="listaMateriais" pt:autocomplete="off"
                                 required="true" requiredMessage="Informe o código do material">
                                 <f:ajax event="change" execute="@this" render="grupoNomeMaterial"
                                     listener="#{avaliacaoBean.buscarMaterial}" />
                             </h:inputText>
-                            <datalist id="listasEditarAvaliacaoMateriais">
+                            <datalist id="listaMateriais">
                                 <ui:repeat value="#{avaliacaoBean.materiais}" var="materialSugerido">
                                     <option value="#{materialSugerido.codigo}" label="#{materialSugerido.nome}" />
                                 </ui:repeat>
@@ -59,10 +59,10 @@
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="fabricante" value="Fabricante" />
                             <h:inputText styleClass="form-control" id="fabricante" value="#{avaliacaoBean.fabricante}"
-                                pt:list="listasEditarAvaliacaoFabricantes" pt:autocomplete="off"
+                                pt:list="listaFabricantes" pt:autocomplete="off"
                                 required="true" requiredMessage="Informe o fabricante" />
                             <h:panelGroup id="grupoListaFabricantes">
-                                <datalist id="listasEditarAvaliacaoFabricantes">
+                                <datalist id="listaFabricantes">
                                     <ui:repeat value="#{avaliacaoBean.sugestoesFabricante}" var="nomeFabricante">
                                         <option value="#{nomeFabricante}" />
                                     </ui:repeat>
@@ -73,9 +73,9 @@
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="marca" value="Marca (opcional)" />
                             <h:inputText styleClass="form-control" id="marca" value="#{avaliacaoBean.marca}"
-                                pt:list="listasEditarAvaliacaoMarcas" pt:autocomplete="off" />
+                                pt:list="listaMarcas" pt:autocomplete="off" />
                             <h:panelGroup id="grupoListaMarcas">
-                                <datalist id="listasEditarAvaliacaoMarcas">
+                                <datalist id="listaMarcas">
                                     <ui:repeat value="#{avaliacaoBean.sugestoesMarca}" var="nomeMarca">
                                         <option value="#{nomeMarca}" />
                                     </ui:repeat>
@@ -119,8 +119,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
                     <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{avaliacaoBean.salvar}">
-                        <f:ajax execute="@form" render="@form :formTabelaAvaliacoes"
-                            onevent="fecharModalEditarAvaliacaoSeSucesso" />
+                        <f:ajax execute="@form" render="@form :formTabelaAvaliacoes" />
                     </h:commandButton>
                 </div>
             </h:form>

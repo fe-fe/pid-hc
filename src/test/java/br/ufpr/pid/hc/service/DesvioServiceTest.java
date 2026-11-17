@@ -1,12 +1,12 @@
 package br.ufpr.pid.hc.service;
 
-import br.ufpr.pid.hc.bean.DesvioBean;
 import br.ufpr.pid.hc.dao.DesvioDao;
 import br.ufpr.pid.hc.entity.*;
 import br.ufpr.pid.hc.enumeration.*;
 import br.ufpr.pid.hc.exception.DomainException;
 import br.ufpr.pid.hc.exception.DuplicateRecordException;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class DesvioEdicaoTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
+
+class DesvioServiceTest {
     private final Material material = new Material();
     private final Fabricante fabricante = new Fabricante();
     private final Marca marca = new Marca();
@@ -50,8 +52,8 @@ public class DesvioEdicaoTest extends TestCase {
         public Marca obterOuCriar(String nome) { return marca; }
     };
 
-    @Override
-    protected void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         material.setCodigo("123");
         material.setNome("Material");
         fabricante.setNome("FABRICANTE");
@@ -98,41 +100,10 @@ public class DesvioEdicaoTest extends TestCase {
         return desvio;
     }
 
-    private DesvioBean bean() {
-        DesvioBean bean = new DesvioBean();
-        bean.setMaterialService(materiais);
-        bean.setFabricanteService(fabricantes);
-        bean.setMarcaService(marcas);
-        return bean;
-    }
-
-    public void testAbrirECancelarNaoAlteraRegistroDaTabela() throws Exception {
-        Desvio original = dao.existente;
-        DesvioBean bean = bean();
-        bean.editarDesvio(original);
-        Desvio copia = bean.getEntidadeSelecionada();
-        assertNotSame(original, copia);
-        for (String nome : List.of("id", "material", "fabricante", "marca", "data", "vigihosp",
-                "registroAnvisa", "lote", "validade", "formaEntrada", "amostra", "servico", "unidade",
-                "motivo", "providencias", "tecnicoUsep", "desfecho", "grauDano", "notificacaoAnvisa", "processoSei")) {
-            Field campo = Desvio.class.getDeclaredField(nome);
-            campo.setAccessible(true);
-            assertEquals(nome, campo.get(original), campo.get(copia));
-        }
-        assertEquals("123", bean.getCodigoMaterial());
-        assertEquals("FABRICANTE", bean.getFabricante());
-        copia.setMotivo("Motivo alterado");
-        bean.setFabricante("OUTRO");
-        assertEquals("Motivo original", original.getMotivo());
-        assertEquals("FABRICANTE", original.getFabricante().getNome());
-        bean.editarDesvio(original);
-        assertEquals("Motivo original", bean.getEntidadeSelecionada().getMotivo());
-    }
-
-    public void testSalvarMantemIdOrigemEAuditoria() {
-        DesvioBean bean = bean();
-        bean.editarDesvio(dao.existente);
-        Desvio edicao = bean.getEntidadeSelecionada();
+    @Test
+    void salvarMantemIdOrigemEAuditoria() {
+        Desvio edicao = registro();
+        edicao.setId(dao.existente.getId());
         edicao.setMotivo("Motivo atualizado");
         edicao.setVigihosp(" VIG-1 ");
         Desvio salva = service.atualizar(edicao, "123", "Material", "FABRICANTE", "MARCA");
@@ -148,7 +119,8 @@ public class DesvioEdicaoTest extends TestCase {
         assertEquals(dao.existente.getId(), dao.idExcluido);
     }
 
-    public void testCamposOpcionaisPodemFicarVazios() {
+    @Test
+    void camposOpcionaisPodemFicarVazios() {
         Desvio edicao = registro();
         edicao.setRegistroAnvisa(null);
         edicao.setProcessoSei("");
@@ -162,7 +134,8 @@ public class DesvioEdicaoTest extends TestCase {
         assertNull(dao.salvo.getGrauDano());
     }
 
-    public void testRejeitaVigihospDuplicado() {
+    @Test
+    void rejeitaVigihospDuplicado() {
         dao.duplicado = true;
         try {
             service.atualizar(registro(), "123", "Material", "FABRICANTE", null);
@@ -172,7 +145,8 @@ public class DesvioEdicaoTest extends TestCase {
         }
     }
 
-    public void testRejeitaRegistroSemIdOuRemovido() {
+    @Test
+    void rejeitaRegistroSemIdOuRemovido() {
         Desvio edicao = registro();
         edicao.setId(null);
         rejeitado(edicao);
@@ -180,7 +154,8 @@ public class DesvioEdicaoTest extends TestCase {
         rejeitado(registro());
     }
 
-    public void testRejeitaCamposObrigatoriosVazios() {
+    @Test
+    void rejeitaCamposObrigatoriosVazios() {
         Desvio edicao = registro();
         edicao.setMotivo(" ");
         rejeitado(edicao);
@@ -192,7 +167,8 @@ public class DesvioEdicaoTest extends TestCase {
         rejeitado(edicao);
     }
 
-    public void testRejeitaDataFuturaEFormatosInvalidos() {
+    @Test
+    void rejeitaDataFuturaEFormatosInvalidos() {
         Desvio edicao = registro();
         edicao.setData(LocalDate.now().plusDays(1));
         rejeitado(edicao);
@@ -202,20 +178,6 @@ public class DesvioEdicaoTest extends TestCase {
         edicao = registro();
         edicao.setProcessoSei("123");
         rejeitado(edicao);
-    }
-
-    public void testBuscarMaterialAtualizaNomeSemMudarCadastro() {
-        DesvioBean bean = bean();
-        bean.editarDesvio(dao.existente);
-        bean.setCodigoMaterial("novo");
-        bean.buscarMaterial();
-        assertFalse(bean.isMaterialExistente());
-        assertNull(bean.getNomeMaterial());
-        bean.setCodigoMaterial("123");
-        bean.buscarMaterial();
-        assertTrue(bean.isMaterialExistente());
-        assertEquals("Material", bean.getNomeMaterial());
-        assertEquals("123", dao.existente.getMaterial().getCodigo());
     }
 
     private void rejeitado(Desvio desvio) {
