@@ -89,9 +89,6 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     protected AbstractService<Avaliacao, UUID> getService() { return avaliacaoService; }
 
     @Override
-    protected Avaliacao criarNovaEntidade() { return new Avaliacao(); }
-
-    @Override
     protected void posInit() {
         carregarSugestoes();
         novaAvaliacao();
@@ -105,6 +102,11 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         materiais = materialService.buscar(0, Integer.MAX_VALUE, MaterialOrdenacao.CODIGO, false);
         fabricantes = fabricanteService.listarNomes();
         marcas = marcaService.listarNomes();
+    }
+
+    public void novo() {
+        novaAvaliacao();
+        Bootstrap.abrirModal("modalAvaliacao");
     }
 
     public void novaAvaliacao() {

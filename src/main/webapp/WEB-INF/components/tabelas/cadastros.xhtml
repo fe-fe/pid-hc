@@ -58,8 +58,8 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <h:commandLink styleClass="btn btn-sm btn-outline-primary" title="Editar" action="#{bean.editar(item)}">
-                                        <f:ajax execute="@this" render=":formEditarCadastro" />
+                                    <h:commandLink styleClass="btn btn-sm btn-outline-primary" title="Editar" action="#{bean.editar(item.id)}">
+                                        <f:ajax execute="@this" render=":modalCadastroConteudo" resetValues="true" />
                                         Editar
                                     </h:commandLink>
                                 </td>

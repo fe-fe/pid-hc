@@ -29,8 +29,5 @@ public class DesvioBean extends AbstractCrudBean<Desvio, UUID, DesvioOrdenacao> 
     @Override
     protected AbstractService<Desvio, UUID> getService() { return desvioService; }
 
-    @Override
-    protected Desvio criarNovaEntidade() { return new Desvio(); }
-
     public List<Desvio> getDesvios() { return getLista(); }
 }
