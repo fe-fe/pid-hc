@@ -30,6 +30,7 @@ Opcionais, com o padrão de produção quando ausentes (o `docker-compose.dev.ym
 | `docker-compose.dev.yml` | Override de dev. |
 | `docker-compose.caddy.yml` | Override que adiciona o Caddy (HTTPS). |
 | `Caddyfile` | Configuração do Caddy. |
+| `Makefile` | Atalhos: `make dev`, `make test`, `make migration nome=...`. |
 
 ## WildFly
 
@@ -52,7 +53,7 @@ rodar o `V1__esquema_inicial.sql`. Mudança em entidade precisa de uma migration
 Para gerar a migration de uma mudança em entidade (precisa de JDK 21 e Docker):
 
 ```bash
-mvn test -Dtest=GerarMigration -Dmigration=marca_site
+make migration nome=marca_site
 ```
 
 Ele sobe um Postgres temporário, aplica as migrations existentes, compara com as entidades e grava
@@ -72,7 +73,7 @@ proxy para `127.0.0.1:8080`.
 ## Subir (dev)
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+make dev   # ou: docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
 
 Usa o `Dockerfile.dev` e monta por bind `faces-views`, `templates`, `components` e `resources`
