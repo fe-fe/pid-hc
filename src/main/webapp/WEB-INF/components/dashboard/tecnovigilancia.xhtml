@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core" xmlns:ui="jakarta.faces.facelets">
+    <table class="pid-table__table table table-hover align-middle mb-0">
+        <caption class="visually-hidden">Notificações de tecnovigilância do material selecionado, da mais recente para a mais antiga, conforme os filtros aplicados.</caption>
+        <thead class="pid-table__head">
+            <tr>
+                <th scope="col">Data</th>
+                <th scope="col">VigiHosp</th>
+                <th scope="col">Fabricante / marca</th>
+                <th scope="col">Grau de dano</th>
+                <th scope="col">Desfecho</th>
+                <th scope="col" class="text-center">Detalhes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ui:repeat value="#{dashboardMaterialBean.notificacoes}" var="notificacao">
+                <tr>
+                    <td class="text-nowrap">
+                        <h:outputText value="#{notificacao.data}" rendered="#{not empty notificacao.data}"><f:convertDateTime type="localDate" pattern="dd/MM/yyyy" /></h:outputText>
+                        <h:outputText value="Não informada" rendered="#{empty notificacao.data}" />
+                    </td>
+                    <td class="text-nowrap"><h:outputText value="#{empty notificacao.vigihosp ? 'Não informado' : notificacao.vigihosp}" /></td>
+                    <td><h:outputText value="#{notificacao.fabricante.nome}" /><small class="d-block text-body-secondary"><h:outputText value="#{empty notificacao.marca ? 'Marca não informada' : notificacao.marca.nome}" /></small></td>
+                    <td><span class="badge rounded-pill #{notificacao.grauDano == 'GRAVE' or notificacao.grauDano == 'OBITO' ? 'text-bg-danger' : 'text-bg-secondary'}">#{empty notificacao.grauDano ? 'Não informado' : notificacao.grauDano.rotulo}</span></td>
+                    <td><h:outputText value="#{empty notificacao.desfecho ? 'Não informado' : notificacao.desfecho.rotulo}" /></td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-3 d-inline-flex align-items-center gap-2 px-3 fw-semibold text-nowrap"
+                            style="height: 36px;
+                                --bs-btn-font-size: 0.8125rem;
+                                --bs-btn-color: var(--bs-secondary-color);
+                                --bs-btn-border-color: var(--pid-control-border);
+                                --bs-btn-hover-color: var(--bs-emphasis-color);
+                                --bs-btn-hover-bg: var(--bs-secondary-bg);
+                                --bs-btn-hover-border-color: var(--bs-secondary-color);"
+                            data-bs-toggle="modal" data-bs-target="#modalDetalhesTecnovigilancia-#{notificacao.id}">
+                            <span>Detalhes</span>
+                        </button>
+                    </td>
+                </tr>
+            </ui:repeat>
+            <ui:fragment rendered="#{empty dashboardMaterialBean.notificacoes}">
+                <tr><td colspan="6" class="text-center text-body-secondary py-5">Nenhuma notificação de tecnovigilância encontrada para este material com os filtros atuais.</td></tr>
+            </ui:fragment>
+        </tbody>
+    </table>
+</ui:composition>

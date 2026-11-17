@@ -10,7 +10,9 @@
         <div class="offcanvas-header border-bottom">
             <div>
                 <h2 class="offcanvas-title fs-5" id="#{filtroId}Title">Filtros</h2>
-                <p class="filters-panel__description mt-1 mb-0">#{filtroDescricao}</p>
+                <ui:fragment rendered="#{not empty filtroDescricao}">
+                    <p class="filters-panel__description mt-1 mb-0">#{filtroDescricao}</p>
+                </ui:fragment>
             </div>
             <button class="btn-close" type="button" data-bs-dismiss="offcanvas" aria-label="Fechar filtros"></button>
         </div>
