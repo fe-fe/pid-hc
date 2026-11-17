@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core" xmlns:pt="jakarta.faces.passthrough">
+<f:metadata>
+    <f:viewAction action="#{primeiroAcessoBean.redirecionarSeConcluido}"/>
+</f:metadata>
+<h:head>
+    <title>PRIMEIRO ACESSO - PID</title>
+    <h:outputStylesheet library="css" name="global.css"/>
+    <h:outputStylesheet library="css" name="pages/auth/login.css"/>
+    <h:outputStylesheet library="webjars" name="bootstrap/5.3.8/css/bootstrap.min-jsf.css"/>
+    <link rel="stylesheet"
+          href="#{request.contextPath}/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"/>
+</h:head>
+<h:body>
+    <h:form id="authForm" styleClass="auth-form">
+        <div class="auth-card">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <h1>Primeiro acesso</h1>
+            <p>Crie o administrador do PID. O código de primeiro acesso aparece no log do servidor.</p>
+
+            <div class="auth-field">
+                <h:outputLabel for="codigo" value="Código de primeiro acesso"/>
+                <h:inputText id="codigo"
+                             value="#{primeiroAcessoBean.codigo}"
+                             styleClass="input"
+                             required="true"
+                             requiredMessage="Informe o código"
+                             pt:autocomplete="off"
+                             pt:placeholder="XXXX-XXXX-XXXX"/>
+                <h:message for="codigo" styleClass="auth-field__message"/>
+            </div>
+
+            <div class="auth-field">
+                <h:outputLabel for="nome" value="Nome"/>
+                <h:inputText id="nome"
+                             value="#{primeiroAcessoBean.usuario.nome}"
+                             styleClass="input"
+                             required="true"
+                             requiredMessage="Informe o nome"/>
+                <h:message for="nome" styleClass="auth-field__message"/>
+            </div>
+
+            <div class="auth-field">
+                <h:outputLabel for="email" value="Email"/>
+                <h:inputText id="email"
+                             value="#{primeiroAcessoBean.usuario.email}"
+                             styleClass="input"
+                             required="true"
+                             requiredMessage="Informe o email"/>
+                <h:message for="email" styleClass="auth-field__message"/>
+            </div>
+
+            <div class="auth-field">
+                <h:outputLabel for="senha" value="Senha"/>
+                <h:inputSecret id="senha"
+                               value="#{primeiroAcessoBean.usuario.senha}"
+                               styleClass="input"
+                               required="true"
+                               requiredMessage="Informe a senha"
+                               pt:autocomplete="new-password"/>
+                <h:message for="senha" styleClass="auth-field__message"/>
+            </div>
+
+            <h:messages globalOnly="true" styleClass="auth-form__message"/>
+
+            <h:commandButton value="Criar administrador" styleClass="btn btn-primary my-4"
+                             action="#{primeiroAcessoBean.criar}"/>
+        </div>
+    </h:form>
+</h:body>
+</html>
