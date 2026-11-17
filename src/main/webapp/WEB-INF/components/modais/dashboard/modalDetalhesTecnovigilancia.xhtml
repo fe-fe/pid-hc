@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core" xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/modais/painel.xhtml">
+        <ui:param name="modalId" value="modalDetalhesTecnovigilancia-#{notificacao.id}" />
+        <ui:param name="modalTitulo" value="Detalhes da tecnovigilância" />
+        <ui:param name="modalTamanho" value="modal-lg" />
+        <ui:define name="descricao">
+            <p class="small text-body-secondary mt-1 mb-0 text-break">
+                <h:outputText value="#{notificacao.material.codigo} — #{notificacao.material.nome}" />
+            </p>
+        </ui:define>
+        <ui:define name="conteudo">
+            <div class="modal-body">
+                <dl class="row gy-3 small text-break mb-0">
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Data</dt>
+                        <dd class="mb-0">
+                            <h:outputText value="#{notificacao.data}" rendered="#{not empty notificacao.data}"><f:convertDateTime type="localDate" pattern="dd/MM/yyyy" /></h:outputText>
+                            <h:outputText value="Não informada" rendered="#{empty notificacao.data}" />
+                        </dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">VigiHosp</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty notificacao.vigihosp ? 'Não informado' : notificacao.vigihosp}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Fabricante</dt>
+                        <dd class="mb-0"><h:outputText value="#{notificacao.fabricante.nome}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Marca</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty notificacao.marca ? 'Não informada' : notificacao.marca.nome}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Grau de dano</dt>
+                        <dd class="mb-0"><span class="badge rounded-pill #{notificacao.grauDano == 'GRAVE' or notificacao.grauDano == 'OBITO' ? 'text-bg-danger' : 'text-bg-secondary'}">#{empty notificacao.grauDano ? 'Não informado' : notificacao.grauDano.rotulo}</span></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Desfecho</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty notificacao.desfecho ? 'Não informado' : notificacao.desfecho.rotulo}" /></dd>
+                    </div>
+                    <div class="col-12">
+                        <dt class="text-body-secondary fw-normal">Motivo</dt>
+                        <dd class="mb-0" style="white-space: pre-wrap;"><h:outputText value="#{empty notificacao.motivo ? 'Não informado' : notificacao.motivo}" /></dd>
+                    </div>
+                    <div class="col-12">
+                        <dt class="text-body-secondary fw-normal">Providências</dt>
+                        <dd class="mb-0" style="white-space: pre-wrap;"><h:outputText value="#{empty notificacao.providencias ? 'Não informadas' : notificacao.providencias}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Lote</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty notificacao.lote ? 'Não informado' : notificacao.lote}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Validade</dt>
+                        <dd class="mb-0">
+                            <h:outputText value="#{notificacao.validade}" rendered="#{not empty notificacao.validade}"><f:convertDateTime type="localDate" pattern="dd/MM/yyyy" /></h:outputText>
+                            <h:outputText value="Não informada" rendered="#{empty notificacao.validade}" />
+                        </dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Registro ANVISA</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty notificacao.registroAnvisa ? 'Não informado' : notificacao.registroAnvisa}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Notificação ANVISA</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty notificacao.notificacaoAnvisa ? 'Não informada' : notificacao.notificacaoAnvisa}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Serviço</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty notificacao.servico ? 'Não informado' : notificacao.servico}" /></dd>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <dt class="text-body-secondary fw-normal">Unidade</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty notificacao.unidade ? 'Não informada' : notificacao.unidade}" /></dd>
+                    </div>
+                    <div class="col-12">
+                        <dt class="text-body-secondary fw-normal">Processo SEI</dt>
+                        <dd class="mb-0"><h:outputText value="#{empty notificacao.processoSei ? 'Não informado' : notificacao.processoSei}" /></dd>
+                    </div>
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </ui:define>
+    </ui:decorate>
+</ui:composition>

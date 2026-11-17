@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core" xmlns:ui="jakarta.faces.facelets">
+    <table class="pid-table__table table table-hover align-middle mb-0">
+        <caption class="visually-hidden">Avaliações do material selecionado, da mais recente para a mais antiga, conforme os filtros aplicados.</caption>
+        <thead class="pid-table__head">
+            <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Fabricante</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Resultado</th>
+                <th scope="col" class="text-center">Detalhes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ui:repeat value="#{dashboardMaterialBean.avaliacoes}" var="avaliacao">
+                <tr>
+                    <td class="text-nowrap"><h:outputText value="#{avaliacao.data}"><f:convertDateTime type="localDate" pattern="dd/MM/yyyy" /></h:outputText></td>
+                    <td><h:outputText value="#{avaliacao.fabricante.nome}" /></td>
+                    <td><h:outputText value="#{empty avaliacao.marca ? 'Não informada' : avaliacao.marca.nome}" /></td>
+                    <td><span class="badge rounded-pill #{avaliacao.resultado == 'APROVADO' ? 'text-bg-success' : 'text-bg-danger'}">#{avaliacao.resultado.rotulo}</span></td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-3 d-inline-flex align-items-center gap-2 px-3 fw-semibold text-nowrap"
+                            style="height: 36px;
+                                --bs-btn-font-size: 0.8125rem;
+                                --bs-btn-color: var(--bs-secondary-color);
+                                --bs-btn-border-color: var(--pid-control-border);
+                                --bs-btn-hover-color: var(--bs-emphasis-color);
+                                --bs-btn-hover-bg: var(--bs-secondary-bg);
+                                --bs-btn-hover-border-color: var(--bs-secondary-color);"
+                            data-bs-toggle="modal" data-bs-target="#modalDetalhesAvaliacao-#{avaliacao.id}">
+                            <span>Detalhes</span>
+                        </button>
+                    </td>
+                </tr>
+            </ui:repeat>
+            <ui:fragment rendered="#{empty dashboardMaterialBean.avaliacoes}">
+                <tr><td colspan="5" class="text-center text-body-secondary py-5">Nenhuma avaliação encontrada para este material com os filtros atuais.</td></tr>
+            </ui:fragment>
+        </tbody>
+    </table>
+</ui:composition>

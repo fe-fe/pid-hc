@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core" xmlns:ui="jakarta.faces.facelets">
+    <h:form id="formHistoricoMaterial">
+        <section class="pid-table card border shadow-sm overflow-hidden" data-table-scroll="true" aria-labelledby="historicoMaterialTitulo">
+            <h2 id="historicoMaterialTitulo" class="visually-hidden">Histórico do material</h2>
+            <div class="pid-table__toolbar d-flex flex-wrap align-items-center gap-3 px-3 py-2 border-bottom bg-body">
+                <span class="small text-body-secondary">#{dashboardMaterialBean.abaAvaliacoes ? 'Avaliações' : 'Notificações de tecnovigilância'} · Mais recentes primeiro</span>
+                <div class="pid-table__scroll-controls d-flex gap-2 ms-auto" role="group" aria-label="Rolagem horizontal da tabela">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-table-scroll-direction="-1"
+                        aria-label="Rolar tabela para a esquerda" aria-controls="historicoMaterial-scroll" disabled="disabled">
+                        <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-table-scroll-direction="1"
+                        aria-label="Rolar tabela para a direita" aria-controls="historicoMaterial-scroll" disabled="disabled">
+                        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="historicoMaterial-scroll" class="pid-table__responsive table-responsive"
+                data-table-scroll-viewport="true" tabindex="0" role="region" aria-label="Histórico do material com rolagem horizontal">
+                <ui:fragment rendered="#{dashboardMaterialBean.abaAvaliacoes}">
+                    <ui:include src="/WEB-INF/components/dashboard/avaliacoes.xhtml" />
+                </ui:fragment>
+                <ui:fragment rendered="#{not dashboardMaterialBean.abaAvaliacoes}">
+                    <ui:include src="/WEB-INF/components/dashboard/tecnovigilancia.xhtml" />
+                </ui:fragment>
+            </div>
+            <ui:include src="/WEB-INF/components/tabelas/paginacao.xhtml">
+                <ui:param name="bean" value="#{dashboardMaterialBean}" />
+                <ui:param name="registroSingular" value="registro encontrado" />
+                <ui:param name="registroPlural" value="registros encontrados" />
+                <ui:param name="tabelaDescricao" value="histórico do material" />
+            </ui:include>
+        </section>
+
+        <ui:repeat value="#{dashboardMaterialBean.avaliacoes}" var="avaliacao">
+            <ui:include src="/WEB-INF/components/modais/dashboard/modalDetalhesAvaliacao.xhtml" />
+        </ui:repeat>
+        <ui:repeat value="#{dashboardMaterialBean.notificacoes}" var="notificacao">
+            <ui:include src="/WEB-INF/components/modais/dashboard/modalDetalhesTecnovigilancia.xhtml" />
+        </ui:repeat>
+    </h:form>
+</ui:composition>
