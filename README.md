@@ -49,6 +49,16 @@ banco (`hbm2ddl.auto=none`). Banco que já existia sem histórico do Flyway entr
 rodar o `V1__esquema_inicial.sql`. Mudança em entidade precisa de uma migration nova; o
 `MigracoesTest` falha se as migrations não baterem com as entidades.
 
+Para gerar a migration de uma mudança em entidade (precisa de JDK 21 e Docker):
+
+```bash
+mvn test -Dtest=GerarMigration -Dmigration=marca_site
+```
+
+Ele sobe um Postgres temporário, aplica as migrations existentes, compara com as entidades e grava
+o SQL que falta no próximo `V<n>__marca_site.sql`. Revise o arquivo: renomear coluna sai como
+apagar e criar, e coluna obrigatória em tabela com dados precisa ser preenchida antes do `NOT NULL`.
+
 ## Subir (normal)
 
 ```bash
