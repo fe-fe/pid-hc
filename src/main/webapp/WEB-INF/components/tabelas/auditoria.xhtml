@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets">
+    <section class="pid-table card border shadow-sm overflow-hidden" aria-labelledby="auditoria-table-title">
+        <h2 id="auditoria-table-title" class="visually-hidden">Eventos de auditoria</h2>
+        <h:form id="formAuditoria">
+            <div class="pid-table__responsive table-responsive">
+                <table class="pid-table__table table align-middle mb-0">
+                    <caption class="visually-hidden">Importações de planilha, atualizações da base ANVISA e alterações em avaliações, do mais recente para o mais antigo.</caption>
+                    <thead class="pid-table__head">
+                    <tr>
+                        <th scope="col" class="text-nowrap">Data</th>
+                        <th scope="col">Autor</th>
+                        <th scope="col">Evento</th>
+                        <th scope="col">Detalhe</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{bean.eventos}" var="evento">
+                        <tr>
+                            <td class="text-nowrap">
+                                <h:outputText value="#{evento.data}">
+                                    <f:convertDateTime type="localDateTime" pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </td>
+                            <td class="#{evento.semUsuario ? 'text-body-secondary fst-italic' : ''}">#{evento.autor}</td>
+                            <td><span class="badge rounded-pill #{evento.tipo.classe}">#{evento.tipo.rotulo}</span></td>
+                            <td>
+                                #{evento.descricao}
+                                <ui:fragment rendered="#{not empty evento.observacao}">
+                                    <div class="small text-body-secondary fst-italic mt-1">#{evento.observacao}</div>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{not empty evento.alteracoes}">
+                                    <ul class="auditoria__alteracoes list-unstyled small text-body-secondary mb-0 mt-1">
+                                        <ui:repeat value="#{evento.alteracoes}" var="alteracao">
+                                            <li>
+                                                <strong>#{alteracao.campo}:</strong>
+                                                <span class="auditoria__valor" title="#{alteracao.antes}">#{alteracao.antes}</span>
+                                                <i class="bi bi-arrow-right mx-1" aria-label="para"></i>
+                                                <span class="auditoria__valor" title="#{alteracao.depois}">#{alteracao.depois}</span>
+                                            </li>
+                                        </ui:repeat>
+                                    </ul>
+                                </ui:fragment>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                    <ui:fragment rendered="#{empty bean.eventos}">
+                        <tr>
+                            <td class="text-center text-body-secondary py-5" colspan="4">
+                                #{bean.filtroAtivo ? 'Nenhum evento encontrado com esses filtros.' : 'Nenhum evento registrado.'}
+                            </td>
+                        </tr>
+                    </ui:fragment>
+                    </tbody>
+                </table>
+            </div>
+
+            <ui:include src="/WEB-INF/components/tabelas/paginacao.xhtml">
+                <ui:param name="registroSingular" value="evento" />
+                <ui:param name="registroPlural" value="eventos" />
+                <ui:param name="tabelaDescricao" value="eventos de auditoria" />
+            </ui:include>
+        </h:form>
+    </section>
+</ui:composition>

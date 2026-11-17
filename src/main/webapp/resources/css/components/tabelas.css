@@ -113,3 +113,19 @@
     min-width: 960px;
     table-layout: fixed;
 }
+
+.auditoria__alteracoes li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 4px;
+}
+
+.auditoria__valor {
+    display: inline-block;
+    max-width: 28ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+}

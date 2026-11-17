@@ -82,6 +82,12 @@
                                 <i class="bi bi-people" aria-hidden="true"></i>
                                 Usuários
                             </h:link>
+                            <h:link outcome="/pages/admin/auditoria" styleClass="btn btn-light link"
+                                    pt:aria-current="#{menuBean.ariaCurrent('/pages/admin/auditoria')}"
+                                    rendered="#{sessao.contemPerfil('ADMINISTRADOR')}">
+                                <i class="bi bi-activity" aria-hidden="true"></i>
+                                Auditoria
+                            </h:link>
                             <h:link outcome="/pages/controle/materiais" styleClass="btn btn-light link"
                                     pt:aria-current="#{menuBean.ariaCurrent('/pages/controle/materiais')}">
                                 <i class="bi bi-box-seam" aria-hidden="true"></i>
