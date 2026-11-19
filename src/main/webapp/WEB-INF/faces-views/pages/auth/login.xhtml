@@ -4,6 +4,7 @@
       xmlns:f="jakarta.faces.core"
       xmlns:ui="jakarta.faces.facelets">
 <f:metadata>
+    <f:viewParam name="erro" value="#{loginBean.erro}"/>
     <f:viewAction action="#{loginBean.redirecionarSeAutenticado}"/>
 </f:metadata>
 <h:head>
