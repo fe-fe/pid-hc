@@ -13,7 +13,7 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <h:outputLabel for="nome" value="Nome" styleClass="form-label" />
-                            <h:inputText id="nome" value="#{usuarioBean.emEdicao.nome}"
+                            <h:inputText id="nome" maxlength="255" value="#{usuarioBean.emEdicao.nome}"
                                 styleClass="form-control" required="true"
                                 requiredMessage="Informe o nome" />
                             <h:message for="nome" styleClass="text-danger small" />
@@ -21,7 +21,7 @@
 
                         <div class="col-md-6">
                             <h:outputLabel for="email" value="E-mail" styleClass="form-label" />
-                            <h:inputText id="email" value="#{usuarioBean.emEdicao.email}"
+                            <h:inputText id="email" maxlength="255" value="#{usuarioBean.emEdicao.email}"
                                 styleClass="form-control" required="true"
                                 requiredMessage="Informe o e-mail" />
                             <h:message for="email" styleClass="text-danger small" />

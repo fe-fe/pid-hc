@@ -33,7 +33,7 @@
 
             <div class="auth-field">
                 <h:outputLabel for="nome" value="Nome"/>
-                <h:inputText id="nome"
+                <h:inputText id="nome" maxlength="255"
                              value="#{primeiroAcessoBean.usuario.nome}"
                              styleClass="input"
                              required="true"
@@ -43,7 +43,7 @@
 
             <div class="auth-field">
                 <h:outputLabel for="email" value="Email"/>
-                <h:inputText id="email"
+                <h:inputText id="email" maxlength="255"
                              value="#{primeiroAcessoBean.usuario.email}"
                              styleClass="input"
                              required="true"

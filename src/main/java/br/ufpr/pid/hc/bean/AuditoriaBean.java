@@ -6,6 +6,8 @@ import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.TipoEvento;
 import br.ufpr.pid.hc.service.AuditoriaService;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -45,6 +47,13 @@ public class AuditoriaBean implements Serializable, Paginavel {
     }
 
     public void aplicarFiltros() {
+        if (inicio != null && fim != null && inicio.isAfter(fim)) {
+            FacesContext contexto = FacesContext.getCurrentInstance();
+            contexto.addMessage("auditoriaFiltersForm:fim", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "A data final deve ser igual ou posterior à inicial", null));
+            contexto.validationFailed();
+            return;
+        }
         filtroAplicado = new FiltroAuditoria(tipo, usuario == null || usuario.isBlank() ? null : usuario, inicio, fim);
         paginaAtual = 0;
         carregar();

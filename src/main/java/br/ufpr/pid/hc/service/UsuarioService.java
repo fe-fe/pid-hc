@@ -18,6 +18,7 @@ import jakarta.inject.Inject;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Stateless
@@ -36,7 +37,7 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
 
     @PermitAll
     public Usuario buscarPorEmail(String email) {
-        return usuarioDao.buscarPorEmail(email);
+        return email == null ? null : usuarioDao.buscarPorEmail(padronizarEmail(email));
     }
 
     @RolesAllowed("ADMINISTRADOR")
@@ -77,6 +78,7 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
 
     private Usuario cadastrar(Usuario usuario) {
         validarCamposObrigatorios(usuario, true);
+        usuario.setEmail(padronizarEmail(usuario.getEmail()));
         validarEmailDuplicado(usuario);
         usuario.setCpf(usuario.getCpf() == null || usuario.getCpf().isBlank() ? null : usuario.getCpf().trim());
         validarCpfDuplicado(usuario);
@@ -97,11 +99,12 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
 
     private Usuario atualizar(Usuario dadosAtualizados) {
         validarCamposObrigatorios(dadosAtualizados, false);
+        dadosAtualizados.setEmail(padronizarEmail(dadosAtualizados.getEmail()));
         validarEmailDuplicado(dadosAtualizados);
 
         Usuario usuario = usuarioDao.buscarPorId(dadosAtualizados.getId());
         if (usuario == null) {
-            throw new IllegalArgumentException("Usuário não encontrado");
+            throw new DomainException("Usuário não encontrado");
         }
 
         validarUltimoAdministradorAtivo(usuario, dadosAtualizados);
@@ -142,6 +145,10 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
                 !usuarioComMesmoEmail.getId().equals(usuario.getId())) {
             throw new DuplicateEmailException();
         }
+    }
+
+    private static String padronizarEmail(String email) {
+        return email.trim().toLowerCase(Locale.ROOT);
     }
 
     private void validarCpfDuplicado(Usuario usuario) {
