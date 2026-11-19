@@ -1,0 +1,237 @@
+---
+config:
+  look: classic
+  theme: base
+  themeVariables:
+    primaryColor: '#ffffff'
+    primaryBorderColor: '#000000'
+    primaryTextColor: '#000000'
+    lineColor: '#000000'
+    secondaryColor: '#ffffff'
+    tertiaryColor: '#ffffff'
+    background: '#ffffff'
+    mainBkg: '#ffffff'
+    classText: '#000000'
+    nodeBorder: '#000000'
+---
+classDiagram
+    direction TB
+
+    class Auditavel {
+        <<abstract>>
+        -Boolean ativo
+        #onCreate() void
+        +isInativo() boolean
+    }
+
+    class Usuario {
+        <<Audited>>
+        -UUID id
+        -String nome
+        -String email
+        -String cpf
+        -String senha
+        -Perfil perfil
+        +Usuario()
+    }
+
+    class Fabricante {
+        <<Audited>>
+        -UUID id
+        -String nome
+        +Fabricante()
+    }
+
+    class Marca {
+        <<Audited>>
+        -UUID id
+        -String nome
+        +Marca()
+    }
+
+    class Material {
+        <<Audited>>
+        -UUID id
+        -String codigo
+        -String nome
+        +Material()
+    }
+
+    class Avaliacao {
+        <<Audited>>
+        -UUID id
+        -Material material
+        -Fabricante fabricante
+        -Marca marca
+        -String registroAnvisa
+        -LocalDate data
+        -ResultadoTecnico resultado
+        -String descricao
+        -String parecer
+        -String local
+        +Avaliacao()
+    }
+
+    class AnexoAvaliacao {
+        <<Audited>>
+        -UUID id
+        -Avaliacao avaliacao
+        -String nome
+        -String caminho
+        +AnexoAvaliacao()
+    }
+
+    class Desvio {
+        <<Audited>>
+        -UUID id
+        -Material material
+        -Fabricante fabricante
+        -Marca marca
+        -LocalDate data
+        -String vigihosp
+        -String registroAnvisa
+        -String lote
+        -LocalDate validade
+        -String formaEntrada
+        -EnvioAmostra amostra
+        -String servico
+        -String unidade
+        -String motivo
+        -String providencias
+        -String tecnicoUsep
+        -Desfecho desfecho
+        -GrauDano grauDano
+        -String notificacaoAnvisa
+        -String processoSei
+        -ImportacaoTecnovigilancia importacao
+        +Desvio()
+    }
+
+    class ImportacaoTecnovigilancia {
+        <<Audited>>
+        -UUID id
+        -String nomeArquivo
+        -String sha256
+        -Integer totalRegistros
+        +ImportacaoTecnovigilancia()
+    }
+
+    class ImportacaoAnvisa {
+        <<Audited>>
+        -UUID id
+        -String sha256
+        -LocalDateTime dtAtualizacaoDado
+        -LocalDateTime importadoEm
+        +ImportacaoAnvisa()
+    }
+
+    class ProdutoAnvisa {
+        -UUID id
+        -String numeroRegistroCadastro
+        -String numeroProcesso
+        -String nomeTecnico
+        -String classeRisco
+        -String nomeComercial
+        -String cnpjDetentorRegistroCadastro
+        -String detentorRegistroCadastro
+        -String nomeFabricante
+        -String nomePaisFabric
+        -String dtPubRegistroCadastro
+        -String validadeRegistroCadastro
+        -String dtAtualizacaoDado
+        +ProdutoAnvisa()
+    }
+
+    class Revisao {
+        <<RevisionEntity>>
+        -Long id
+        -LocalDateTime data
+        -String usuario
+    }
+
+    class RevisaoListener {
+        -String ANONIMO$
+        +newRevision(Object revisao) void
+        -usuarioLogado()$ String
+    }
+
+    class RevisionListener {
+        <<interface>>
+        +newRevision(Object revisao) void
+    }
+
+    class Perfil {
+        <<enumeration>>
+        ADMINISTRADOR
+        ANALISTA
+    }
+
+    class ResultadoTecnico {
+        <<enumeration>>
+        APROVADO
+        REPROVADO
+        +getRotulo() String
+        +isAprovado() boolean
+    }
+
+    class EnvioAmostra {
+        <<enumeration>>
+        SIM
+        NAO
+        FOTO
+        +getRotulo() String
+    }
+
+    class GrauDano {
+        <<enumeration>>
+        AUSENTE
+        POTENCIAL
+        LEVE
+        MODERADO
+        GRAVE
+        OBITO
+        +getRotulo() String
+    }
+
+    class Desfecho {
+        <<enumeration>>
+        QUEIXA_PONTUAL
+        ESCLARECIMENTO
+        INCONCLUSIVO
+        DESVIO_FINALIDADE
+        SUGESTAO_TROCA_LOTE
+        SUGESTAO_REPROVACAO_MARCA
+        SUGESTAO_REVISAO_DESCRITIVO
+        SUGESTAO_REPOSICAO
+        SUGESTAO_RECOLHIMENTO
+        SUGESTAO_CAPACITACAO
+        +getRotulo() String
+    }
+
+    Auditavel <|-- Usuario
+    Auditavel <|-- Fabricante
+    Auditavel <|-- Marca
+    Auditavel <|-- Material
+    Auditavel <|-- Avaliacao
+    Auditavel <|-- AnexoAvaliacao
+    Auditavel <|-- Desvio
+    Auditavel <|-- ImportacaoTecnovigilancia
+
+    RevisionListener <|.. RevisaoListener
+    RevisaoListener ..> Revisao : preenche usuario
+
+    Avaliacao "*" --> "1" Material
+    Avaliacao "*" --> "1" Fabricante
+    Avaliacao "*" --> "0..1" Marca
+    AnexoAvaliacao "*" --> "1" Avaliacao
+
+    Desvio "*" --> "1" Material
+    Desvio "*" --> "1" Fabricante
+    Desvio "*" --> "0..1" Marca
+    Desvio "*" --> "0..1" ImportacaoTecnovigilancia
+
+    Usuario ..> Perfil
+    Avaliacao ..> ResultadoTecnico
+    Desvio ..> EnvioAmostra
+    Desvio ..> GrauDano
+    Desvio ..> Desfecho

@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+skinparam monochrome true
+skinparam shadowing false
+skinparam actorStyle stick
+
+actor "Analista" as Analista
+actor "Administrador" as Admin
+
+Admin --|> Analista
+
+rectangle "Sistema PID-HC" {
+  usecase "Fazer login" as UC02
+  usecase "Visualizar dashboard" as UC03
+  usecase "Gerenciar materiais" as UC05
+  usecase "Gerenciar fabricantes" as UC06
+  usecase "Gerenciar marcas" as UC07
+  usecase "Registrar avaliação técnica" as UC08
+  usecase "Anexar arquivos à avaliação" as UC09
+  usecase "Gerenciar desvios de qualidade" as UC10
+  usecase "Consultar tecnovigilância" as UC11
+  usecase "Importar planilha de tecnovigilância" as UC12
+  usecase "Baixar modelo da planilha" as UC13
+  usecase "Consultar histórico do material" as UC14
+  usecase "Consultar produtos ANVISA" as UC15
+  usecase "Atualizar base ANVISA" as UC16
+  usecase "Realizar primeiro acesso" as UC01
+  usecase "Gerenciar usuários" as UC04
+  usecase "Consultar auditoria" as UC17
+}
+
+Analista --> UC02
+Analista --> UC03
+Analista --> UC05
+Analista --> UC06
+Analista --> UC07
+Analista --> UC08
+Analista --> UC10
+Analista --> UC11
+Analista --> UC12
+Analista --> UC14
+Analista --> UC15
+Analista --> UC16
+
+Admin --> UC01
+Admin --> UC04
+Admin --> UC17
+
+UC09 .> UC08 : <<extend>>
+UC13 .> UC12 : <<extend>>
+@enduml
