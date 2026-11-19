@@ -17,7 +17,7 @@ public enum ColunaTecnovigilancia {
     MARCA("Marca", false, Tipo.TEXTO, 28,
             "Nome comercial do produto, de preferência como consta no registro ANVISA. Pode ficar em branco."),
     REGISTRO_ANVISA("Registro ANVISA", false, Tipo.TEXTO, 17,
-            "11 dígitos, só números, sem pontos ou traços."),
+            "10 ou 11 dígitos, só números, sem pontos ou traços."),
     LOTE("Lote", false, Tipo.TEXTO, 14, "Lote do produto."),
     VALIDADE("Validade", false, Tipo.DATA, 13, "Validade do lote, no formato dd/mm/aaaa."),
     FORMA_ENTRADA("Forma de entrada", false, Tipo.TEXTO, 24, "Forma de entrada do produto, em texto livre."),

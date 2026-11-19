@@ -62,8 +62,8 @@ public class DesvioService extends AbstractService<Desvio, UUID> {
             throw new DomainException("A data da notificação não pode ser futura.");
         }
         String registroAnvisa = desvio.getRegistroAnvisa();
-        if (registroAnvisa != null && !registroAnvisa.isBlank() && !registroAnvisa.matches("[0-9]{11}")) {
-            throw new DomainException("Registro ANVISA deve ter 11 dígitos, só números.");
+        if (registroAnvisa != null && !registroAnvisa.isBlank() && !registroAnvisa.matches("[0-9]{10,11}")) {
+            throw new DomainException("Registro ANVISA deve ter 10 ou 11 dígitos, só números.");
         }
         String processoSei = desvio.getProcessoSei();
         if (processoSei != null && !processoSei.isBlank()

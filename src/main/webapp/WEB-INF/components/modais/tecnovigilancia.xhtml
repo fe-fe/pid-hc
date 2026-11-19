@@ -85,8 +85,8 @@
                             <h:outputLabel styleClass="form-label" for="registroAnvisa" value="Registro ANVISA" />
                             <h:inputText id="registroAnvisa" styleClass="form-control" maxlength="11" pt:inputmode="numeric"
                                 value="#{desvioBean.emEdicao.registroAnvisa}"
-                                validatorMessage="Registro ANVISA deve ter 11 dígitos, só números">
-                                <f:validateRegex pattern="([0-9]{11})?" />
+                                validatorMessage="Registro ANVISA deve ter 10 ou 11 dígitos, só números">
+                                <f:validateRegex pattern="([0-9]{10,11})?" />
                             </h:inputText>
                             <h:message for="registroAnvisa" styleClass="text-danger small" />
                         </div>
