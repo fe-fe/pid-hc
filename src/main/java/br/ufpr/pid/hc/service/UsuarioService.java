@@ -104,7 +104,7 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
 
         Usuario usuario = usuarioDao.buscarPorId(dadosAtualizados.getId());
         if (usuario == null) {
-            throw new IllegalArgumentException("Usuário não encontrado");
+            throw new DomainException("Usuário não encontrado");
         }
 
         validarUltimoAdministradorAtivo(usuario, dadosAtualizados);
