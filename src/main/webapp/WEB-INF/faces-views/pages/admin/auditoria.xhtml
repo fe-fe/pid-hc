@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/templates/pagina.xhtml">
+
+    <ui:define name="title">Auditoria - PID</ui:define>
+
+    <ui:define name="pageTitle">Auditoria</ui:define>
+
+    <ui:define name="pageActions">
+        <div class="page__action-buttons ms-auto">
+            <ui:include src="/WEB-INF/components/filtros/botao.xhtml">
+                <ui:param name="filtroId" value="auditoriaFilters" />
+            </ui:include>
+        </div>
+    </ui:define>
+
+    <ui:define name="pageContent">
+        <ui:include src="/WEB-INF/components/tabelas/auditoria.xhtml">
+            <ui:param name="bean" value="#{auditoriaBean}" />
+        </ui:include>
+    </ui:define>
+
+    <ui:define name="pageOverlays">
+        <ui:include src="/WEB-INF/components/filtros/auditoria.xhtml" />
+    </ui:define>
+</ui:composition>

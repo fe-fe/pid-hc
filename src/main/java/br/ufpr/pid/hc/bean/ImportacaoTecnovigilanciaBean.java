@@ -34,9 +34,6 @@ public class ImportacaoTecnovigilanciaBean implements Serializable {
     @Inject
     private ImportacaoTecnovigilanciaService importacaoTecnovigilanciaService;
 
-    @Inject
-    private Sessao sessao;
-
     private transient Part arquivo;
     private List<PlanilhaInvalidaException.Erro> erros = List.of();
     private Integer importados;
@@ -67,7 +64,7 @@ public class ImportacaoTecnovigilanciaBean implements Serializable {
 
         try (InputStream entrada = arquivo.getInputStream()) {
             ImportacaoTecnovigilanciaService.Resultado resultado = importacaoTecnovigilanciaService
-                    .importar(nome, entrada.readAllBytes(), sessao.getUsuarioLogado());
+                    .importar(nome, entrada.readAllBytes());
             importados = resultado.importados();
             adicionarMensagem(FacesMessage.SEVERITY_INFO, switch (importados) {
                 case 0 -> "Nenhum desvio novo para importar.";

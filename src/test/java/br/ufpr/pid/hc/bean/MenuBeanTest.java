@@ -29,6 +29,8 @@ class MenuBeanTest {
     void gestaoAbertaNosCadastrosENosUsuarios() {
         naPagina("/pages/controle/marcas.xhtml", () -> assertTrue(bean.isGestaoAberta()));
         naPagina("/pages/admin/users.xhtml", () -> assertTrue(bean.isGestaoAberta()));
+        naPagina("/pages/admin/auditoria.xhtml", () -> assertTrue(bean.isGestaoAberta()));
+        naPagina("/pages/admin/dashboard.xhtml", () -> assertFalse(bean.isGestaoAberta()));
         naPagina("/pages/avaliacoes.xhtml", () -> assertFalse(bean.isGestaoAberta()));
     }
 

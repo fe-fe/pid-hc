@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,7 +34,7 @@ class MaterialServiceTest {
     @Test
     void tiraEspacosDoCodigoEDoNome() {
         when(materialDao.buscarPorCodigo("123")).thenReturn(Optional.empty());
-        when(materialDao.salvar(any(), isNull())).thenAnswer(chamada -> chamada.getArgument(0));
+        when(materialDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
 
         Material salvo = service.salvar(material(null, " 123 ", " Gaze "));
 
@@ -54,7 +53,7 @@ class MaterialServiceTest {
         when(materialDao.buscarPorCodigo("123")).thenReturn(Optional.of(material(UUID.randomUUID(), "123", "Gaze")));
 
         assertThrows(DuplicateRecordException.class, () -> service.salvar(material(null, "123", "Luva")));
-        verify(materialDao, never()).salvar(any(), any());
+        verify(materialDao, never()).salvar(any());
     }
 
     @Test

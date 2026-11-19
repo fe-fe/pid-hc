@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -64,8 +63,6 @@ class DesvioServiceTest {
         injetar("marcaService", marcas);
         dao.existente = registro();
         dao.existente.setImportacao(new ImportacaoTecnovigilancia());
-        dao.existente.setCriadoPor(new Usuario());
-        dao.existente.setCriadoEm(LocalDateTime.of(2026, 1, 1, 10, 0));
         dao.existente.setAtivo(true);
     }
 
@@ -101,7 +98,7 @@ class DesvioServiceTest {
     }
 
     @Test
-    void salvarMantemIdOrigemEAuditoria() {
+    void salvarMantemIdEOrigem() {
         Desvio edicao = registro();
         edicao.setId(dao.existente.getId());
         edicao.setMotivo("Motivo atualizado");
@@ -113,8 +110,6 @@ class DesvioServiceTest {
         assertEquals("Motivo atualizado", dao.salvo.getMotivo());
         assertEquals("Motivo original", dao.existente.getMotivo());
         assertSame(dao.existente.getImportacao(), salva.getImportacao());
-        assertSame(dao.existente.getCriadoPor(), salva.getCriadoPor());
-        assertEquals(dao.existente.getCriadoEm(), salva.getCriadoEm());
         assertEquals(dao.existente.getAtivo(), salva.getAtivo());
         assertEquals(dao.existente.getId(), dao.idExcluido);
     }
@@ -205,7 +200,7 @@ class DesvioServiceTest {
         }
 
         @Override
-        public Desvio salvar(Desvio desvio, Usuario usuario) {
+        public Desvio salvar(Desvio desvio) {
             salvo = desvio;
             return desvio;
         }

@@ -4,6 +4,8 @@ import br.ufpr.pid.hc.enumeration.Perfil;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Audited
 public class Usuario extends Auditavel {
 
     public Usuario() {}
@@ -28,6 +31,7 @@ public class Usuario extends Auditavel {
     @Column(name = "cpf", updatable = false, unique = true, length = 11)
     private String cpf;
 
+    @NotAudited
     @Column(name = "senha", nullable = false)
     private String senha;
 

@@ -89,7 +89,7 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
             usuario.setAtivo(true);
         }
 
-        return usuarioDao.salvar(usuario, null);
+        return usuarioDao.salvar(usuario);
     }
 
     private Usuario atualizar(Usuario dadosAtualizados) {
@@ -108,7 +108,7 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
         usuario.setPerfil(dadosAtualizados.getPerfil());
         usuario.setAtivo(dadosAtualizados.getAtivo());
 
-        return usuarioDao.salvar(usuario, null);
+        return usuarioDao.salvar(usuario);
     }
 
     private void validarCamposObrigatorios(Usuario usuario, boolean validarSenha) {
