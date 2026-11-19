@@ -79,6 +79,12 @@ class MarcaServiceTest {
         assertEquals("BETA", service.obterOuCriar("beta").getNome());
     }
 
+    @Test
+    void obterEmBranco() {
+        assertThrows(MissingRequiredFieldsException.class, () -> service.obterOuCriar("   "));
+        verify(marcaDao, never()).salvar(any());
+    }
+
     private static Marca marca(UUID id, String nome) {
         Marca marca = new Marca();
         marca.setId(id);

@@ -30,6 +30,7 @@ public class LoginBean {
 
     private String email;
     private String senha;
+    private boolean erro;
 
     @Inject
     private Sessao session;
@@ -45,7 +46,14 @@ public class LoginBean {
 
     // chamado via f:viewAction na tela de login (só em GET); num @PostConstruct o redirect disparava também no logout
     public String redirecionarSeAutenticado() {
-        return session.isAutenticado() ? session.getPaginaInicial() + "?faces-redirect=true" : null;
+        if (session.isAutenticado()) {
+            return session.getPaginaInicial() + "?faces-redirect=true";
+        }
+        if (erro) {
+            FacesContext.getCurrentInstance().addMessage("authForm:senha",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email ou senha inválidos", null));
+        }
+        return null;
     }
 
     public String redirecionarParaPaginaInicial() {
@@ -63,7 +71,6 @@ public class LoginBean {
         );
 
         if (status == AuthenticationStatus.SEND_CONTINUE) {
-            session.setUsuarioLogado(usuarioService.buscarPorEmail(email));
             FacesContext.getCurrentInstance().responseComplete();
             return null;
         }
@@ -76,9 +83,6 @@ public class LoginBean {
             new FacesMessage(FacesMessage.SEVERITY_ERROR, mensagem, null));
             return null;
         }
-
-        Usuario usuario = usuarioService.buscarPorEmail(email);
-        session.setUsuarioLogado(usuario);
 
         return session.getPaginaInicial() + "?faces-redirect=true";
     }
@@ -95,7 +99,6 @@ public class LoginBean {
                         .getExternalContext()
                         .getRequest();
         request.logout();
-        session.setUsuarioLogado(null);
         return "/pages/auth/login?faces-redirect=true";
     }
 

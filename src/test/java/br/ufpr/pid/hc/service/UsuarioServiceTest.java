@@ -86,6 +86,16 @@ class UsuarioServiceTest {
     }
 
     @Test
+    void emailPadronizado() {
+        Usuario novo = usuario(null, " Ana@HC.br ", Perfil.ANALISTA, null);
+        novo.setSenha("segredo123");
+        when(usuarioDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
+
+        assertEquals("ana@hc.br", service.salvar(novo).getEmail());
+        verify(usuarioDao).buscarPorEmail("ana@hc.br");
+    }
+
+    @Test
     void cpfEmBranco() {
         Usuario novo = usuario(null, "ana@hc.br", Perfil.ANALISTA, null);
         novo.setSenha("segredo123");

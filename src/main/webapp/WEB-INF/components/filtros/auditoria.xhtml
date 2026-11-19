@@ -40,6 +40,8 @@
                             </h:inputText>
                         </div>
                     </div>
+                    <h:message for="inicio" styleClass="text-danger small" />
+                    <h:message for="fim" styleClass="text-danger small" />
                 </fieldset>
 
                 <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
@@ -47,7 +49,7 @@
                         <f:ajax execute="@this" render="@form :formAuditoria" resetValues="true" />
                     </h:commandButton>
                     <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary" action="#{auditoriaBean.aplicarFiltros}">
-                        <f:ajax execute="@form" render=":formAuditoria" />
+                        <f:ajax execute="@form" render="@form :formAuditoria" />
                     </h:commandButton>
                 </div>
             </h:form>

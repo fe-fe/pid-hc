@@ -4,7 +4,6 @@ import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.Perfil;
 import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.NoResultException;
 
 import java.util.List;
 import java.util.Locale;
@@ -41,14 +40,11 @@ public class UsuarioDao extends AbstractDao<Usuario, UUID> {
     }
 
     public Usuario buscarPorEmail(String email) {
-        try {
-            return entityManager.createQuery(
-                    "SELECT u FROM Usuario u WHERE u.email = :email",
-                    Usuario.class
-            ).setParameter("email", email).getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return entityManager.createQuery("SELECT u FROM Usuario u WHERE lower(trim(u.email)) = :email", Usuario.class)
+                .setParameter("email", email)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
     }
 
     public Usuario buscarPorCpf(String cpf) {

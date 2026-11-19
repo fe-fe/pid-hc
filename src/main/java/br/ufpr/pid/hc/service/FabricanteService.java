@@ -41,6 +41,9 @@ public class FabricanteService extends AbstractService<Fabricante, UUID> {
 
     @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
     public Fabricante obterOuCriar(String nome) {
+        if (nome == null || nome.isBlank()) {
+            throw new MissingRequiredFieldsException();
+        }
         String nomePadronizado = padronizarNome(nome);
         return fabricanteDao.buscarPorNome(nomePadronizado).orElseGet(() -> {
             Fabricante novo = new Fabricante();
