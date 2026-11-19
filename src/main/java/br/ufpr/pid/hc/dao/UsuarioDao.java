@@ -51,6 +51,14 @@ public class UsuarioDao extends AbstractDao<Usuario, UUID> {
         }
     }
 
+    public Usuario buscarPorCpf(String cpf) {
+        return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.cpf = :cpf", Usuario.class)
+                .setParameter("cpf", cpf)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
+
     public long contarAtivosPorPerfil(Perfil perfil) {
         return entityManager.createQuery(
                 "SELECT count(u) FROM Usuario u WHERE u.perfil = :perfil AND (u.ativo IS NULL OR u.ativo = true)",

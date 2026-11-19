@@ -91,6 +91,19 @@ class MigracoesTest {
         assertEquals("3", consultar("SELECT count(*) FROM marca_aud"));
     }
 
+    @Test
+    void cpfVazio() throws Exception {
+        executar(new String(getClass().getResourceAsStream("/db/migration/V1__esquema_inicial.sql").readAllBytes()));
+        executar("""
+                INSERT INTO usuario (id, nome, email, senha, perfil, ativo, cpf)
+                VALUES ('00000000-0000-0000-0000-000000000001', 'Ana', 'ana@hc.br', 'x', 'ADMINISTRADOR', true, '');
+                """);
+
+        Migracoes.flyway(dataSource).migrate();
+
+        assertEquals("1", consultar("SELECT count(*) FROM usuario WHERE cpf IS NULL"));
+    }
+
     private String consultar(String sql) throws SQLException {
         try (Connection conexao = dataSource.getConnection(); Statement comando = conexao.createStatement();
              ResultSet resultado = comando.executeQuery(sql)) {

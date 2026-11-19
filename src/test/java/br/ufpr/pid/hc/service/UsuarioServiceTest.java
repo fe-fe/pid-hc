@@ -5,6 +5,7 @@ import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.Perfil;
 import br.ufpr.pid.hc.exception.DomainException;
 import br.ufpr.pid.hc.exception.DuplicateEmailException;
+import br.ufpr.pid.hc.exception.DuplicateRecordException;
 import br.ufpr.pid.hc.exception.LastActiveAdminException;
 import br.ufpr.pid.hc.exception.MissingRequiredFieldsException;
 import br.ufpr.pid.hc.exception.WeakPasswordException;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -81,6 +83,30 @@ class UsuarioServiceTest {
         when(usuarioDao.buscarPorEmail("ana@hc.br")).thenReturn(usuario(UUID.randomUUID(), "ana@hc.br", Perfil.ANALISTA, true));
 
         assertThrows(DuplicateEmailException.class, () -> service.salvar(novo));
+    }
+
+    @Test
+    void cpfEmBranco() {
+        Usuario novo = usuario(null, "ana@hc.br", Perfil.ANALISTA, null);
+        novo.setSenha("segredo123");
+        novo.setCpf("  ");
+        when(usuarioDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
+
+        Usuario salvo = service.salvar(novo);
+
+        assertNull(salvo.getCpf());
+        verify(usuarioDao, never()).buscarPorCpf(any());
+    }
+
+    @Test
+    void cpfRepetido() {
+        Usuario novo = usuario(null, "ana@hc.br", Perfil.ANALISTA, null);
+        novo.setSenha("segredo123");
+        novo.setCpf("12345678901");
+        when(usuarioDao.buscarPorCpf("12345678901")).thenReturn(usuario(UUID.randomUUID(), "bia@hc.br", Perfil.ANALISTA, true));
+
+        assertThrows(DuplicateRecordException.class, () -> service.salvar(novo));
+        verify(usuarioDao, never()).salvar(any());
     }
 
     @Test
