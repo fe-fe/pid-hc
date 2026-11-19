@@ -14,7 +14,7 @@
                     <div class="row g-3 mb-3">
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="codigoMaterial" value="Código do material" />
-                            <h:inputText styleClass="form-control" id="codigoMaterial" value="#{avaliacaoBean.codigoMaterial}"
+                            <h:inputText styleClass="form-control" id="codigoMaterial" maxlength="255" value="#{avaliacaoBean.codigoMaterial}"
                                 pt:list="listaMateriais" pt:autocomplete="off"
                                 required="true" requiredMessage="Informe o código do material">
                                 <f:ajax event="change" execute="@this" render="grupoNomeMaterial"
@@ -29,7 +29,7 @@
                         </div>
                         <h:panelGroup id="grupoNomeMaterial" layout="block" styleClass="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="nomeMaterial" value="Nome do material" />
-                            <h:inputText styleClass="form-control" id="nomeMaterial" value="#{avaliacaoBean.nomeMaterial}"
+                            <h:inputText styleClass="form-control" id="nomeMaterial" maxlength="255" value="#{avaliacaoBean.nomeMaterial}"
                                 readonly="#{avaliacaoBean.materialExistente}"
                                 required="#{not avaliacaoBean.materialExistente}"
                                 requiredMessage="Material novo: informe o nome" />
@@ -41,7 +41,7 @@
                     </div>
                     <div class="mb-3">
                         <h:outputLabel styleClass="form-label" for="registroAnvisa" value="Registro ANVISA" />
-                        <h:inputText styleClass="form-control" id="registroAnvisa" value="#{avaliacaoBean.avaliacao.registroAnvisa}"
+                        <h:inputText styleClass="form-control" id="registroAnvisa" maxlength="255" value="#{avaliacaoBean.avaliacao.registroAnvisa}"
                             pt:autocomplete="off">
                             <f:ajax event="change" execute="@this" listener="#{avaliacaoBean.buscarRegistroAnvisa}"
                                 render="resultadoRegistroAnvisa grupoListaFabricantes grupoListaMarcas" />
@@ -58,7 +58,7 @@
                     <div class="row g-3 mb-3">
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="fabricante" value="Fabricante" />
-                            <h:inputText styleClass="form-control" id="fabricante" value="#{avaliacaoBean.fabricante}"
+                            <h:inputText styleClass="form-control" id="fabricante" maxlength="255" value="#{avaliacaoBean.fabricante}"
                                 pt:list="listaFabricantes" pt:autocomplete="off"
                                 required="true" requiredMessage="Informe o fabricante" />
                             <h:panelGroup id="grupoListaFabricantes">
@@ -72,7 +72,7 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <h:outputLabel styleClass="form-label" for="marca" value="Marca (opcional)" />
-                            <h:inputText styleClass="form-control" id="marca" value="#{avaliacaoBean.marca}"
+                            <h:inputText styleClass="form-control" id="marca" maxlength="255" value="#{avaliacaoBean.marca}"
                                 pt:list="listaMarcas" pt:autocomplete="off" />
                             <h:panelGroup id="grupoListaMarcas">
                                 <datalist id="listaMarcas">
@@ -104,7 +104,7 @@
                     </div>
                     <div class="mb-3">
                         <h:outputLabel styleClass="form-label" for="local" value="Local" />
-                        <h:inputText styleClass="form-control" id="local" value="#{avaliacaoBean.avaliacao.local}" />
+                        <h:inputText styleClass="form-control" id="local" maxlength="255" value="#{avaliacaoBean.avaliacao.local}" />
                     </div>
                     <div class="mb-3">
                         <h:outputLabel styleClass="form-label" for="descricao" value="Descrição" />
