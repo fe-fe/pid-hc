@@ -49,14 +49,6 @@ Table avaliacao {
   ativo boolean
 }
 
-Table anexo_avaliacao {
-  id uuid [pk]
-  avaliacao_id uuid [not null, ref: > avaliacao.id]
-  nome varchar(255)
-  caminho varchar(255)
-  ativo boolean
-}
-
 Table importacao_tecnovigilancia {
   id uuid [pk]
   nome_arquivo varchar(255) [not null]
@@ -194,19 +186,6 @@ Table avaliacao_aud {
   }
 }
 
-Table anexo_avaliacao_aud {
-  id uuid
-  rev bigint [ref: > revisao.id]
-  revtype smallint
-  avaliacao_id uuid
-  nome varchar(255)
-  caminho varchar(255)
-
-  indexes {
-    (id, rev) [pk]
-  }
-}
-
 Table desvio_aud {
   id uuid
   rev bigint [ref: > revisao.id]
@@ -269,7 +248,6 @@ TableGroup negocio {
   fabricante
   marca
   avaliacao
-  anexo_avaliacao
   desvio
   importacao_tecnovigilancia
 }
@@ -286,7 +264,6 @@ TableGroup auditoria {
   fabricante_aud
   marca_aud
   avaliacao_aud
-  anexo_avaliacao_aud
   desvio_aud
   importacao_tecnovigilancia_aud
   importacaoanvisa_aud

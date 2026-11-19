@@ -16,7 +16,6 @@ rectangle "Sistema PID-HC" {
   usecase "Gerenciar fabricantes" as UC06
   usecase "Gerenciar marcas" as UC07
   usecase "Registrar avaliação técnica" as UC08
-  usecase "Anexar arquivos à avaliação" as UC09
   usecase "Gerenciar desvios de qualidade" as UC10
   usecase "Consultar tecnovigilância" as UC11
   usecase "Importar planilha de tecnovigilância" as UC12
@@ -46,6 +45,5 @@ Admin --> UC01
 Admin --> UC04
 Admin --> UC17
 
-UC09 .> UC08 : <<extend>>
 UC13 .> UC12 : <<extend>>
 @enduml

@@ -72,15 +72,6 @@ classDiagram
         +Avaliacao()
     }
 
-    class AnexoAvaliacao {
-        <<Audited>>
-        -UUID id
-        -Avaliacao avaliacao
-        -String nome
-        -String caminho
-        +AnexoAvaliacao()
-    }
-
     class Desvio {
         <<Audited>>
         -UUID id
@@ -213,7 +204,6 @@ classDiagram
     Auditavel <|-- Marca
     Auditavel <|-- Material
     Auditavel <|-- Avaliacao
-    Auditavel <|-- AnexoAvaliacao
     Auditavel <|-- Desvio
     Auditavel <|-- ImportacaoTecnovigilancia
 
@@ -223,7 +213,6 @@ classDiagram
     Avaliacao "*" --> "1" Material
     Avaliacao "*" --> "1" Fabricante
     Avaliacao "*" --> "0..1" Marca
-    AnexoAvaliacao "*" --> "1" Avaliacao
 
     Desvio "*" --> "1" Material
     Desvio "*" --> "1" Fabricante
