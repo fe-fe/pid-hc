@@ -7,6 +7,7 @@ import br.ufpr.pid.hc.enumeration.Perfil;
 import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import br.ufpr.pid.hc.exception.DomainException;
 import br.ufpr.pid.hc.exception.DuplicateEmailException;
+import br.ufpr.pid.hc.exception.DuplicateRecordException;
 import br.ufpr.pid.hc.exception.LastActiveAdminException;
 import br.ufpr.pid.hc.exception.MissingRequiredFieldsException;
 import br.ufpr.pid.hc.exception.WeakPasswordException;
@@ -77,6 +78,8 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
     private Usuario cadastrar(Usuario usuario) {
         validarCamposObrigatorios(usuario, true);
         validarEmailDuplicado(usuario);
+        usuario.setCpf(usuario.getCpf() == null || usuario.getCpf().isBlank() ? null : usuario.getCpf().trim());
+        validarCpfDuplicado(usuario);
 
         if (usuario.getSenha().length() < 6) {
             throw new WeakPasswordException();
@@ -138,6 +141,12 @@ public class UsuarioService extends AbstractService<Usuario, UUID> {
         if (usuarioComMesmoEmail != null &&
                 !usuarioComMesmoEmail.getId().equals(usuario.getId())) {
             throw new DuplicateEmailException();
+        }
+    }
+
+    private void validarCpfDuplicado(Usuario usuario) {
+        if (usuario.getCpf() != null && usuarioDao.buscarPorCpf(usuario.getCpf()) != null) {
+            throw new DuplicateRecordException("CPF já foi cadastrado");
         }
     }
 }
