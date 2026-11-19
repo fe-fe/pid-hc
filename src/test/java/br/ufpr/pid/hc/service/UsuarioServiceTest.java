@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,7 +42,7 @@ class UsuarioServiceTest {
         Usuario novo = usuario(null, "ana@hc.br", Perfil.ANALISTA, null);
         novo.setSenha("segredo123");
         when(hashUtil.generate(any())).thenReturn("hash");
-        when(usuarioDao.salvar(any(), isNull())).thenAnswer(chamada -> chamada.getArgument(0));
+        when(usuarioDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
 
         Usuario salvo = service.salvar(novo);
 
@@ -57,7 +56,7 @@ class UsuarioServiceTest {
         novo.setSenha("12345");
 
         assertThrows(WeakPasswordException.class, () -> service.salvar(novo));
-        verify(usuarioDao, never()).salvar(any(), any());
+        verify(usuarioDao, never()).salvar(any());
     }
 
     @Test
@@ -93,7 +92,7 @@ class UsuarioServiceTest {
         editado.setNome("Ana Maria");
         when(usuarioDao.buscarPorEmail("ana@hc.br")).thenReturn(atual);
         when(usuarioDao.buscarPorId(id)).thenReturn(atual);
-        when(usuarioDao.salvar(any(), isNull())).thenAnswer(chamada -> chamada.getArgument(0));
+        when(usuarioDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
 
         Usuario salvo = service.salvar(editado);
 
@@ -126,7 +125,7 @@ class UsuarioServiceTest {
         UUID id = UUID.randomUUID();
         when(usuarioDao.buscarPorId(id)).thenReturn(usuario(id, "admin@hc.br", Perfil.ADMINISTRADOR, true));
         when(usuarioDao.contarAtivosPorPerfil(Perfil.ADMINISTRADOR)).thenReturn(2L);
-        when(usuarioDao.salvar(any(), isNull())).thenAnswer(chamada -> chamada.getArgument(0));
+        when(usuarioDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
 
         Usuario salvo = service.salvar(usuario(id, "admin@hc.br", Perfil.ANALISTA, true));
 
@@ -139,7 +138,7 @@ class UsuarioServiceTest {
         novo.setSenha("segredo123");
         when(usuarioDao.contarAtivosPorPerfil(Perfil.ADMINISTRADOR)).thenReturn(0L);
         when(hashUtil.generate(any())).thenReturn("hash");
-        when(usuarioDao.salvar(any(), isNull())).thenAnswer(chamada -> chamada.getArgument(0));
+        when(usuarioDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
 
         Usuario salvo = service.cadastrarPrimeiroAdministrador(novo);
 
@@ -153,7 +152,7 @@ class UsuarioServiceTest {
 
         assertThrows(DomainException.class,
                 () -> service.cadastrarPrimeiroAdministrador(usuario(null, "x@hc.br", Perfil.ANALISTA, true)));
-        verify(usuarioDao, never()).salvar(any(), any());
+        verify(usuarioDao, never()).salvar(any());
     }
 
     private static Usuario usuario(UUID id, String email, Perfil perfil, Boolean ativo) {

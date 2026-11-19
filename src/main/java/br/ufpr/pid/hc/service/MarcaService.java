@@ -45,7 +45,7 @@ public class MarcaService extends AbstractService<Marca, UUID> {
         return marcaDao.buscarPorNome(nomePadronizado).orElseGet(() -> {
             Marca novo = new Marca();
             novo.setNome(nomePadronizado);
-            return marcaDao.salvar(novo, null);
+            return marcaDao.salvar(novo);
         });
     }
 
@@ -61,6 +61,6 @@ public class MarcaService extends AbstractService<Marca, UUID> {
                 .ifPresent(existente -> {
                     throw new DuplicateRecordException("Já existe um cadastro com o nome " + existente.getNome());
                 });
-        return marcaDao.salvar(marca, null);
+        return marcaDao.salvar(marca);
     }
 }

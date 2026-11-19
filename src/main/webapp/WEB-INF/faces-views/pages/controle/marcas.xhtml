@@ -17,22 +17,15 @@
     </ui:define>
 
     <ui:define name="pageActions">
-        <h:form id="formPesquisaMarcas" styleClass="page__search" onsubmit="return false;">
-            <h:outputLabel for="termo" value="Nome da marca" styleClass="visually-hidden" />
-            <svg class="page__search-icon" width="16" height="16" viewBox="0 0 24 24"
-                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                 stroke-linejoin="round" aria-hidden="true">
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.3-4.3" />
-            </svg>
-            <h:inputText id="termo" value="#{marcaBean.termoPesquisa}"
-                         styleClass="page__search-input" pt:autocomplete="off"
-                         pt:type="search" pt:placeholder="Pesquisar por nome"
-                         pt:oninput="this.dispatchEvent(new Event('change'));">
-                <f:ajax event="change" execute="@this" delay="400"
-                        listener="#{marcaBean.pesquisar}" render=":formTabelaCadastro" />
-            </h:inputText>
-        </h:form>
+        <ui:include src="/WEB-INF/components/pesquisa.xhtml">
+            <ui:param name="formId" value="formPesquisaMarcas" />
+            <ui:param name="bean" value="#{marcaBean}" />
+            <ui:param name="metodo" value="pesquisar" />
+            <ui:param name="valor" value="#{marcaBean.termoPesquisa}" />
+            <ui:param name="render" value=":formTabelaCadastro" />
+            <ui:param name="placeholder" value="Pesquisar por nome" />
+            <ui:param name="rotulo" value="Nome da marca" />
+        </ui:include>
         <h:form id="formNovo" styleClass="page__action-buttons ms-auto">
             <h:commandLink styleClass="page__button page__button--primary" action="#{marcaBean.novo}">
                 <f:ajax execute="@this" render=":modalCadastroConteudo" resetValues="true" />

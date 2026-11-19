@@ -266,10 +266,10 @@ p {
     display: flex;
     align-items: center;
     gap: 8px;
-    width: 280px;
+    width: 340px;
     max-width: 100%;
     min-height: 36px;
-    padding: 0 10px;
+    padding: 0 3px 0 10px;
     background-color: var(--pid-surface);
     border: 1px solid var(--pid-control-border);
     border-radius: 8px;
@@ -341,26 +341,29 @@ p {
     white-space: nowrap;
 }
 
-.page__search.input-group {
-    width: 320px;
-    padding: 0;
-    gap: 0;
-    overflow: hidden;
+.page__search-button {
+    flex-shrink: 0;
+    height: 28px;
+    padding: 0 12px;
+    color: var(--pid-text-secondary);
+    background-color: var(--pid-surface-subtle);
+    border: 1px solid var(--pid-border);
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
 }
 
-.page__search .input-group-text,
-.page__search .form-control {
-    min-height: 34px;
-    color: var(--pid-text);
-    background-color: transparent;
-    border: 0;
-    box-shadow: none;
-    font-size: 0.8125rem;
+.page__search-button:hover,
+.page__search-button:focus-visible {
+    color: var(--pid-link);
+    border-color: var(--pid-hover-border);
+    background-color: var(--pid-hover);
 }
 
-.page__search .input-group-text {
-    color: var(--pid-muted);
-    padding-right: 4px;
+.page__search-button:focus-visible {
+    outline: 2px solid var(--pid-link);
+    outline-offset: 2px;
 }
 
 .page__search-area {
@@ -407,8 +410,7 @@ p {
         justify-content: center;
     }
 
-    .page__search,
-    .page__search.input-group {
+    .page__search {
         width: 100%;
     }
 }

@@ -6,7 +6,6 @@ import br.ufpr.pid.hc.dao.MaterialDao;
 import br.ufpr.pid.hc.entity.Desvio;
 import br.ufpr.pid.hc.entity.Fabricante;
 import br.ufpr.pid.hc.entity.Material;
-import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.ColunaTecnovigilancia;
 import br.ufpr.pid.hc.exception.PlanilhaInvalidaException;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -171,10 +170,10 @@ class ImportacaoTecnovigilanciaServiceTest {
             conteudo = saida.toByteArray();
         }
 
-        service.importar("desvios.xlsx", conteudo, new Usuario());
+        service.importar("desvios.xlsx", conteudo);
 
         ArgumentCaptor<Desvio> salvos = ArgumentCaptor.forClass(Desvio.class);
-        verify(desvioDao, times(linhas.length)).salvar(salvos.capture(), any());
+        verify(desvioDao, times(linhas.length)).salvar(salvos.capture());
         return salvos.getAllValues();
     }
 

@@ -14,24 +14,15 @@
 
     <ui:define name="pageActions">
         <div class="page__search-area">
-            <h:form id="formPesquisaTecnovigilancia" styleClass="page__search"
-                onsubmit="return false;">
-                <h:outputLabel for="termo" styleClass="visually-hidden"
-                    value="Pesquisar por VigiHosp ou código do material" />
-                <svg class="page__search-icon" width="16" height="16" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.3-4.3" />
-                </svg>
-                <h:inputText id="termo" value="#{desvioBean.termoPesquisa}"
-                    styleClass="page__search-input" pt:type="search" pt:autocomplete="off"
-                    pt:placeholder="VigiHosp ou código do material"
-                    pt:oninput="this.dispatchEvent(new Event('change'));">
-                    <f:ajax event="change" execute="@this" delay="400"
-                        listener="#{desvioBean.pesquisar}" render=":formTabelaTecnovigilancia" />
-                </h:inputText>
-            </h:form>
+            <ui:include src="/WEB-INF/components/pesquisa.xhtml">
+                <ui:param name="formId" value="formPesquisaTecnovigilancia" />
+                <ui:param name="bean" value="#{desvioBean}" />
+                <ui:param name="metodo" value="pesquisar" />
+                <ui:param name="valor" value="#{desvioBean.termoPesquisa}" />
+                <ui:param name="render" value=":formTabelaTecnovigilancia" />
+                <ui:param name="placeholder" value="VigiHosp ou código do material" />
+                <ui:param name="rotulo" value="Pesquisar por VigiHosp ou código do material" />
+            </ui:include>
         </div>
 
         <div class="page__action-buttons">

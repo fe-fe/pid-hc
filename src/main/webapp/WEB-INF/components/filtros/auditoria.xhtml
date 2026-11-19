@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="jakarta.faces.core"
+    xmlns:h="jakarta.faces.html"
+    xmlns:pt="jakarta.faces.passthrough"
+    xmlns:ui="jakarta.faces.facelets">
+    <ui:decorate template="/WEB-INF/components/filtros/painel.xhtml">
+        <ui:param name="filtroId" value="auditoriaFilters" />
+        <ui:param name="filtroDescricao" value="Refine os eventos exibidos" />
+
+        <ui:define name="formulario">
+            <h:form id="auditoriaFiltersForm" styleClass="d-flex flex-column gap-3 flex-grow-1">
+                <div>
+                    <h:outputLabel for="tipo" value="Evento" styleClass="form-label" />
+                    <h:selectOneMenu id="tipo" styleClass="form-select" value="#{auditoriaBean.tipo}">
+                        <f:selectItem itemLabel="Todos" noSelectionOption="true" />
+                        <f:selectItems value="#{auditoriaBean.tipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.rotulo}" />
+                    </h:selectOneMenu>
+                </div>
+
+                <div>
+                    <h:outputLabel for="usuario" value="Autor" styleClass="form-label" />
+                    <h:selectOneMenu id="usuario" styleClass="form-select" value="#{auditoriaBean.usuario}">
+                        <f:selectItem itemLabel="Todos" itemValue="" />
+                        <f:selectItems value="#{auditoriaBean.usuarios}" var="usuario" itemValue="#{usuario.email}" itemLabel="#{usuario.nome}" />
+                    </h:selectOneMenu>
+                </div>
+
+                <fieldset>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <h:outputLabel for="inicio" value="De" styleClass="form-label small mb-1" />
+                            <h:inputText id="inicio" pt:type="date" styleClass="form-control" value="#{auditoriaBean.inicio}">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                        </div>
+                        <div class="col-6">
+                            <h:outputLabel for="fim" value="Até" styleClass="form-label small mb-1" />
+                            <h:inputText id="fim" pt:type="date" styleClass="form-control" value="#{auditoriaBean.fim}">
+                                <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
+                    <h:commandButton value="Limpar" styleClass="btn btn-outline-secondary" action="#{auditoriaBean.limparFiltros}">
+                        <f:ajax execute="@this" render="@form :formAuditoria" resetValues="true" />
+                    </h:commandButton>
+                    <h:commandButton value="Aplicar filtros" styleClass="btn btn-primary" action="#{auditoriaBean.aplicarFiltros}">
+                        <f:ajax execute="@form" render=":formAuditoria" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </ui:define>
+        <ui:define name="acoes" />
+    </ui:decorate>
+</ui:composition>

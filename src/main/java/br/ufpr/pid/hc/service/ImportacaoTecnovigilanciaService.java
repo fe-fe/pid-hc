@@ -9,7 +9,6 @@ import br.ufpr.pid.hc.entity.Fabricante;
 import br.ufpr.pid.hc.entity.ImportacaoTecnovigilancia;
 import br.ufpr.pid.hc.entity.Marca;
 import br.ufpr.pid.hc.entity.Material;
-import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.ColunaTecnovigilancia;
 import br.ufpr.pid.hc.enumeration.Desfecho;
 import br.ufpr.pid.hc.enumeration.EnvioAmostra;
@@ -132,11 +131,12 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
     }
 
     @RolesAllowed({"ADMINISTRADOR", "ANALISTA"})
-    public Resultado importar(String nomeArquivo, byte[] conteudo, Usuario usuario) {
+    public Resultado importar(String nomeArquivo, byte[] conteudo) {
         String sha256 = calcularSha256(conteudo);
         importacaoTecnovigilanciaDao.buscarPorSha256(sha256).ifPresent(anterior -> {
-            throw new DomainException("Esta planilha já foi importada em "
-                    + anterior.getCriadoEm().format(FORMATO_DATA_HORA) + ".");
+            throw new DomainException(importacaoTecnovigilanciaDao.dataCriacao(anterior.getId())
+                    .map(data -> "Esta planilha já foi importada em " + data.format(FORMATO_DATA_HORA) + ".")
+                    .orElse("Esta planilha já foi importada."));
         });
 
         Leitura leitura = ler(conteudo);
@@ -149,7 +149,7 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
         importacao.setNomeArquivo(nomeArquivo);
         importacao.setSha256(sha256);
         importacao.setTotalRegistros(linhas.size());
-        importacaoTecnovigilanciaDao.salvar(importacao, usuario);
+        importacaoTecnovigilanciaDao.salvar(importacao);
 
         Map<String, Material> materiais = materialDao
                 .buscar(0, Integer.MAX_VALUE, MaterialOrdenacao.CODIGO, true).stream()
@@ -175,7 +175,7 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
                 desvio.setMarca(marcas.computeIfAbsent(padronizarNome(linha.marca()), marcaService::obterOuCriar));
             }
             desvio.setImportacao(importacao);
-            desvioDao.salvar(desvio, usuario);
+            desvioDao.salvar(desvio);
         }
         return new Resultado(linhas.size(), List.copyOf(materiaisNovos), List.copyOf(materiaisDivergentes),
                 leitura.vigihospIgnorados());

@@ -81,13 +81,9 @@ public class DesvioService extends AbstractService<Desvio, UUID> {
         desvio.setMaterial(materialService.obterOuCriar(codigoMaterial, nomeMaterial));
         desvio.setFabricante(fabricanteService.obterOuCriar(fabricante));
         desvio.setMarca(marca == null || marca.isBlank() ? null : marcaService.obterOuCriar(marca));
-        // A edição mantém a origem da importação e os dados de auditoria do registro.
+        // A edição mantém a origem da importação e o status do registro.
         desvio.setImportacao(existente.getImportacao());
         desvio.setAtivo(existente.getAtivo());
-        desvio.setCriadoEm(existente.getCriadoEm());
-        desvio.setCriadoPor(existente.getCriadoPor());
-        desvio.setAtualizadoEm(existente.getAtualizadoEm());
-        desvio.setAtualizadoPor(existente.getAtualizadoPor());
         return salvar(desvio);
     }
 }

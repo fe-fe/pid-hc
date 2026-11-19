@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-final class BancoDeTeste {
+public final class BancoDeTeste {
 
     private static final String PACOTE_ENTIDADES = "br.ufpr.pid.hc.entity";
 
     private BancoDeTeste() {}
 
-    static PGSimpleDataSource dataSource(PostgreSQLContainer postgres) {
+    public static PGSimpleDataSource dataSource(PostgreSQLContainer postgres) {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setUrl(postgres.getJdbcUrl());
         dataSource.setUser(postgres.getUsername());
@@ -28,7 +28,7 @@ final class BancoDeTeste {
         return dataSource;
     }
 
-    static SessionFactory hibernate(PostgreSQLContainer postgres, Map<String, String> configuracoes) throws URISyntaxException {
+    public static SessionFactory hibernate(PostgreSQLContainer postgres, Map<String, String> configuracoes) throws URISyntaxException {
         StandardServiceRegistryBuilder registro = new StandardServiceRegistryBuilder()
                 .applySetting("hibernate.connection.url", postgres.getJdbcUrl())
                 .applySetting("hibernate.connection.username", postgres.getUsername())

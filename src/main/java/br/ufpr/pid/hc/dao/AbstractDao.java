@@ -1,13 +1,17 @@
 package br.ufpr.pid.hc.dao;
 
 import br.ufpr.pid.hc.entity.Auditavel;
-import br.ufpr.pid.hc.entity.Usuario;
+import br.ufpr.pid.hc.entity.Revisao;
 import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractDao<T extends Auditavel, ID> {
 
@@ -25,31 +29,26 @@ public abstract class AbstractDao<T extends Auditavel, ID> {
     }
 
     @Transactional
-    public T salvar(T entidade, Usuario usuario) {
-
+    public T salvar(T entidade) {
         Object id = entityManager.getEntityManagerFactory()
                 .getPersistenceUnitUtil()
                 .getIdentifier(entidade);
-
-        entidade.setAtualizadoPor(usuario);
         if (id == null) {
-            entidade.setCriadoPor(usuario);
             entityManager.persist(entidade);
             return entidade;
-        } else {
-            entidade.setAtualizadoPor(usuario);
-            return entityManager.merge(entidade);
         }
+        return entityManager.merge(entidade);
     }
 
-    public void desativar(T entidade, Usuario usuario) {
-        entidade.setAtivo(false);
-        salvar(entidade, usuario);
-    }
-
-    public void ativar(T entidade, Usuario usuario) {
-        entidade.setAtivo(true);
-        salvar(entidade, usuario);
+    public Optional<LocalDateTime> dataCriacao(ID id) {
+        return AuditReaderFactory.get(entityManager).createQuery()
+                .forRevisionsOfEntity(tipoEntidade, false, true)
+                .add(AuditEntity.id().eq(id))
+                .addOrder(AuditEntity.revisionNumber().asc())
+                .setMaxResults(1)
+                .getResultList().stream()
+                .map(linha -> ((Revisao) ((Object[]) linha)[1]).getData())
+                .findFirst();
     }
 
     public List<T> buscar(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao) {

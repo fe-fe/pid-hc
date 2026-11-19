@@ -24,15 +24,6 @@
     height: 2rem;
 }
 
-[data-table-scroll-viewport].is-scrollable {
-    cursor: grab;
-}
-
-[data-table-scroll-viewport].is-dragging {
-    cursor: grabbing;
-    user-select: none;
-}
-
 .pid-table__table {
     --bs-table-bg: var(--pid-surface);
     --bs-table-color: var(--pid-text-secondary);
@@ -83,6 +74,31 @@
     border-color: var(--pid-border);
 }
 
+.pid-table__pagination .pagination {
+    --bs-pagination-color: var(--pid-text-secondary);
+    --bs-pagination-bg: transparent;
+    --bs-pagination-border-color: transparent;
+    --bs-pagination-hover-color: var(--pid-text);
+    --bs-pagination-hover-bg: var(--pid-hover);
+    --bs-pagination-hover-border-color: transparent;
+    --bs-pagination-focus-color: var(--pid-text);
+    --bs-pagination-focus-bg: var(--pid-hover);
+    --bs-pagination-focus-box-shadow: 0 0 0 3px var(--pid-accent-soft);
+    --bs-pagination-active-color: #fff;
+    --bs-pagination-active-bg: #3346c4;
+    --bs-pagination-active-border-color: #3346c4;
+    --bs-pagination-disabled-color: var(--pid-disabled-text);
+    --bs-pagination-disabled-bg: transparent;
+    --bs-pagination-disabled-border-color: transparent;
+    gap: 2px;
+}
+
+.pid-table__pagination .page-link {
+    min-width: 2rem;
+    text-align: center;
+    border-radius: 6px;
+}
+
 .pid-table__actions {
     width: 1%;
     white-space: nowrap;
@@ -96,4 +112,20 @@
 .pid-table__table--history {
     min-width: 960px;
     table-layout: fixed;
+}
+
+.auditoria__alteracoes li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 4px;
+}
+
+.auditoria__valor {
+    display: inline-block;
+    max-width: 28ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
 }

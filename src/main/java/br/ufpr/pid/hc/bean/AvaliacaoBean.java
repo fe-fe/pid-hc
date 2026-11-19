@@ -137,10 +137,6 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         avaliacao.setParecer(selecionada.getParecer());
         avaliacao.setLocal(selecionada.getLocal());
         avaliacao.setAtivo(selecionada.getAtivo());
-        avaliacao.setCriadoEm(selecionada.getCriadoEm());
-        avaliacao.setCriadoPor(selecionada.getCriadoPor());
-        avaliacao.setAtualizadoEm(selecionada.getAtualizadoEm());
-        avaliacao.setAtualizadoPor(selecionada.getAtualizadoPor());
         codigoMaterial = selecionada.getMaterial().getCodigo();
         nomeMaterial = selecionada.getMaterial().getNome();
         materialExistente = true;

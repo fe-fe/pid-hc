@@ -24,7 +24,7 @@ import java.util.List;
 @ViewScoped
 @Getter
 @Setter
-public class ProdutoAnvisaBean implements Serializable {
+public class ProdutoAnvisaBean implements Serializable, Paginavel {
 
     private static final int TAMANHO_PAGINA = 15;
 
@@ -53,22 +53,15 @@ public class ProdutoAnvisaBean implements Serializable {
         carregarPagina();
     }
 
-    public void proximaPagina() {
-        if (!isUltimaPagina()) {
-            paginaAtual++;
-            carregarPagina();
-        }
+    @Override
+    public void irParaPagina(int pagina) {
+        paginaAtual = Math.max(0, Math.min(pagina, getTotalPaginas() - 1));
+        carregarPagina();
     }
 
-    public void paginaAnterior() {
-        if (paginaAtual > 0) {
-            paginaAtual--;
-            carregarPagina();
-        }
-    }
-
-    public boolean isUltimaPagina() {
-        return (long) (paginaAtual + 1) * TAMANHO_PAGINA >= totalRegistros;
+    @Override
+    public int getTamanhoPagina() {
+        return TAMANHO_PAGINA;
     }
 
     public boolean isAtualizacaoBloqueada() {

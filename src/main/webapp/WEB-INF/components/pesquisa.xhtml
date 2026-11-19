@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:pt="jakarta.faces.passthrough"
+    xmlns:ui="jakarta.faces.facelets">
+    <h:form id="#{formId}" styleClass="page__search" onsubmit="return false;">
+        <h:outputLabel for="termo" value="#{rotulo}" styleClass="visually-hidden" />
+        <svg class="page__search-icon" width="16" height="16" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+        </svg>
+        <h:inputText id="termo" value="#{valor}" styleClass="page__search-input"
+                     pt:type="search" pt:autocomplete="off" pt:placeholder="#{placeholder}"
+                     pt:oninput="this.dispatchEvent(new Event('change'));">
+            <f:ajax event="change" execute="@this" delay="400" listener="#{bean[metodo]}" render="#{render}" />
+        </h:inputText>
+        <h:commandButton value="Pesquisar" styleClass="page__search-button" action="#{bean[metodo]}">
+            <f:ajax execute="@form" render="#{render}" />
+        </h:commandButton>
+    </h:form>
+</ui:composition>
