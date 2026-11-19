@@ -41,7 +41,7 @@
                     </div>
                     <div class="mb-3">
                         <h:outputLabel styleClass="form-label" for="registroAnvisa" value="Registro ANVISA" />
-                        <h:inputText styleClass="form-control" id="registroAnvisa" maxlength="255" value="#{avaliacaoBean.avaliacao.registroAnvisa}"
+                        <h:inputText styleClass="form-control" id="registroAnvisa" maxlength="11" pt:inputmode="numeric" value="#{avaliacaoBean.avaliacao.registroAnvisa}"
                             pt:autocomplete="off">
                             <f:ajax event="change" execute="@this" listener="#{avaliacaoBean.buscarRegistroAnvisa}"
                                 render="resultadoRegistroAnvisa grupoListaFabricantes grupoListaMarcas" />

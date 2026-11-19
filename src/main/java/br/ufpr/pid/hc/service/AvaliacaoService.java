@@ -6,6 +6,7 @@ import br.ufpr.pid.hc.entity.Avaliacao;
 import br.ufpr.pid.hc.entity.Fabricante;
 import br.ufpr.pid.hc.entity.Marca;
 import br.ufpr.pid.hc.enumeration.CampoOrdenacao;
+import br.ufpr.pid.hc.exception.DomainException;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.Stateless;
@@ -67,6 +68,10 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
     @RolesAllowed({ "ADMINISTRADOR", "ANALISTA" })
     public Avaliacao registrar(Avaliacao avaliacao, String codigoMaterial, String nomeMaterial,
             String fabricante, String marca) {
+        String registroAnvisa = avaliacao.getRegistroAnvisa();
+        if (registroAnvisa != null && !registroAnvisa.isBlank() && !registroAnvisa.matches("[0-9]{11}")) {
+            throw new DomainException("Registro ANVISA deve ter 11 dígitos, só números.");
+        }
         avaliacao.setMaterial(materialService.obterOuCriar(codigoMaterial, nomeMaterial));
         avaliacao.setFabricante(fabricanteService.obterOuCriar(fabricante));
         avaliacao.setMarca(marca == null || marca.isBlank() ? null : marcaService.obterOuCriar(marca));
