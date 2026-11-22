@@ -3,6 +3,7 @@ package br.ufpr.pid.hc.dao;
 import br.ufpr.pid.hc.dto.Alteracao;
 import br.ufpr.pid.hc.dto.EventoAuditoria;
 import br.ufpr.pid.hc.dto.FiltroAuditoria;
+import br.ufpr.pid.hc.entity.Parametro;
 import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.ResultadoTecnico;
 import br.ufpr.pid.hc.enumeration.TipoEvento;
@@ -59,6 +60,10 @@ public class AuditoriaDao {
             SELECT r.id, r.data, r.usuario, 'DESVIO_EDITADO', d.id, d.vigihosp, m.codigo, NULL
             FROM desvio_aud d JOIN revisao r ON r.id = d.rev LEFT JOIN material m ON m.id = d.material_id
             WHERE d.revtype = 1
+            UNION ALL
+            SELECT r.id, r.data, r.usuario, 'CONFIGURACAO', CAST(NULL AS uuid), p.chave, p.valor, NULL
+            FROM parametro_aud p JOIN revisao r ON r.id = p.rev
+            WHERE p.revtype IN (0, 1)
             """.formatted(versoes("usuario_aud"), versoes("material_aud"), versoes("fabricante_aud"),
             versoes("marca_aud"));
 
@@ -202,6 +207,9 @@ public class AuditoriaDao {
             case USUARIO_CRIADO, USUARIO_EDITADO, USUARIO_DESATIVADO, USUARIO_REATIVADO -> texto + " — " + complemento;
             case CADASTRO_CRIADO, CADASTRO_EDITADO, CADASTRO_DESATIVADO, CADASTRO_REATIVADO -> texto + ": " + complemento;
             case DESVIO_EDITADO -> "VigiHosp " + texto + (complemento == null ? "" : " — material " + complemento);
+            case CONFIGURACAO -> Parametro.VALIDADE.equals(texto)
+                    ? "Prazo de validade das avaliações: " + complemento + " meses"
+                    : texto + ": " + complemento;
         };
     }
 

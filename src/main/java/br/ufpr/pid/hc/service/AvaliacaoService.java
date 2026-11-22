@@ -13,7 +13,9 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Stateless
@@ -29,6 +31,9 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
 
     @Inject
     private MarcaService marcaService;
+
+    @Inject
+    private ParametroService parametroService;
 
     @Override
     protected AbstractDao<Avaliacao, UUID> getDao() {
@@ -54,15 +59,29 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
     @PermitAll
     public List<Avaliacao> buscarComFiltros(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao,
             String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas, boolean somenteVencidas) {
         return avaliacaoDao.buscarComFiltros(pagina, tamanhoPagina, campoOrdenacao, termoMaterial, fabricantes,
-                dataInicio, dataFim, codigoMaterial, marcas);
+                dataInicio, dataFim, codigoMaterial, marcas, somenteVencidas ? limite() : null);
     }
 
     @PermitAll
     public long contarComFiltros(String termoMaterial, List<UUID> fabricantes, LocalDate dataInicio,
-            LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
-        return avaliacaoDao.contarComFiltros(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas);
+            LocalDate dataFim, String codigoMaterial, List<UUID> marcas, boolean somenteVencidas) {
+        return avaliacaoDao.contarComFiltros(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas,
+                somenteVencidas ? limite() : null);
+    }
+
+    @PermitAll
+    public Set<UUID> vencidas(Collection<Avaliacao> avaliacoes) {
+        if (avaliacoes == null || avaliacoes.isEmpty()) {
+            return Set.of();
+        }
+        return Set.copyOf(avaliacaoDao.vencidas(avaliacoes.stream().map(Avaliacao::getId).toList(), limite()));
+    }
+
+    @PermitAll
+    public LocalDate limite() {
+        return LocalDate.now().minusMonths(parametroService.validade());
     }
 
     @RolesAllowed({ "ADMINISTRADOR", "ANALISTA" })

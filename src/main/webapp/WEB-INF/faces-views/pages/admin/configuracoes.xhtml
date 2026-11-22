@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:pt="jakarta.faces.passthrough"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/WEB-INF/templates/pagina.xhtml">
+
+    <ui:define name="title">Configurações - PID</ui:define>
+
+    <ui:define name="pageTitle">Configurações</ui:define>
+
+    <ui:define name="pageContent">
+        <section class="card border shadow-sm" aria-labelledby="validade-titulo">
+            <div class="card-body">
+                <h2 id="validade-titulo" class="h6 mb-1">Validade das avaliações</h2>
+                <p class="small text-body-secondary mb-3">
+                    A avaliação mais recente de cada material, fabricante e marca fica vencida quando a sua data
+                    ultrapassa este prazo. O padrão é de #{configuracaoBean.validadePadrao} meses.
+                </p>
+                <h:form id="formConfiguracoes" styleClass="d-flex flex-column gap-3" style="max-width: 22rem">
+                    <div>
+                        <h:outputLabel for="validade" value="Prazo de validade (meses)" styleClass="form-label" />
+                        <h:inputText id="validade" styleClass="form-control" value="#{configuracaoBean.validade}"
+                                     pt:type="number" pt:min="1" pt:max="#{configuracaoBean.validadeMaxima}"
+                                     required="true" requiredMessage="Informe o prazo de validade"
+                                     converterMessage="Informe um número inteiro de meses" />
+                        <h:message for="validade" styleClass="text-danger small" />
+                    </div>
+                    <h:messages globalOnly="true" infoClass="text-success small" errorClass="text-danger small"
+                                styleClass="list-unstyled mb-0" />
+                    <div>
+                        <h:commandButton value="Salvar" styleClass="btn btn-primary" action="#{configuracaoBean.salvar}">
+                            <f:ajax execute="@form" render="@form" />
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+        </section>
+    </ui:define>
+</ui:composition>
