@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "dashboard.xhtml" as V
+control "DashboardMaterialBean" as B
+participant "MaterialService" as M
+participant "DashboardMaterialService" as S
+database "PostgreSQL" as DB
+
+U -> V : digita o código ou o nome do material
+V -> B : buscarSugestoes()
+B -> M : buscarPorTermo(termo)
+M -> DB : SELECT material
+B --> V : até 10 sugestões
+U -> V : seleciona um material
+V -> B : selecionar(material)
+B -> S : resumir(filtro)
+S -> DB : SELECT contagens de avaliações\ne notificações
+B -> S : buscarAvaliacoes(filtro) /\nbuscarNotificacoes(filtro)
+S -> DB : SELECT avaliacao / desvio
+B --> V : resumo e abas Avaliações\ne Tecnovigilância
+V --> U : painel do material
+@enduml

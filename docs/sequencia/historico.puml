@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "historicoMateriais.xhtml" as V
+control "ConsultaMaterialBean" as B
+participant "MaterialService" as M
+participant "AvaliacaoService" as S
+database "PostgreSQL" as DB
+
+U -> V : informa o código do material\ne clica em "Pesquisar"
+V -> B : consultar()
+B -> M : buscarPorCodigo(codigo)
+M -> DB : SELECT material
+alt material encontrado
+  B -> S : buscarAvaliacoesPorMaterial(codigo)
+  S -> DB : SELECT avaliacao
+  B -> B : agrupa as avaliações por marca\ne aplica os filtros
+  B --> V : histórico por marca
+else material não encontrado
+  B --> V : "Material não encontrado."
+end
+V --> U : resultado
+@enduml

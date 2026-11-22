@@ -1,0 +1,24 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "anvisa.xhtml" as V
+control "ProdutoAnvisaBean" as B
+participant "ImportacaoAnvisaService" as S
+participant "ProdutoAnvisaDao" as DAO
+database "PostgreSQL" as DB
+
+U -> V : informa registro, CNPJ, nome,\nfabricante ou detentor
+V -> B : buscar()
+B -> S : buscarProdutos(termo, pagina, tamanho)
+S -> DAO : buscar(termo, pagina, tamanho)
+DAO -> DB : SELECT anvisa_produto_saude
+DB --> DAO : produtos
+S --> B : página de produtos
+B --> V : tabela e datas da base
+V --> U : produtos encontrados
+@enduml

@@ -9,9 +9,10 @@ const browser = await chromium.launch({ channel: 'chromium', args: ['--lang=pt-B
 const contexto = await browser.newContext({
   viewport: { width: 1440, height: 900 },
   deviceScaleFactor: 2,
-  colorScheme: 'light',
+  colorScheme: 'dark',
   locale: 'pt-BR',
 });
+await contexto.addInitScript(() => localStorage.setItem('pid-hc-theme', 'dark'));
 const page = await contexto.newPage();
 const falhas = [];
 
@@ -22,9 +23,9 @@ async function abrir(caminho) {
   await page.waitForLoadState('networkidle');
 }
 
-async function foto(nome) {
+async function foto(nome, recorte) {
   await page.waitForTimeout(400);
-  await page.screenshot({ path: `/telas/${nome}.png` });
+  await (recorte ?? page).screenshot({ path: `/telas/${nome}.png` });
   console.log(`  ${nome}.png`);
 }
 
@@ -39,10 +40,10 @@ async function fechar() {
   await page.waitForTimeout(300);
 }
 
-async function tela(nome, passos) {
+async function tela(nome, passos, recorte) {
   try {
     await passos();
-    await foto(nome);
+    await foto(nome, recorte);
   } catch (erro) {
     falhas.push(nome);
     console.log(`  ${nome}: falhou (${erro.message.split('\n')[0]})`);
@@ -120,6 +121,15 @@ await tela('marca-modal', async () => {
 await fechar();
 
 await tela('avaliacoes', () => abrir('/pages/avaliacoes.xhtml'));
+await tela('avaliacoes-vencidas', async () => {
+  await page.getByRole('button', { name: /Filtrar/ }).first().click();
+  await page.locator('.offcanvas.show').first().waitFor();
+  await id('formFiltrosAvaliacao:somenteVencidas').check();
+  await page.getByRole('button', { name: 'Aplicar filtros' }).click();
+  await page.waitForLoadState('networkidle');
+  await page.locator('.offcanvas.show').first().waitFor({ state: 'detached' }).catch(() => {});
+});
+await abrir('/pages/avaliacoes.xhtml');
 await tela('avaliacao-modal', async () => {
   await page.locator('a.page__button--primary').first().click();
   await modal();
@@ -156,12 +166,18 @@ await fechar();
 await tela('importar-planilha', () => abrir('/pages/importarPlanilha.xhtml'));
 await tela('anvisa', () => abrir('/pages/controle/anvisa.xhtml'));
 
+await tela('menu-sair', () => abrir('/pages/admin/dashboard.xhtml'), page.locator('aside.sidebar'));
 await sair();
 await entrar(ANALISTA);
 await tela('dashboard-analista', () => abrir('/pages/analista/dashboard.xhtml'));
 await sair();
 
 await entrar(ADMIN);
+await tela('configuracoes', async () => {
+  await abrir('/pages/admin/configuracoes.xhtml');
+  await page.getByRole('button', { name: 'Salvar' }).click();
+  await page.waitForLoadState('networkidle');
+});
 await tela('auditoria', () => abrir('/pages/admin/auditoria.xhtml'));
 
 await browser.close();

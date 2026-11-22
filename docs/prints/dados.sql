@@ -44,7 +44,11 @@ INSERT INTO carga_avaliacao VALUES
   ('107455', 'NOVAMED PRODUTOS HOSPITALARES', 'NOVATOUCH', '80123450085', '2026-09-04', 'APROVADO', 'Centro Cirúrgico',
    'Bisel afiado e canhão firme.', 'Aprovada.'),
   ('104388', 'PROTEXA DESCARTÁVEIS', 'PROTEXA PLUS', '80456780094', '2026-10-17', 'APROVADO', 'UTI Adulto',
-   'Sem vazamento no teste de pressão.', 'Aprovada.');
+   'Sem vazamento no teste de pressão.', 'Aprovada.'),
+  ('104210', 'SANIVIDA INDÚSTRIA MÉDICA', 'SANIFLEX', '80234560105', '2024-02-07', 'REPROVADO', 'Centro Cirúrgico',
+   'Punho com baixa elasticidade.', 'Reprovada; reavaliar em novo lote.'),
+  ('107455', 'PROTEXA DESCARTÁVEIS', 'PROTEXA PLUS', '80456780110', '2024-06-14', 'APROVADO', 'Pronto Atendimento',
+   'Canhão firme e bisel sem rebarbas.', 'Aprovada.');
 
 INSERT INTO avaliacao (id, ativo, material_id, fabricante_id, marca_id, registroanvisa, data, resultado, local,
                        descricao, parecer)

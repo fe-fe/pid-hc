@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "Formulário de avaliação" as V
+control "AvaliacaoBean" as B
+participant "ImportacaoAnvisaService" as S
+participant "ProdutoAnvisaDao" as DAO
+database "PostgreSQL" as DB
+
+U -> V : informa o registro ANVISA
+V -> B : buscarRegistroAnvisa()
+B -> S : buscarPorRegistro(registro)
+S -> DAO : buscarPorRegistro(registro)
+DAO -> DB : SELECT anvisa_produto_saude
+DB --> DAO : produtos
+alt registro encontrado
+  B -> B : monta sugestões com os nomes\nde fabricante e comerciais
+  B --> V : "Registro encontrado na ANVISA:\nveja as sugestões de fabricante e marca."
+else registro não encontrado
+  B --> V : "Registro não encontrado na base ANVISA."
+end
+V --> U : sugestões nos campos\nfabricante e marca
+@enduml

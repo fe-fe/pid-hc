@@ -1,0 +1,34 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+left to right direction
+
+node "Computador do usuário" as Cliente {
+  artifact "Navegador web" as Navegador
+}
+
+node "Servidor (Docker Compose)" as Servidor {
+  node "Contêiner caddy" <<Caddy 2>> as Caddy {
+    component "Proxy reverso HTTPS" as Proxy
+  }
+  node "Contêiner wildfly" <<WildFly 39 / Java 21>> as WildFly {
+    artifact "pid-hc.war" as War
+  }
+  node "Contêiner postgres" <<PostgreSQL 16>> as Postgres {
+    database "Banco do PID" as Banco
+  }
+}
+
+node "Portal de dados abertos\nda ANVISA" <<sistema externo>> as Anvisa {
+  artifact "TA_PRODUTO_SAUDE_SITE.csv" as Csv
+}
+
+node "Let's Encrypt" <<sistema externo>> as Acme
+
+Navegador --> Proxy : HTTPS (443)
+Proxy --> War : HTTP (8080)\nrede interna
+War --> Banco : JDBC (5432)\nrede interna
+War --> Csv : HTTPS\ndownload semanal
+Proxy --> Acme : ACME\ncertificado TLS
+@enduml

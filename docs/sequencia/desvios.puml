@@ -1,0 +1,25 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "tecnovigilancia.xhtml" as V
+control "DesvioBean" as B
+participant "DesvioService" as S
+participant "DesvioDao" as DAO
+database "PostgreSQL" as DB
+
+U -> V : pesquisa por VigiHosp ou código\ne aplica o filtro de período
+V -> B : pesquisar() / aplicarFiltros()
+B -> B : valida o período
+B -> S : buscarComFiltros(termo, periodo, pagina)
+S -> DAO : buscarComFiltros(...)
+DAO -> DB : SELECT desvio
+DB --> DAO : desvios
+S --> B : página de desvios
+B --> V : tabela atualizada
+V --> U : desvios encontrados
+@enduml

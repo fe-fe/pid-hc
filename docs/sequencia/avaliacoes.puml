@@ -1,0 +1,25 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "avaliacoes.xhtml" as V
+control "AvaliacaoBean" as B
+participant "AvaliacaoService" as S
+participant "AvaliacaoDao" as DAO
+database "PostgreSQL" as DB
+
+U -> V : pesquisa por código ou aplica filtros\n(material, fabricante, marca, período)
+V -> B : pesquisarPorCodigo() / aplicarFiltros()
+B -> B : valida o período
+B -> S : buscarComFiltros(pagina, ordenacao, filtros)
+S -> DAO : buscarComFiltros(...)
+DAO -> DB : SELECT avaliacao
+DB --> DAO : avaliações
+S --> B : página de avaliações
+B --> V : tabela atualizada
+V --> U : avaliações filtradas e ordenadas
+@enduml

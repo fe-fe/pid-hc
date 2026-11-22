@@ -1,0 +1,25 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "avaliacoes.xhtml" as V
+control "AvaliacaoBean" as B
+participant "AvaliacaoService" as S
+database "PostgreSQL" as DB
+
+U -> V : clica em "Editar avaliação"
+V -> B : editar(avaliacao)
+B --> V : formulário preenchido
+U -> V : altera os dados e clica em "Salvar"
+V -> B : salvar()
+B -> S : registrar(avaliacao, codigo, nome,\nfabricante, marca)
+S -> S : valida e obtém ou cria\nmaterial, fabricante e marca
+S -> DB : UPDATE avaliacao\n(revisão de auditoria)
+S --> B : avaliação atualizada
+B --> V : fecha o formulário e atualiza a lista
+V --> U : avaliação atualizada
+@enduml

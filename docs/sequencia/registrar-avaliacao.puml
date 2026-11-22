@@ -1,0 +1,33 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "avaliacoes.xhtml" as V
+control "AvaliacaoBean" as B
+participant "AvaliacaoService" as S
+participant "MaterialService" as M
+participant "FabricanteService" as F
+participant "MarcaService" as MA
+database "PostgreSQL" as DB
+
+U -> V : clica em "Criar Avaliação",\npreenche o formulário e salva
+V -> B : salvar()
+B -> S : registrar(avaliacao, codigo, nome,\nfabricante, marca)
+S -> S : valida o registro ANVISA\n(10 ou 11 dígitos)
+S -> M : obterOuCriar(codigo, nome)
+M -> DB : SELECT/INSERT material
+S -> F : obterOuCriar(fabricante)
+F -> DB : SELECT/INSERT fabricante
+opt marca informada
+  S -> MA : obterOuCriar(marca)
+  MA -> DB : SELECT/INSERT marca
+end
+S -> DB : INSERT avaliacao\n(revisão de auditoria)
+S --> B : avaliação salva
+B --> V : fecha o formulário e atualiza a lista
+V --> U : avaliação na listagem
+@enduml

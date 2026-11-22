@@ -1,0 +1,23 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Usuário" as U
+boundary "Menu lateral" as V
+control "LoginBean" as B
+participant "AcessoService" as AS
+participant "HttpServletRequest" as R
+database "PostgreSQL" as DB
+
+U -> V : clica em "Sair"
+V -> B : logout()
+B -> AS : registrar(email, LOGOUT)
+AS -> DB : INSERT acesso
+B -> R : logout()
+R -> R : invalida a sessão
+B --> V : redireciona para login.xhtml
+V --> U : tela de login
+@enduml

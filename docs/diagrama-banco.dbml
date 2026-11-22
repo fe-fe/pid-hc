@@ -1,5 +1,5 @@
 // Diagrama do banco de dados - PID-HC
-// Gerado a partir das migrations Flyway (V1 a V5) em src/main/resources/db/migration
+// Gerado a partir das migrations Flyway (V1 a V6) em src/main/resources/db/migration
 // Cole em https://dbdiagram.io
 
 // =====================================================
@@ -87,6 +87,11 @@ Table acesso {
   data timestamp [not null]
   usuario varchar(255) [not null, note: 'e-mail informado no login']
   tipo varchar(255) [not null, note: 'LOGIN | LOGIN_RECUSADO | LOGOUT']
+}
+
+Table parametro {
+  chave varchar(255) [pk]
+  valor varchar(255) [not null, note: 'validade_avaliacao_meses = prazo de validade das avaliações']
 }
 
 Table importacaoanvisa {
@@ -266,9 +271,24 @@ TableGroup negocio {
   importacao_tecnovigilancia
 }
 
+TableGroup configuracao {
+  parametro
+}
+
 TableGroup anvisa {
   importacaoanvisa
   anvisa_produto_saude
+}
+
+Table parametro_aud {
+  chave varchar(255)
+  rev bigint [ref: > revisao.id]
+  revtype smallint
+  valor varchar(255)
+
+  indexes {
+    (chave, rev) [pk]
+  }
 }
 
 TableGroup auditoria {
@@ -282,4 +302,5 @@ TableGroup auditoria {
   desvio_aud
   importacao_tecnovigilancia_aud
   importacaoanvisa_aud
+  parametro_aud
 }

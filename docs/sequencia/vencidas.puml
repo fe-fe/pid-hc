@@ -1,0 +1,27 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "avaliacoes.xhtml" as V
+control "AvaliacaoBean" as B
+participant "AvaliacaoService" as S
+participant "AvaliacaoDao" as DAO
+database "PostgreSQL" as DB
+
+U -> V : marca "Somente vencidas"\ne clica em "Aplicar filtros"
+V -> B : aplicarFiltros()
+B -> S : buscarComFiltros(..., somenteVencidas)
+S -> S : limite = hoje − prazo de validade\n(24 meses por padrão)
+S -> DAO : buscarComFiltros(..., limite)
+DAO -> DB : SELECT avaliação mais recente de cada\nmaterial, fabricante e marca anterior ao limite
+DB --> DAO : avaliações vencidas
+S --> B : página de avaliações
+B -> S : vencidas(avaliacoes)
+S --> B : identificadores das vencidas
+B --> V : tabela com o selo "Vencida"
+V --> U : avaliações que precisam de novo teste
+@enduml
