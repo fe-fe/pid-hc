@@ -1,5 +1,10 @@
 @startuml
-skinparam monochrome true
+!theme plain
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 13
+skinparam participantBackgroundColor white
+skinparam ArrowColor black
+skinparam SequenceLifeLineBorderColor #888888
 skinparam shadowing false
 skinparam dpi 200
 skinparam sequenceMessageAlign center
