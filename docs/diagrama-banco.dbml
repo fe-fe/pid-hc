@@ -1,0 +1,285 @@
+// Diagrama do banco de dados - PID-HC
+// Gerado a partir das migrations Flyway (V1 a V5) em src/main/resources/db/migration
+// Cole em https://dbdiagram.io
+
+// =====================================================
+// TABELAS DE NEGÓCIO
+// =====================================================
+
+Table usuario {
+  id uuid [pk]
+  nome varchar(255)
+  email varchar(255) [not null, unique]
+  cpf varchar(11) [unique]
+  senha varchar(255) [not null]
+  perfil varchar(255) [not null, note: 'ADMINISTRADOR | ANALISTA']
+  ativo boolean
+}
+
+Table material {
+  id uuid [pk]
+  codigo varchar(255) [not null, unique]
+  nome varchar(255) [not null]
+  ativo boolean
+}
+
+Table fabricante {
+  id uuid [pk]
+  nome varchar(255) [not null, unique]
+  ativo boolean
+}
+
+Table marca {
+  id uuid [pk]
+  nome varchar(255) [not null, unique]
+  ativo boolean
+}
+
+Table avaliacao {
+  id uuid [pk]
+  material_id uuid [not null, ref: > material.id]
+  fabricante_id uuid [not null, ref: > fabricante.id]
+  marca_id uuid [ref: > marca.id]
+  registroanvisa varchar(255)
+  data date [not null]
+  resultado varchar(255) [not null, note: 'APROVADO | REPROVADO']
+  descricao text
+  parecer text
+  local varchar(255)
+  ativo boolean
+}
+
+Table importacao_tecnovigilancia {
+  id uuid [pk]
+  nome_arquivo varchar(255) [not null]
+  sha256 varchar(64) [not null, unique]
+  total_registros integer [not null]
+  ativo boolean
+}
+
+Table desvio {
+  id uuid [pk]
+  material_id uuid [not null, ref: > material.id]
+  fabricante_id uuid [not null, ref: > fabricante.id]
+  marca_id uuid [ref: > marca.id]
+  importacao_id uuid [ref: > importacao_tecnovigilancia.id]
+  data date
+  vigihosp varchar(255)
+  registroanvisa varchar(255)
+  lote varchar(255)
+  validade date
+  formaentrada varchar(255)
+  amostra varchar(255) [note: 'SIM | NAO | FOTO']
+  servico varchar(255)
+  unidade varchar(255)
+  motivo text
+  providencias text
+  tecnicousep varchar(255)
+  desfecho varchar(255)
+  graudano varchar(255) [note: 'AUSENTE | POTENCIAL | LEVE | MODERADO | GRAVE | OBITO']
+  notificacaoanvisa varchar(255)
+  processosei varchar(255)
+  ativo boolean
+}
+
+Table acesso {
+  id uuid [pk]
+  data timestamp [not null]
+  usuario varchar(255) [not null, note: 'e-mail informado no login']
+  tipo varchar(255) [not null, note: 'LOGIN | LOGIN_RECUSADO | LOGOUT']
+}
+
+Table importacaoanvisa {
+  id uuid [pk]
+  sha256 varchar(64) [not null]
+  dt_atualizacao_dado timestamp [not null]
+  importado_em timestamp [not null]
+}
+
+Table anvisa_produto_saude {
+  id uuid [pk]
+  numero_registro_cadastro varchar(255) [not null]
+  numero_processo varchar(255)
+  nome_tecnico text
+  classe_risco varchar(255)
+  nome_comercial text
+  cnpj_detentor_registro_cadastro varchar(255)
+  detentor_registro_cadastro text
+  nome_fabricante text
+  nome_pais_fabric varchar(255)
+  dt_pub_registro_cadastro varchar(255)
+  validade_registro_cadastro varchar(255)
+  dt_atualizacao_dado varchar(255)
+
+  indexes {
+    numero_registro_cadastro
+  }
+}
+
+// =====================================================
+// AUDITORIA (Hibernate Envers)
+// =====================================================
+
+Table revisao {
+  id bigint [pk]
+  data timestamp
+  usuario varchar(255) [note: 'e-mail do usuário logado']
+}
+
+Table usuario_aud {
+  id uuid
+  rev bigint [ref: > revisao.id]
+  revtype smallint [note: '0 = inclusão | 1 = alteração | 2 = exclusão']
+  cpf varchar(11)
+  email varchar(255)
+  nome varchar(255)
+  perfil varchar(255)
+  ativo boolean
+
+  indexes {
+    (id, rev) [pk]
+  }
+}
+
+Table material_aud {
+  id uuid
+  rev bigint [ref: > revisao.id]
+  revtype smallint
+  codigo varchar(255)
+  nome varchar(255)
+  ativo boolean
+
+  indexes {
+    (id, rev) [pk]
+  }
+}
+
+Table fabricante_aud {
+  id uuid
+  rev bigint [ref: > revisao.id]
+  revtype smallint
+  nome varchar(255)
+  ativo boolean
+
+  indexes {
+    (id, rev) [pk]
+  }
+}
+
+Table marca_aud {
+  id uuid
+  rev bigint [ref: > revisao.id]
+  revtype smallint
+  nome varchar(255)
+  ativo boolean
+
+  indexes {
+    (id, rev) [pk]
+  }
+}
+
+Table avaliacao_aud {
+  id uuid
+  rev bigint [ref: > revisao.id]
+  revtype smallint
+  material_id uuid
+  fabricante_id uuid
+  marca_id uuid
+  registroanvisa varchar(255)
+  data date
+  resultado varchar(255)
+  descricao text
+  parecer text
+  local varchar(255)
+  ativo boolean
+
+  indexes {
+    (id, rev) [pk]
+  }
+}
+
+Table desvio_aud {
+  id uuid
+  rev bigint [ref: > revisao.id]
+  revtype smallint
+  material_id uuid
+  fabricante_id uuid
+  marca_id uuid
+  importacao_id uuid
+  data date
+  vigihosp varchar(255)
+  registroanvisa varchar(255)
+  lote varchar(255)
+  validade date
+  formaentrada varchar(255)
+  amostra varchar(255)
+  servico varchar(255)
+  unidade varchar(255)
+  motivo text
+  providencias text
+  tecnicousep varchar(255)
+  desfecho varchar(255)
+  graudano varchar(255)
+  notificacaoanvisa varchar(255)
+  processosei varchar(255)
+  ativo boolean
+
+  indexes {
+    (id, rev) [pk]
+  }
+}
+
+Table importacao_tecnovigilancia_aud {
+  id uuid
+  rev bigint [ref: > revisao.id]
+  revtype smallint
+  nome_arquivo varchar(255)
+  sha256 varchar(64)
+  total_registros integer
+  ativo boolean
+
+  indexes {
+    (id, rev) [pk]
+  }
+}
+
+Table importacaoanvisa_aud {
+  id uuid
+  rev bigint [ref: > revisao.id]
+  revtype smallint
+  dt_atualizacao_dado timestamp
+  importado_em timestamp
+  sha256 varchar(64)
+
+  indexes {
+    (id, rev) [pk]
+  }
+}
+
+TableGroup negocio {
+  usuario
+  material
+  fabricante
+  marca
+  avaliacao
+  desvio
+  importacao_tecnovigilancia
+}
+
+TableGroup anvisa {
+  importacaoanvisa
+  anvisa_produto_saude
+}
+
+TableGroup auditoria {
+  acesso
+  revisao
+  usuario_aud
+  material_aud
+  fabricante_aud
+  marca_aud
+  avaliacao_aud
+  desvio_aud
+  importacao_tecnovigilancia_aud
+  importacaoanvisa_aud
+}

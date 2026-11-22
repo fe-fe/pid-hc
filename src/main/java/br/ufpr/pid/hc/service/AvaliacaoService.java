@@ -69,8 +69,8 @@ public class AvaliacaoService extends AbstractService<Avaliacao, UUID> {
     public Avaliacao registrar(Avaliacao avaliacao, String codigoMaterial, String nomeMaterial,
             String fabricante, String marca) {
         String registroAnvisa = avaliacao.getRegistroAnvisa();
-        if (registroAnvisa != null && !registroAnvisa.isBlank() && !registroAnvisa.matches("[0-9]{11}")) {
-            throw new DomainException("Registro ANVISA deve ter 11 dígitos, só números.");
+        if (registroAnvisa != null && !registroAnvisa.isBlank() && !registroAnvisa.matches("[0-9]{10,11}")) {
+            throw new DomainException("Registro ANVISA deve ter 10 ou 11 dígitos, só números.");
         }
         avaliacao.setMaterial(materialService.obterOuCriar(codigoMaterial, nomeMaterial));
         avaliacao.setFabricante(fabricanteService.obterOuCriar(fabricante));

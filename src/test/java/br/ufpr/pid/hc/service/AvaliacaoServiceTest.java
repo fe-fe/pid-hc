@@ -43,7 +43,7 @@ class AvaliacaoServiceTest {
         DomainException erro = assertThrows(DomainException.class,
                 () -> service.registrar(avaliacao, "M1", "MATERIAL", "FABRICANTE", null));
 
-        assertEquals("Registro ANVISA deve ter 11 dígitos, só números.", erro.getMessage());
+        assertEquals("Registro ANVISA deve ter 10 ou 11 dígitos, só números.", erro.getMessage());
         verifyNoInteractions(materialService, fabricanteService);
         verify(avaliacaoDao, never()).salvar(any());
     }
@@ -55,6 +55,15 @@ class AvaliacaoServiceTest {
         when(avaliacaoDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
 
         assertEquals("80102510123", service.registrar(avaliacao, "M1", "MATERIAL", "FABRICANTE", null).getRegistroAnvisa());
+    }
+
+    @Test
+    void registroDezDigitos() {
+        Avaliacao avaliacao = new Avaliacao();
+        avaliacao.setRegistroAnvisa("8003400112");
+        when(avaliacaoDao.salvar(any())).thenAnswer(chamada -> chamada.getArgument(0));
+
+        assertEquals("8003400112", service.registrar(avaliacao, "M1", "MATERIAL", "FABRICANTE", null).getRegistroAnvisa());
     }
 
     @Test

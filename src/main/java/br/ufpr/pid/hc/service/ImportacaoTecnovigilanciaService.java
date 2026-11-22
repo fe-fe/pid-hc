@@ -81,7 +81,7 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
     private static final DateTimeFormatter LEITURA_DATA = DateTimeFormatter.ofPattern("d/M/uuuu")
             .withResolverStyle(ResolverStyle.STRICT);
     private static final DateTimeFormatter FORMATO_DATA_HORA = DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm");
-    private static final Pattern REGISTRO_ANVISA_VALIDO = Pattern.compile("\\d{11}");
+    private static final Pattern REGISTRO_ANVISA_VALIDO = Pattern.compile("\\d{10,11}");
     private static final Pattern PROCESSO_SEI_VALIDO = Pattern.compile("\\d{5}\\.\\d{6}/\\d{4}-\\d{2}");
 
     @Inject
@@ -368,7 +368,7 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
             String fabricante = texto(FABRICANTE);
             String marca = texto(MARCA);
             desvio.setRegistroAnvisa(formato(REGISTRO_ANVISA, REGISTRO_ANVISA_VALIDO,
-                    "Registro ANVISA deve ter 11 dígitos, só números"));
+                    "Registro ANVISA deve ter 10 ou 11 dígitos, só números"));
             desvio.setLote(texto(LOTE));
             desvio.setValidade(data(VALIDADE));
             desvio.setFormaEntrada(texto(FORMA_ENTRADA));
@@ -589,7 +589,7 @@ public class ImportacaoTecnovigilanciaService extends AbstractService<Importacao
     private DataValidationConstraint restricao(XSSFDataValidationHelper ajudante, ColunaTecnovigilancia coluna,
             String faixaDaLista) {
         return switch (coluna) {
-            case REGISTRO_ANVISA -> ajudante.createTextLengthConstraint(OperatorType.EQUAL, "11", null);
+            case REGISTRO_ANVISA -> ajudante.createTextLengthConstraint(OperatorType.BETWEEN, "10", "11");
             case PROCESSO_SEI -> ajudante.createTextLengthConstraint(OperatorType.EQUAL, "20", null);
             default -> switch (coluna.getTipo()) {
                 case LISTA -> ajudante.createFormulaListConstraint(faixaDaLista);
