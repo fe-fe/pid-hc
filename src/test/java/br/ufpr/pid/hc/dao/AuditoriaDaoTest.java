@@ -5,12 +5,18 @@ import br.ufpr.pid.hc.config.Migracoes;
 import br.ufpr.pid.hc.dto.Alteracao;
 import br.ufpr.pid.hc.dto.EventoAuditoria;
 import br.ufpr.pid.hc.dto.FiltroAuditoria;
+import br.ufpr.pid.hc.entity.Acesso;
 import br.ufpr.pid.hc.entity.Avaliacao;
+import br.ufpr.pid.hc.entity.Desvio;
 import br.ufpr.pid.hc.entity.Fabricante;
 import br.ufpr.pid.hc.entity.ImportacaoAnvisa;
 import br.ufpr.pid.hc.entity.ImportacaoTecnovigilancia;
+import br.ufpr.pid.hc.entity.Marca;
 import br.ufpr.pid.hc.entity.Material;
+import br.ufpr.pid.hc.entity.Usuario;
+import br.ufpr.pid.hc.enumeration.Perfil;
 import br.ufpr.pid.hc.enumeration.ResultadoTecnico;
+import br.ufpr.pid.hc.enumeration.TipoAcesso;
 import br.ufpr.pid.hc.enumeration.TipoEvento;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -38,6 +44,10 @@ class AuditoriaDaoTest {
     private static SessionFactory hibernate;
     private static AuditoriaDao dao;
     private static UUID avaliacao;
+    private static UUID material;
+    private static UUID fabricante;
+    private static UUID desvio;
+    private static UUID usuario;
 
     @BeforeAll
     static void registrarEventos() throws Exception {
@@ -59,6 +69,8 @@ class AuditoriaDaoTest {
             sessao.persist(fabricante);
             sessao.persist(nova);
             avaliacao = nova.getId();
+            AuditoriaDaoTest.material = material.getId();
+            AuditoriaDaoTest.fabricante = fabricante.getId();
         });
         hibernate.inTransaction(sessao -> {
             Avaliacao editada = sessao.find(Avaliacao.class, avaliacao);
@@ -71,6 +83,15 @@ class AuditoriaDaoTest {
             importacao.setSha256("abc");
             importacao.setTotalRegistros(2);
             sessao.persist(importacao);
+            Marca marca = new Marca();
+            marca.setNome("MARCA DA PLANILHA");
+            sessao.persist(marca);
+            Desvio novo = new Desvio();
+            novo.setMaterial(sessao.find(Material.class, material));
+            novo.setFabricante(sessao.find(Fabricante.class, fabricante));
+            novo.setVigihosp("123");
+            sessao.persist(novo);
+            desvio = novo.getId();
         });
         hibernate.inTransaction(sessao -> {
             ImportacaoAnvisa anvisa = new ImportacaoAnvisa();
@@ -78,6 +99,24 @@ class AuditoriaDaoTest {
             anvisa.setDtAtualizacaoDado(LocalDateTime.of(2026, 11, 3, 8, 0));
             anvisa.setImportadoEm(LocalDateTime.now());
             sessao.persist(anvisa);
+        });
+        hibernate.inTransaction(sessao -> {
+            Usuario ana = new Usuario();
+            ana.setNome("Ana");
+            ana.setEmail("ana@hc.br");
+            ana.setSenha("senha");
+            ana.setPerfil(Perfil.ANALISTA);
+            sessao.persist(ana);
+            usuario = ana.getId();
+        });
+        hibernate.inTransaction(sessao -> sessao.find(Usuario.class, usuario).setAtivo(false));
+        hibernate.inTransaction(sessao -> sessao.find(Desvio.class, desvio).setLote("L1"));
+        hibernate.inTransaction(sessao -> {
+            Acesso login = new Acesso();
+            login.setData(LocalDateTime.now().plusSeconds(1));
+            login.setUsuario("ana@hc.br");
+            login.setTipo(TipoAcesso.LOGIN);
+            sessao.persist(login);
         });
         hibernate.inTransaction(sessao -> sessao.createNativeMutationQuery(
                 "UPDATE revisao SET usuario = 'ana@hc.br' WHERE id = (SELECT min(rev) FROM importacao_tecnovigilancia_aud)")
@@ -98,21 +137,32 @@ class AuditoriaDaoTest {
     void todos() {
         List<EventoAuditoria> eventos = dao.buscar(FiltroAuditoria.VAZIO, 0, 15);
 
-        assertEquals(List.of(TipoEvento.ANVISA, TipoEvento.PLANILHA, TipoEvento.AVALIACAO_EDITADA, TipoEvento.AVALIACAO_CRIADA),
-                eventos.stream().map(EventoAuditoria::getTipo).toList());
-        assertEquals(4, dao.contar(FiltroAuditoria.VAZIO));
-        assertEquals("Base de produtos de 03/11/2026", eventos.get(0).getDescricao());
-        assertEquals("Sistema", eventos.get(0).getAutor());
-        assertEquals("desvios.xlsx · 2 desvios", eventos.get(1).getDescricao());
-        assertEquals("ana@hc.br", eventos.get(1).getAutor());
-        assertEquals("777 — Gaze", eventos.get(3).getDescricao());
+        assertEquals(List.of(TipoEvento.LOGIN, TipoEvento.DESVIO_EDITADO, TipoEvento.USUARIO_DESATIVADO,
+                        TipoEvento.USUARIO_CRIADO, TipoEvento.ANVISA, TipoEvento.PLANILHA, TipoEvento.AVALIACAO_EDITADA),
+                eventos.stream().limit(7).map(EventoAuditoria::getTipo).toList());
+        assertEquals(10, dao.contar(FiltroAuditoria.VAZIO));
+        assertEquals("Ana", eventos.get(0).getAutor());
+        assertEquals("VigiHosp 123 — material 777", eventos.get(1).getDescricao());
+        assertEquals("Ana — ana@hc.br", eventos.get(2).getDescricao());
+        assertEquals("Base de produtos de 03/11/2026", eventos.get(4).getDescricao());
+        assertEquals("Sistema", eventos.get(4).getAutor());
+        assertEquals("desvios.xlsx · 2 desvios", eventos.get(5).getDescricao());
+        assertEquals("Ana", eventos.get(5).getAutor());
+    }
+
+    @Test
+    void cadastros() {
+        List<String> descricoes = dao.buscar(new FiltroAuditoria(TipoEvento.CADASTRO_CRIADO, null, null, null), 0, 15)
+                .stream().map(EventoAuditoria::getDescricao).sorted().toList();
+
+        assertEquals(List.of("Fabricante: FAB", "Material: 777 — Gaze"), descricoes);
     }
 
     @Test
     void filtros() {
         assertEquals(1, dao.contar(new FiltroAuditoria(TipoEvento.AVALIACAO_EDITADA, null, null, null)));
-        assertEquals(1, dao.contar(new FiltroAuditoria(null, "ana@hc.br", null, null)));
-        assertEquals(4, dao.contar(new FiltroAuditoria(null, null, LocalDate.now(), LocalDate.now())));
+        assertEquals(2, dao.contar(new FiltroAuditoria(null, "ana@hc.br", null, null)));
+        assertEquals(10, dao.contar(new FiltroAuditoria(null, null, LocalDate.now(), LocalDate.now())));
         assertEquals(0, dao.contar(new FiltroAuditoria(null, null, null, LocalDate.now().minusDays(1))));
     }
 

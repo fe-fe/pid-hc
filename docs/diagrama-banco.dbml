@@ -1,5 +1,5 @@
 // Diagrama do banco de dados - PID-HC
-// Gerado a partir das migrations Flyway (V1, V2, V3) em src/main/resources/db/migration
+// Gerado a partir das migrations Flyway (V1 a V5) em src/main/resources/db/migration
 // Cole em https://dbdiagram.io
 
 // =====================================================
@@ -82,6 +82,13 @@ Table desvio {
   ativo boolean
 }
 
+Table acesso {
+  id uuid [pk]
+  data timestamp [not null]
+  usuario varchar(255) [not null, note: 'e-mail informado no login']
+  tipo varchar(255) [not null, note: 'LOGIN | LOGIN_RECUSADO | LOGOUT']
+}
+
 Table importacaoanvisa {
   id uuid [pk]
   sha256 varchar(64) [not null]
@@ -127,6 +134,7 @@ Table usuario_aud {
   email varchar(255)
   nome varchar(255)
   perfil varchar(255)
+  ativo boolean
 
   indexes {
     (id, rev) [pk]
@@ -139,6 +147,7 @@ Table material_aud {
   revtype smallint
   codigo varchar(255)
   nome varchar(255)
+  ativo boolean
 
   indexes {
     (id, rev) [pk]
@@ -150,6 +159,7 @@ Table fabricante_aud {
   rev bigint [ref: > revisao.id]
   revtype smallint
   nome varchar(255)
+  ativo boolean
 
   indexes {
     (id, rev) [pk]
@@ -161,6 +171,7 @@ Table marca_aud {
   rev bigint [ref: > revisao.id]
   revtype smallint
   nome varchar(255)
+  ativo boolean
 
   indexes {
     (id, rev) [pk]
@@ -180,6 +191,7 @@ Table avaliacao_aud {
   descricao text
   parecer text
   local varchar(255)
+  ativo boolean
 
   indexes {
     (id, rev) [pk]
@@ -210,6 +222,7 @@ Table desvio_aud {
   graudano varchar(255)
   notificacaoanvisa varchar(255)
   processosei varchar(255)
+  ativo boolean
 
   indexes {
     (id, rev) [pk]
@@ -223,6 +236,7 @@ Table importacao_tecnovigilancia_aud {
   nome_arquivo varchar(255)
   sha256 varchar(64)
   total_registros integer
+  ativo boolean
 
   indexes {
     (id, rev) [pk]
@@ -258,6 +272,7 @@ TableGroup anvisa {
 }
 
 TableGroup auditoria {
+  acesso
   revisao
   usuario_aud
   material_aud

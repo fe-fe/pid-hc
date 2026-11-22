@@ -1,6 +1,8 @@
 package br.ufpr.pid.hc.bean;
 
 import br.ufpr.pid.hc.entity.Usuario;
+import br.ufpr.pid.hc.enumeration.TipoAcesso;
+import br.ufpr.pid.hc.service.AcessoService;
 import br.ufpr.pid.hc.service.UsuarioService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
@@ -44,6 +46,9 @@ public class LoginBean {
     @Inject
     private UsuarioService usuarioService;
 
+    @Inject
+    private AcessoService acessoService;
+
     // chamado via f:viewAction na tela de login (só em GET); num @PostConstruct o redirect disparava também no logout
     public String redirecionarSeAutenticado() {
         if (session.isAutenticado()) {
@@ -76,6 +81,7 @@ public class LoginBean {
         }
 
         if (status != AuthenticationStatus.SUCCESS) {
+            acessoService.registrar(email, TipoAcesso.LOGIN_RECUSADO);
             String mensagem = isUsuarioDesativado()
                     ? "Usuário desativado. Procure um administrador"
                     : "Email ou senha inválidos";
@@ -84,6 +90,7 @@ public class LoginBean {
             return null;
         }
 
+        acessoService.registrar(email, TipoAcesso.LOGIN);
         return session.getPaginaInicial() + "?faces-redirect=true";
     }
 
@@ -98,6 +105,9 @@ public class LoginBean {
                 FacesContext.getCurrentInstance()
                         .getExternalContext()
                         .getRequest();
+        if (request.getUserPrincipal() != null) {
+            acessoService.registrar(request.getUserPrincipal().getName(), TipoAcesso.LOGOUT);
+        }
         request.logout();
         return "/pages/auth/login?faces-redirect=true";
     }

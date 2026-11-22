@@ -37,7 +37,30 @@ public class AuditoriaDao {
                    a.id, m.codigo, m.nome, NULL
             FROM avaliacao_aud a JOIN revisao r ON r.id = a.rev LEFT JOIN material m ON m.id = a.material_id
             WHERE a.revtype IN (0, 1)
-            """;
+            UNION ALL
+            SELECT 0, a.data, a.usuario, a.tipo, a.id, NULL, NULL, NULL
+            FROM acesso a
+            UNION ALL
+            SELECT r.id, r.data, r.usuario, 'USUARIO_' || v.situacao, v.id, v.nome, v.email, NULL
+            FROM (%s) v JOIN revisao r ON r.id = v.rev
+            UNION ALL
+            SELECT r.id, r.data, r.usuario, 'CADASTRO_' || v.situacao, v.id, 'Material', v.codigo || ' — ' || v.nome, NULL
+            FROM (%s) v JOIN revisao r ON r.id = v.rev
+            WHERE NOT EXISTS (SELECT 1 FROM importacao_tecnovigilancia_aud i WHERE i.rev = v.rev)
+            UNION ALL
+            SELECT r.id, r.data, r.usuario, 'CADASTRO_' || v.situacao, v.id, 'Fabricante', v.nome, NULL
+            FROM (%s) v JOIN revisao r ON r.id = v.rev
+            WHERE NOT EXISTS (SELECT 1 FROM importacao_tecnovigilancia_aud i WHERE i.rev = v.rev)
+            UNION ALL
+            SELECT r.id, r.data, r.usuario, 'CADASTRO_' || v.situacao, v.id, 'Marca', v.nome, NULL
+            FROM (%s) v JOIN revisao r ON r.id = v.rev
+            WHERE NOT EXISTS (SELECT 1 FROM importacao_tecnovigilancia_aud i WHERE i.rev = v.rev)
+            UNION ALL
+            SELECT r.id, r.data, r.usuario, 'DESVIO_EDITADO', d.id, d.vigihosp, m.codigo, NULL
+            FROM desvio_aud d JOIN revisao r ON r.id = d.rev LEFT JOIN material m ON m.id = d.material_id
+            WHERE d.revtype = 1
+            """.formatted(versoes("usuario_aud"), versoes("material_aud"), versoes("fabricante_aud"),
+            versoes("marca_aud"));
 
     private static final String VERSOES_AVALIACAO = """
             SELECT to_char(a.data, 'DD/MM/YYYY'), a.resultado, a.local, a.registroanvisa, a.descricao, a.parecer,
@@ -107,6 +130,20 @@ public class AuditoriaDao {
         return entityManager.createQuery("SELECT u FROM Usuario u ORDER BY u.nome", Usuario.class).getResultList();
     }
 
+    private static String versoes(String tabela) {
+        return """
+                SELECT *, CASE
+                        WHEN revtype = 0 THEN 'CRIADO'
+                        WHEN anterior AND NOT atual THEN 'DESATIVADO'
+                        WHEN atual AND NOT anterior THEN 'REATIVADO'
+                        ELSE 'EDITADO' END AS situacao
+                FROM (SELECT t.*, COALESCE(t.ativo, true) AS atual,
+                             COALESCE(LAG(t.ativo) OVER (PARTITION BY t.id ORDER BY t.rev), true) AS anterior
+                      FROM %s t) x
+                WHERE revtype IN (0, 1)
+                """.formatted(tabela);
+    }
+
     private static String condicoes(FiltroAuditoria filtro) {
         List<String> condicoes = new ArrayList<>();
         if (filtro.tipo() != null) {
@@ -159,6 +196,12 @@ public class AuditoriaDao {
             case PLANILHA -> texto + " · " + quantidade + (quantidade != null && quantidade.intValue() == 1 ? " desvio" : " desvios");
             case ANVISA -> texto == null ? "Base de produtos atualizada" : "Base de produtos de " + texto;
             case AVALIACAO_CRIADA, AVALIACAO_EDITADA -> texto == null ? "Material removido" : texto + " — " + complemento;
+            case LOGIN -> "Entrou no sistema";
+            case LOGIN_RECUSADO -> "E-mail ou senha inválidos, ou usuário desativado";
+            case LOGOUT -> "Saiu do sistema";
+            case USUARIO_CRIADO, USUARIO_EDITADO, USUARIO_DESATIVADO, USUARIO_REATIVADO -> texto + " — " + complemento;
+            case CADASTRO_CRIADO, CADASTRO_EDITADO, CADASTRO_DESATIVADO, CADASTRO_REATIVADO -> texto + ": " + complemento;
+            case DESVIO_EDITADO -> "VigiHosp " + texto + (complemento == null ? "" : " — material " + complemento);
         };
     }
 

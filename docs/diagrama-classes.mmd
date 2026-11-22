@@ -19,6 +19,7 @@ classDiagram
 
     class Auditavel {
         <<abstract>>
+        <<Audited>>
         -Boolean ativo
         #onCreate() void
         +isInativo() boolean
@@ -133,6 +134,14 @@ classDiagram
         +ProdutoAnvisa()
     }
 
+    class Acesso {
+        -UUID id
+        -LocalDateTime data
+        -String usuario
+        -TipoAcesso tipo
+        +Acesso()
+    }
+
     class Revisao {
         <<RevisionEntity>>
         -Long id
@@ -155,6 +164,13 @@ classDiagram
         <<enumeration>>
         ADMINISTRADOR
         ANALISTA
+    }
+
+    class TipoAcesso {
+        <<enumeration>>
+        LOGIN
+        LOGIN_RECUSADO
+        LOGOUT
     }
 
     class ResultadoTecnico {
@@ -220,6 +236,7 @@ classDiagram
     Desvio "*" --> "0..1" ImportacaoTecnovigilancia
 
     Usuario ..> Perfil
+    Acesso ..> TipoAcesso
     Avaliacao ..> ResultadoTecnico
     Desvio ..> EnvioAmostra
     Desvio ..> GrauDano
