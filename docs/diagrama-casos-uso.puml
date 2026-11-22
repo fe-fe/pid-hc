@@ -3,47 +3,78 @@ left to right direction
 skinparam monochrome true
 skinparam shadowing false
 skinparam actorStyle stick
+skinparam packageStyle rectangle
+skinparam dpi 200
 
 actor "Analista" as Analista
 actor "Administrador" as Admin
+actor "Agendador" as Agendador
 
 Admin --|> Analista
 
-rectangle "Sistema PID-HC" {
-  usecase "Fazer login" as UC02
-  usecase "Visualizar dashboard" as UC03
-  usecase "Gerenciar materiais" as UC05
-  usecase "Gerenciar fabricantes" as UC06
-  usecase "Gerenciar marcas" as UC07
-  usecase "Registrar avaliação técnica" as UC08
-  usecase "Gerenciar desvios de qualidade" as UC10
-  usecase "Consultar tecnovigilância" as UC11
-  usecase "Importar planilha de tecnovigilância" as UC12
-  usecase "Baixar modelo da planilha" as UC13
-  usecase "Consultar histórico do material" as UC14
-  usecase "Consultar produtos ANVISA" as UC15
-  usecase "Atualizar base ANVISA" as UC16
-  usecase "Realizar primeiro acesso" as UC01
-  usecase "Gerenciar usuários" as UC04
-  usecase "Consultar auditoria" as UC17
+rectangle "Módulo PID" {
+  package "Acesso" {
+    usecase "HU01 – Fazer login" as Login
+    usecase "HU02 – Encerrar sessão" as Sair
+    usecase "HU03 – Realizar primeiro acesso" as PrimeiroAcesso
+  }
+  package "Usuários e auditoria" {
+    usecase "HU04 – Gerenciar usuários" as Usuarios
+    usecase "HU05 – Atribuir perfil de acesso" as Perfil
+    usecase "HU06 – Consultar auditoria" as Auditoria
+  }
+  package "Cadastros" {
+    usecase "HU07 – Gerenciar materiais" as Materiais
+    usecase "HU08 – Gerenciar fabricantes" as Fabricantes
+    usecase "HU09 – Gerenciar marcas" as Marcas
+  }
+  package "Avaliação" {
+    usecase "HU10 – Registrar avaliação técnica" as Registrar
+    usecase "HU11 – Consultar avaliações" as Avaliacoes
+    usecase "HU12 – Editar avaliação" as EditarAvaliacao
+    usecase "HU13 – Sugerir fabricante e marca\npelo registro ANVISA" as Sugerir
+  }
+  package "Consultas de material" {
+    usecase "HU14 – Visualizar dashboard" as Dashboard
+    usecase "HU15 – Consultar histórico do material" as Historico
+  }
+  package "Tecnovigilância" {
+    usecase "HU16 – Consultar desvios de qualidade" as Desvios
+    usecase "HU17 – Editar desvio de qualidade" as EditarDesvio
+    usecase "HU18 – Importar planilha de tecnovigilância" as Importar
+    usecase "HU19 – Baixar modelo da planilha" as Modelo
+  }
+  package "ANVISA" {
+    usecase "HU20 – Consultar produtos ANVISA" as Produtos
+    usecase "HU21 – Atualizar base ANVISA" as AtualizarAnvisa
+  }
 }
 
-Analista --> UC02
-Analista --> UC03
-Analista --> UC05
-Analista --> UC06
-Analista --> UC07
-Analista --> UC08
-Analista --> UC10
-Analista --> UC11
-Analista --> UC12
-Analista --> UC14
-Analista --> UC15
-Analista --> UC16
+Analista -- Login
+Analista -- Sair
+Analista -- Materiais
+Analista -- Fabricantes
+Analista -- Marcas
+Analista -- Registrar
+Analista -- Avaliacoes
+Analista -- Dashboard
+Analista -- Historico
+Analista -- Desvios
+Analista -- Importar
+Analista -- Modelo
+Analista -- Produtos
+Analista -- AtualizarAnvisa
 
-Admin --> UC01
-Admin --> UC04
-Admin --> UC17
+Admin -- PrimeiroAcesso
+Admin -- Usuarios
+Admin -- Auditoria
 
-UC13 .> UC12 : <<extend>>
+Agendador -- AtualizarAnvisa
+
+Usuarios ..> Perfil : <<include>>
+Avaliacoes <.. EditarAvaliacao : <<extend>>
+Registrar <.. Sugerir : <<extend>>
+EditarAvaliacao <.. Sugerir : <<extend>>
+Desvios <.. EditarDesvio : <<extend>>
+
 @enduml

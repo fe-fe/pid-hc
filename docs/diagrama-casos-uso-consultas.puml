@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+skinparam monochrome true
+skinparam shadowing false
+skinparam actorStyle stick
+skinparam packageStyle rectangle
+skinparam dpi 200
+
+actor "Analista" as Analista
+
+rectangle "Consultas de material" {
+  usecase "HU14 – Visualizar dashboard" as Dashboard
+  usecase "HU15 – Consultar histórico do material" as Historico
+}
+
+Analista -- Dashboard
+Analista -- Historico
+@enduml

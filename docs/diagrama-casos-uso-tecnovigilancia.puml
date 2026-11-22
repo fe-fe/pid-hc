@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+skinparam monochrome true
+skinparam shadowing false
+skinparam actorStyle stick
+skinparam packageStyle rectangle
+skinparam dpi 200
+
+actor "Analista" as Analista
+
+rectangle "Tecnovigilância" {
+  usecase "HU16 – Consultar desvios de qualidade" as Desvios
+  usecase "HU17 – Editar desvio de qualidade" as EditarDesvio
+  usecase "HU18 – Importar planilha de tecnovigilância" as Importar
+  usecase "HU19 – Baixar modelo da planilha" as Modelo
+}
+
+Analista -- Desvios
+Analista -- Importar
+Analista -- Modelo
+Desvios <.. EditarDesvio : <<extend>>
+@enduml

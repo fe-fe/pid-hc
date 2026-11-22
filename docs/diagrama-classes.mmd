@@ -18,8 +18,7 @@ classDiagram
     direction TB
 
     class Auditavel {
-        <<abstract>>
-        <<Audited>>
+        <<MappedSuperclass>>
         -Boolean ativo
         #onCreate() void
         +isInativo() boolean

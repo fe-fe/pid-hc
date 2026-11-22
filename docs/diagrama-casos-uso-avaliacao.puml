@@ -1,0 +1,23 @@
+@startuml
+left to right direction
+skinparam monochrome true
+skinparam shadowing false
+skinparam actorStyle stick
+skinparam packageStyle rectangle
+skinparam dpi 200
+
+actor "Analista" as Analista
+
+rectangle "Avaliação" {
+  usecase "HU10 – Registrar avaliação técnica" as Registrar
+  usecase "HU11 – Consultar avaliações" as Avaliacoes
+  usecase "HU12 – Editar avaliação" as EditarAvaliacao
+  usecase "HU13 – Sugerir fabricante e marca\npelo registro ANVISA" as Sugerir
+}
+
+Analista -- Registrar
+Analista -- Avaliacoes
+Avaliacoes <.. EditarAvaliacao : <<extend>>
+Registrar <.. Sugerir : <<extend>>
+EditarAvaliacao <.. Sugerir : <<extend>>
+@enduml
