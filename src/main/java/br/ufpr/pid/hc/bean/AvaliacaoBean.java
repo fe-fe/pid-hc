@@ -26,6 +26,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Named
@@ -80,6 +81,9 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     private LocalDate dataFim;
     private LocalDate dataInicioFiltrada;
     private LocalDate dataFimFiltrada;
+    private boolean somenteVencidas;
+    private boolean vencidasFiltradas;
+    private Set<UUID> vencidas = Set.of();
 
     public AvaliacaoBean() {
         super(15, AvaliacaoOrdenacao.MATERIAL);
@@ -193,7 +197,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
 
     public boolean isFiltroAtivo() {
         return codigoFiltrado != null || materialFiltrado != null || fabricantesFiltrados != null || marcasFiltradas != null
-                || dataInicioFiltrada != null || dataFimFiltrada != null;
+                || dataInicioFiltrada != null || dataFimFiltrada != null || vencidasFiltradas;
     }
 
     public void pesquisarPorCodigo() {
@@ -276,6 +280,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         marcasFiltradas = marcasSelecionadas.isEmpty()
                 ? null
                 : marcasSelecionadas.stream().map(Marca::getId).toList();
+        vencidasFiltradas = somenteVencidas;
         reordenar();
         Bootstrap.fecharOffcanvas("avaliacoesFilters");
     }
@@ -297,6 +302,8 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
         marcasEncontradas = List.of();
         marcasSelecionadas = new ArrayList<>();
         marcasFiltradas = null;
+        somenteVencidas = false;
+        vencidasFiltradas = false;
         reordenar();
     }
 
@@ -304,7 +311,7 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     protected long contarRegistros() {
         return isFiltroAtivo()
                 ? avaliacaoService.contarComFiltros(materialFiltrado, fabricantesFiltrados,
-                        dataInicioFiltrada, dataFimFiltrada, codigoFiltrado, marcasFiltradas)
+                        dataInicioFiltrada, dataFimFiltrada, codigoFiltrado, marcasFiltradas, vencidasFiltradas)
                 : super.contarRegistros();
     }
 
@@ -312,8 +319,19 @@ public class AvaliacaoBean extends AbstractCrudBean<Avaliacao, UUID, AvaliacaoOr
     protected List<Avaliacao> buscarRegistros() {
         return isFiltroAtivo()
                 ? avaliacaoService.buscarComFiltros(paginaAtual, tamanhoPagina, ordenacaoAtual, materialFiltrado,
-                        fabricantesFiltrados, dataInicioFiltrada, dataFimFiltrada, codigoFiltrado, marcasFiltradas)
+                        fabricantesFiltrados, dataInicioFiltrada, dataFimFiltrada, codigoFiltrado, marcasFiltradas,
+                        vencidasFiltradas)
                 : super.buscarRegistros();
+    }
+
+    @Override
+    protected void carregarPagina() {
+        super.carregarPagina();
+        vencidas = avaliacaoService.vencidas(lista);
+    }
+
+    public boolean vencida(Avaliacao avaliacao) {
+        return vencidas.contains(avaliacao.getId());
     }
 
     public void salvar() {

@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Administrador" as U
+boundary "users.xhtml" as V
+control "UsuarioBean" as B
+participant "UsuarioService" as S
+participant "UsuarioDao" as DAO
+database "PostgreSQL" as DB
+
+U -> V : seleciona o perfil de acesso\ne clica em "Salvar"
+V -> B : salvar()
+B -> S : salvar(usuario)
+S -> S : exige perfil preenchido
+S -> DAO : contarAtivosPorPerfil(ADMINISTRADOR)
+DAO -> DB : SELECT count(usuario)
+DB --> S : quantidade
+alt não é o último administrador ativo
+  S -> DAO : salvar(usuario)
+  DAO -> DB : UPDATE usuario
+  B --> V : perfil atualizado
+else último administrador ativo
+  S --> B : LastActiveAdminException
+  B --> V : "Não é possível desativar ou alterar\no perfil do último administrador ativo"
+end
+V --> U : resultado
+@enduml

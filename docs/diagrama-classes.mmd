@@ -18,8 +18,7 @@ classDiagram
     direction TB
 
     class Auditavel {
-        <<abstract>>
-        <<Audited>>
+        <<MappedSuperclass>>
         -Boolean ativo
         #onCreate() void
         +isInativo() boolean
@@ -61,9 +60,6 @@ classDiagram
     class Avaliacao {
         <<Audited>>
         -UUID id
-        -Material material
-        -Fabricante fabricante
-        -Marca marca
         -String registroAnvisa
         -LocalDate data
         -ResultadoTecnico resultado
@@ -76,9 +72,6 @@ classDiagram
     class Desvio {
         <<Audited>>
         -UUID id
-        -Material material
-        -Fabricante fabricante
-        -Marca marca
         -LocalDate data
         -String vigihosp
         -String registroAnvisa
@@ -95,7 +88,6 @@ classDiagram
         -GrauDano grauDano
         -String notificacaoAnvisa
         -String processoSei
-        -ImportacaoTecnovigilancia importacao
         +Desvio()
     }
 
@@ -140,6 +132,13 @@ classDiagram
         -String usuario
         -TipoAcesso tipo
         +Acesso()
+    }
+
+    class Parametro {
+        <<Audited>>
+        -String chave
+        -String valor
+        +Parametro()
     }
 
     class Revisao {
@@ -226,14 +225,14 @@ classDiagram
     RevisionListener <|.. RevisaoListener
     RevisaoListener ..> Revisao : preenche usuario
 
-    Avaliacao "*" --> "1" Material
-    Avaliacao "*" --> "1" Fabricante
-    Avaliacao "*" --> "0..1" Marca
+    Avaliacao "*" --> "1" Material : material
+    Avaliacao "*" --> "1" Fabricante : fabricante
+    Avaliacao "*" --> "0..1" Marca : marca
 
-    Desvio "*" --> "1" Material
-    Desvio "*" --> "1" Fabricante
-    Desvio "*" --> "0..1" Marca
-    Desvio "*" --> "0..1" ImportacaoTecnovigilancia
+    Desvio "*" --> "1" Material : material
+    Desvio "*" --> "1" Fabricante : fabricante
+    Desvio "*" --> "0..1" Marca : marca
+    Desvio "*" --> "0..1" ImportacaoTecnovigilancia : importacao
 
     Usuario ..> Perfil
     Acesso ..> TipoAcesso

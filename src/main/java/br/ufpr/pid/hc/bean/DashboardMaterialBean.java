@@ -8,6 +8,7 @@ import br.ufpr.pid.hc.entity.Fabricante;
 import br.ufpr.pid.hc.entity.Marca;
 import br.ufpr.pid.hc.entity.Material;
 import br.ufpr.pid.hc.enumeration.MaterialOrdenacao;
+import br.ufpr.pid.hc.service.AvaliacaoService;
 import br.ufpr.pid.hc.service.DashboardMaterialService;
 import br.ufpr.pid.hc.service.MaterialService;
 import jakarta.faces.application.FacesMessage;
@@ -24,6 +25,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Named
@@ -39,6 +41,8 @@ public class DashboardMaterialBean implements Serializable, Paginavel {
     private MaterialService materialService;
     @Inject
     private DashboardMaterialService dashboardMaterialService;
+    @Inject
+    private AvaliacaoService avaliacaoService;
 
     private String termo;
     private boolean buscaRealizada;
@@ -54,6 +58,7 @@ public class DashboardMaterialBean implements Serializable, Paginavel {
     private ConsultaMaterialFiltro filtroAplicado;
     private ResumoMaterial resumo = ResumoMaterial.VAZIO;
     private List<Avaliacao> avaliacoes = List.of();
+    private Set<UUID> vencidas = Set.of();
     private List<Desvio> notificacoes = List.of();
     private boolean abaAvaliacoes = true;
     private int pagina;
@@ -145,6 +150,11 @@ public class DashboardMaterialBean implements Serializable, Paginavel {
                 ? dashboardMaterialService.buscarAvaliacoes(filtroAplicado, pagina, TAMANHO_PAGINA) : List.of();
         notificacoes = abaAvaliacoes ? List.of()
                 : dashboardMaterialService.buscarNotificacoes(filtroAplicado, pagina, TAMANHO_PAGINA);
+        vencidas = avaliacaoService.vencidas(avaliacoes);
+    }
+
+    public boolean vencida(Avaliacao avaliacao) {
+        return vencidas.contains(avaliacao.getId());
     }
 
     private UUID identificador(String valor) {

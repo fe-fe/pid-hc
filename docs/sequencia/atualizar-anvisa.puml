@@ -1,0 +1,36 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+actor "Agendador" as A
+boundary "anvisa.xhtml" as V
+control "ProdutoAnvisaBean" as B
+participant "ImportacaoAnvisaService" as S
+participant "Portal de dados\nabertos da ANVISA" as P
+database "PostgreSQL" as DB
+
+alt atualização manual
+  U -> V : clica em "Atualizar"
+  V -> B : atualizar()
+  B -> S : importar()
+else atualização agendada
+  A -> S : importarAgendado()\n(segunda-feira, 3h)
+end
+S -> S : confere o intervalo de 2 horas\ne se já há execução em andamento
+S -> P : baixa o CSV de produtos para a saúde
+P --> S : arquivo
+S -> DB : SELECT última importação (SHA-256)
+alt arquivo novo
+  S -> S : confere o cabeçalho do CSV
+  S -> DB : substitui anvisa_produto_saude\ne registra a importação
+  S --> B : IMPORTADA
+else arquivo igual ao anterior
+  S --> B : SEM_ALTERACAO
+end
+B --> V : mensagem com o resultado
+V --> U : resultado
+@enduml

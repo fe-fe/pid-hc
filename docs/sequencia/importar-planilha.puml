@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "importarPlanilha.xhtml" as V
+control "ImportacaoTecnovigilanciaBean" as B
+participant "ImportacaoTecnovigilanciaService" as S
+database "PostgreSQL" as DB
+
+U -> V : seleciona ou arrasta a planilha\ne clica em "Importar"
+V -> B : importar()
+B -> B : confere extensão .xlsx\ne tamanho até 10 MB
+B -> S : importar(nomeArquivo, conteudo)
+S -> DB : SELECT importação com o mesmo SHA-256
+S -> S : lê a aba de desvios e valida\ncabeçalho, células e linhas
+S -> DB : SELECT VigiHosp já existentes
+alt planilha válida
+  S -> DB : INSERT importacao_tecnovigilancia
+  S -> DB : obtém ou cria material,\nfabricante e marca
+  S -> DB : INSERT desvio (um por linha nova)
+  B --> V : resumo da importação
+else planilha com erros
+  S --> B : PlanilhaInvalidaException(erros)
+  B --> V : lista de erros por linha e coluna
+end
+V --> U : resultado da importação
+@enduml

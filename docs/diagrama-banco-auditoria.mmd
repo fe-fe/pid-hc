@@ -1,0 +1,134 @@
+---
+config:
+  look: classic
+  theme: base
+  themeVariables:
+    primaryColor: '#ffffff'
+    primaryBorderColor: '#000000'
+    primaryTextColor: '#000000'
+    lineColor: '#000000'
+    secondaryColor: '#ffffff'
+    tertiaryColor: '#ffffff'
+    background: '#ffffff'
+    mainBkg: '#ffffff'
+    attributeBackgroundColorOdd: '#ffffff'
+    attributeBackgroundColorEven: '#f4f4f4'
+---
+erDiagram
+    revisao {
+        bigint id PK
+        timestamp data
+        varchar usuario
+    }
+    acesso {
+        uuid id PK
+        timestamp data
+        varchar usuario
+        varchar tipo
+    }
+    usuario_aud {
+        uuid id PK
+        bigint rev PK, FK
+        smallint revtype
+        varchar cpf
+        varchar email
+        varchar nome
+        varchar perfil
+        boolean ativo
+    }
+    material_aud {
+        uuid id PK
+        bigint rev PK, FK
+        smallint revtype
+        varchar codigo
+        varchar nome
+        boolean ativo
+    }
+    fabricante_aud {
+        uuid id PK
+        bigint rev PK, FK
+        smallint revtype
+        varchar nome
+        boolean ativo
+    }
+    marca_aud {
+        uuid id PK
+        bigint rev PK, FK
+        smallint revtype
+        varchar nome
+        boolean ativo
+    }
+    avaliacao_aud {
+        uuid id PK
+        bigint rev PK, FK
+        smallint revtype
+        uuid material_id
+        uuid fabricante_id
+        uuid marca_id
+        varchar registroanvisa
+        date data
+        varchar resultado
+        text descricao
+        text parecer
+        varchar local
+        boolean ativo
+    }
+    desvio_aud {
+        uuid id PK
+        bigint rev PK, FK
+        smallint revtype
+        uuid material_id
+        uuid fabricante_id
+        uuid marca_id
+        uuid importacao_id
+        date data
+        varchar vigihosp
+        varchar registroanvisa
+        varchar lote
+        date validade
+        varchar formaentrada
+        varchar amostra
+        varchar servico
+        varchar unidade
+        text motivo
+        text providencias
+        varchar tecnicousep
+        varchar desfecho
+        varchar graudano
+        varchar notificacaoanvisa
+        varchar processosei
+        boolean ativo
+    }
+    importacao_tecnovigilancia_aud {
+        uuid id PK
+        bigint rev PK, FK
+        smallint revtype
+        varchar nome_arquivo
+        varchar sha256
+        integer total_registros
+        boolean ativo
+    }
+    importacaoanvisa_aud {
+        uuid id PK
+        bigint rev PK, FK
+        smallint revtype
+        timestamp dt_atualizacao_dado
+        timestamp importado_em
+        varchar sha256
+    }
+    parametro_aud {
+        varchar chave PK
+        bigint rev PK, FK
+        smallint revtype
+        varchar valor
+    }
+
+    usuario_aud }o--|| revisao : "rev"
+    material_aud }o--|| revisao : "rev"
+    fabricante_aud }o--|| revisao : "rev"
+    marca_aud }o--|| revisao : "rev"
+    avaliacao_aud }o--|| revisao : "rev"
+    desvio_aud }o--|| revisao : "rev"
+    importacao_tecnovigilancia_aud }o--|| revisao : "rev"
+    importacaoanvisa_aud }o--|| revisao : "rev"
+    parametro_aud }o--|| revisao : "rev"

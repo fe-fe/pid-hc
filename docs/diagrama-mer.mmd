@@ -1,0 +1,30 @@
+---
+config:
+  look: classic
+  theme: base
+  themeVariables:
+    primaryColor: '#ffffff'
+    primaryBorderColor: '#000000'
+    primaryTextColor: '#000000'
+    lineColor: '#000000'
+    secondaryColor: '#ffffff'
+    tertiaryColor: '#ffffff'
+    background: '#ffffff'
+    mainBkg: '#ffffff'
+    attributeBackgroundColorOdd: '#ffffff'
+    attributeBackgroundColorEven: '#f4f4f4'
+---
+erDiagram
+    MATERIAL ||--o{ AVALIACAO : "é avaliado em"
+    FABRICANTE ||--o{ AVALIACAO : "fabrica o produto de"
+    MARCA |o--o{ AVALIACAO : "identifica o produto de"
+    MATERIAL ||--o{ DESVIO : "tem"
+    FABRICANTE ||--o{ DESVIO : "é notificado em"
+    MARCA |o--o{ DESVIO : "é notificada em"
+    IMPORTACAO_TECNOVIGILANCIA |o--o{ DESVIO : "carrega"
+    IMPORTACAO_ANVISA ||--o{ PRODUTO_ANVISA : "atualiza"
+    USUARIO ||--o{ ACESSO : "realiza"
+    PARAMETRO {
+        string chave
+        string valor
+    }

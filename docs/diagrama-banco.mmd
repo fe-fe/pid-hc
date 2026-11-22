@@ -1,0 +1,119 @@
+---
+config:
+  look: classic
+  theme: base
+  themeVariables:
+    primaryColor: '#ffffff'
+    primaryBorderColor: '#000000'
+    primaryTextColor: '#000000'
+    lineColor: '#000000'
+    secondaryColor: '#ffffff'
+    tertiaryColor: '#ffffff'
+    background: '#ffffff'
+    mainBkg: '#ffffff'
+    attributeBackgroundColorOdd: '#ffffff'
+    attributeBackgroundColorEven: '#f4f4f4'
+---
+erDiagram
+    usuario {
+        uuid id PK
+        varchar nome
+        varchar email UK
+        varchar cpf UK
+        varchar senha
+        varchar perfil
+        boolean ativo
+    }
+    material {
+        uuid id PK
+        varchar codigo UK
+        varchar nome
+        boolean ativo
+    }
+    fabricante {
+        uuid id PK
+        varchar nome UK
+        boolean ativo
+    }
+    marca {
+        uuid id PK
+        varchar nome UK
+        boolean ativo
+    }
+    avaliacao {
+        uuid id PK
+        uuid material_id FK
+        uuid fabricante_id FK
+        uuid marca_id FK
+        varchar registroanvisa
+        date data
+        varchar resultado
+        text descricao
+        text parecer
+        varchar local
+        boolean ativo
+    }
+    desvio {
+        uuid id PK
+        uuid material_id FK
+        uuid fabricante_id FK
+        uuid marca_id FK
+        uuid importacao_id FK
+        date data
+        varchar vigihosp
+        varchar registroanvisa
+        varchar lote
+        date validade
+        varchar formaentrada
+        varchar amostra
+        varchar servico
+        varchar unidade
+        text motivo
+        text providencias
+        varchar tecnicousep
+        varchar desfecho
+        varchar graudano
+        varchar notificacaoanvisa
+        varchar processosei
+        boolean ativo
+    }
+    importacao_tecnovigilancia {
+        uuid id PK
+        varchar nome_arquivo
+        varchar sha256 UK
+        integer total_registros
+        boolean ativo
+    }
+    importacaoanvisa {
+        uuid id PK
+        varchar sha256
+        timestamp dt_atualizacao_dado
+        timestamp importado_em
+    }
+    anvisa_produto_saude {
+        uuid id PK
+        varchar numero_registro_cadastro
+        varchar numero_processo
+        text nome_tecnico
+        varchar classe_risco
+        text nome_comercial
+        varchar cnpj_detentor_registro_cadastro
+        text detentor_registro_cadastro
+        text nome_fabricante
+        varchar nome_pais_fabric
+        varchar dt_pub_registro_cadastro
+        varchar validade_registro_cadastro
+        varchar dt_atualizacao_dado
+    }
+    parametro {
+        varchar chave PK
+        varchar valor
+    }
+
+    avaliacao }o--|| material : "material_id"
+    avaliacao }o--|| fabricante : "fabricante_id"
+    avaliacao }o--o| marca : "marca_id"
+    desvio }o--|| material : "material_id"
+    desvio }o--|| fabricante : "fabricante_id"
+    desvio }o--o| marca : "marca_id"
+    desvio }o--o| importacao_tecnovigilancia : "importacao_id"

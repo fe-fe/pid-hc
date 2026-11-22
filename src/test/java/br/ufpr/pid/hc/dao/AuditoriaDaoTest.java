@@ -13,6 +13,7 @@ import br.ufpr.pid.hc.entity.ImportacaoAnvisa;
 import br.ufpr.pid.hc.entity.ImportacaoTecnovigilancia;
 import br.ufpr.pid.hc.entity.Marca;
 import br.ufpr.pid.hc.entity.Material;
+import br.ufpr.pid.hc.entity.Parametro;
 import br.ufpr.pid.hc.entity.Usuario;
 import br.ufpr.pid.hc.enumeration.Perfil;
 import br.ufpr.pid.hc.enumeration.ResultadoTecnico;
@@ -53,6 +54,13 @@ class AuditoriaDaoTest {
     static void registrarEventos() throws Exception {
         Migracoes.flyway(BancoDeTeste.dataSource(POSTGRES)).migrate();
         hibernate = BancoDeTeste.hibernate(POSTGRES, Map.of("hibernate.hbm2ddl.auto", "validate"));
+
+        hibernate.inTransaction(sessao -> {
+            Parametro validade = new Parametro();
+            validade.setChave(Parametro.VALIDADE);
+            validade.setValor("36");
+            sessao.persist(validade);
+        });
 
         hibernate.inTransaction(sessao -> {
             Material material = new Material();
@@ -140,7 +148,7 @@ class AuditoriaDaoTest {
         assertEquals(List.of(TipoEvento.LOGIN, TipoEvento.DESVIO_EDITADO, TipoEvento.USUARIO_DESATIVADO,
                         TipoEvento.USUARIO_CRIADO, TipoEvento.ANVISA, TipoEvento.PLANILHA, TipoEvento.AVALIACAO_EDITADA),
                 eventos.stream().limit(7).map(EventoAuditoria::getTipo).toList());
-        assertEquals(10, dao.contar(FiltroAuditoria.VAZIO));
+        assertEquals(11, dao.contar(FiltroAuditoria.VAZIO));
         assertEquals("Ana", eventos.get(0).getAutor());
         assertEquals("VigiHosp 123 — material 777", eventos.get(1).getDescricao());
         assertEquals("Ana — ana@hc.br", eventos.get(2).getDescricao());
@@ -159,10 +167,18 @@ class AuditoriaDaoTest {
     }
 
     @Test
+    void configuracao() {
+        List<EventoAuditoria> eventos = dao.buscar(new FiltroAuditoria(TipoEvento.CONFIGURACAO, null, null, null), 0, 15);
+
+        assertEquals(1, eventos.size());
+        assertEquals("Prazo de validade das avaliações: 36 meses", eventos.get(0).getDescricao());
+    }
+
+    @Test
     void filtros() {
         assertEquals(1, dao.contar(new FiltroAuditoria(TipoEvento.AVALIACAO_EDITADA, null, null, null)));
         assertEquals(2, dao.contar(new FiltroAuditoria(null, "ana@hc.br", null, null)));
-        assertEquals(10, dao.contar(new FiltroAuditoria(null, null, LocalDate.now(), LocalDate.now())));
+        assertEquals(11, dao.contar(new FiltroAuditoria(null, null, LocalDate.now(), LocalDate.now())));
         assertEquals(0, dao.contar(new FiltroAuditoria(null, null, null, LocalDate.now().minusDays(1))));
     }
 

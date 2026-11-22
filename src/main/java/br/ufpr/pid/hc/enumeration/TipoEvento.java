@@ -18,6 +18,7 @@ public enum TipoEvento {
     PLANILHA("Importação de planilha", "text-bg-primary"),
     DESVIO_EDITADO("Desvio editado", "text-bg-warning"),
     ANVISA("Atualização da ANVISA", "text-bg-info"),
+    CONFIGURACAO("Configuração alterada", "text-bg-info"),
     AVALIACAO_CRIADA("Avaliação criada", "text-bg-success"),
     AVALIACAO_EDITADA("Avaliação editada", "text-bg-warning");
 

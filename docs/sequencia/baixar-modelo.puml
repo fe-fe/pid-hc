@@ -1,0 +1,25 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "importarPlanilha.xhtml" as V
+control "ImportacaoTecnovigilanciaBean" as B
+participant "ImportacaoTecnovigilanciaService" as S
+participant "FabricanteService" as F
+database "PostgreSQL" as DB
+
+U -> V : clica para baixar o modelo
+V -> B : baixarModelo()
+B -> S : gerarModelo()
+S -> DB : SELECT material (ativos)
+S -> F : listarNomes()
+F -> DB : SELECT fabricante
+S -> S : monta as abas Desvios,\nInstruções e Listas
+S --> B : planilha .xlsx
+B --> V : download do arquivo
+V --> U : modelo da planilha
+@enduml

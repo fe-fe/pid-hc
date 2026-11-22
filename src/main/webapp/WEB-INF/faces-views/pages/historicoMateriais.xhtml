@@ -100,6 +100,8 @@
 
                                             <h:outputText value="#{avaliacao.resultado.rotulo}"
                                                 styleClass="badge rounded-pill #{avaliacao.resultado.aprovado ? 'text-bg-success' : 'text-bg-danger'}" />
+                                            <h:outputText value="Vencida" rendered="#{consultaMaterialBean.vencida(avaliacao)}"
+                                                styleClass="badge rounded-pill text-bg-warning ms-1" />
                                         </h:column>
 
                                         <h:column>

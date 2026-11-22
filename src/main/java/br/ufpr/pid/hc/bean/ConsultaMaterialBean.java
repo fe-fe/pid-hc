@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,6 +40,7 @@ public class ConsultaMaterialBean implements Serializable {
     private Material material;
 
     private List<Avaliacao> avaliacoes = List.of();
+    private Set<UUID> vencidas = Set.of();
 
     private String termoFabricante;
     private List<Fabricante> fabricantesEncontrados = List.of();
@@ -53,6 +55,11 @@ public class ConsultaMaterialBean implements Serializable {
         material = materialService.buscarPorCodigo(codigo).orElse(null);
 
         avaliacoes = material == null ? List.of() : avaliacaoService.buscarAvaliacoesPorMaterial(codigo);
+        vencidas = avaliacaoService.vencidas(avaliacoes);
+    }
+
+    public boolean vencida(Avaliacao avaliacao) {
+        return vencidas.contains(avaliacao.getId());
     }
 
     public Map<String, List<Avaliacao>> getAvaliacoesPorMarca() {

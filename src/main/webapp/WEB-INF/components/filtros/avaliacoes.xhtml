@@ -149,6 +149,12 @@
                     </div>
                 </div>
 
+                <div class="form-check">
+                    <h:selectBooleanCheckbox id="somenteVencidas" styleClass="form-check-input"
+                                             value="#{avaliacaoBean.somenteVencidas}" />
+                    <h:outputLabel for="somenteVencidas" value="Somente vencidas" styleClass="form-check-label" />
+                </div>
+
                 <div class="filters-panel__actions d-flex justify-content-end gap-2 mt-auto">
                     <h:commandButton value="Limpar" styleClass="btn btn-outline-secondary"
                                      action="#{avaliacaoBean.limparFiltros}">

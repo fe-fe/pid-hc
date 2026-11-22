@@ -1,0 +1,42 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Usuário" as U
+boundary "login.xhtml" as V
+control "LoginBean" as B
+participant "SecurityContext" as S
+participant "UserIdentityStore" as I
+participant "UsuarioService" as US
+participant "AcessoService" as AS
+database "PostgreSQL" as DB
+
+U -> V : informa e-mail e senha\ne clica em "Entrar"
+V -> B : login()
+B -> S : authenticate(credenciais)
+S -> I : validate(credencial)
+I -> US : buscarPorEmail(email)
+US -> DB : SELECT usuario
+DB --> US : usuário
+US --> I : usuário
+I -> I : confere ativo e senha (PBKDF2)
+
+alt credenciais válidas e usuário ativo
+  I --> S : VALID (perfil)
+  S --> B : SUCCESS
+  B -> AS : registrar(email, LOGIN)
+  AS -> DB : INSERT acesso
+  B --> V : redireciona ao dashboard do perfil
+  V --> U : dashboard
+else credenciais inválidas ou usuário desativado
+  I --> S : INVALID
+  S --> B : SEND_FAILURE
+  B -> AS : registrar(email, LOGIN_RECUSADO)
+  AS -> DB : INSERT acesso
+  B --> V : mensagem de erro
+  V --> U : "Email ou senha inválidos" ou\n"Usuário desativado. Procure um administrador"
+end
+@enduml

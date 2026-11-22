@@ -17,7 +17,7 @@
                     <td class="text-nowrap"><h:outputText value="#{avaliacao.data}"><f:convertDateTime type="localDate" pattern="dd/MM/yyyy" /></h:outputText></td>
                     <td><h:outputText value="#{avaliacao.fabricante.nome}" /></td>
                     <td><h:outputText value="#{empty avaliacao.marca ? 'Não informada' : avaliacao.marca.nome}" /></td>
-                    <td><span class="badge rounded-pill #{avaliacao.resultado == 'APROVADO' ? 'text-bg-success' : 'text-bg-danger'}">#{avaliacao.resultado.rotulo}</span></td>
+                    <td><span class="badge rounded-pill #{avaliacao.resultado == 'APROVADO' ? 'text-bg-success' : 'text-bg-danger'}">#{avaliacao.resultado.rotulo}</span><ui:fragment rendered="#{dashboardMaterialBean.vencida(avaliacao)}"> <span class="badge rounded-pill text-bg-warning">Vencida</span></ui:fragment></td>
                     <td class="text-center">
                         <button type="button" class="btn btn-outline-secondary btn-sm rounded-3 d-inline-flex align-items-center gap-2 px-3 fw-semibold text-nowrap"
                             style="height: 36px;

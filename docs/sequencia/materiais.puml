@@ -1,0 +1,33 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "materiais.xhtml" as V
+control "MaterialBean" as B
+participant "MaterialService" as S
+participant "MaterialDao" as DAO
+database "PostgreSQL" as DB
+
+U -> V : clica em "Incluir Material" ou "Editar"
+V -> B : novo() / editar(id)
+B --> V : abre o formulário
+U -> V : preenche os dados e clica em "Salvar"
+V -> B : salvar()
+B -> S : salvar(entidade)
+S -> S : valida código e nome
+S -> DAO : buscarPorCodigo(codigo)
+DAO -> DB : SELECT material
+alt não há duplicidade
+  S -> DAO : salvar(entidade)
+  DAO -> DB : INSERT/UPDATE material\n(revisão de auditoria)
+  B --> V : fecha o formulário e atualiza a lista
+else registro duplicado
+  S --> B : DuplicateRecordException
+  B --> V : mensagem de erro
+end
+V --> U : resultado
+@enduml

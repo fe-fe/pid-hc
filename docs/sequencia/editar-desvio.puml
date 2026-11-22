@@ -1,0 +1,30 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Analista" as U
+boundary "tecnovigilancia.xhtml" as V
+control "DesvioBean" as B
+participant "DesvioService" as S
+database "PostgreSQL" as DB
+
+U -> V : clica em "Editar tecnovigilância"
+V -> B : editar(desvio)
+B --> V : formulário preenchido
+U -> V : altera os dados e clica em "Salvar"
+V -> B : salvar()
+B -> S : atualizar(desvio, codigo, nome,\nfabricante, marca)
+S -> S : valida campos obrigatórios, data,\nregistro ANVISA e Processo SEI
+S -> DB : SELECT desvio (VigiHosp único)
+alt dados válidos
+  S -> DB : UPDATE desvio\n(revisão de auditoria)
+  B --> V : fecha o formulário e atualiza a lista
+else regra violada
+  S --> B : DomainException
+  B --> V : mensagem de erro
+end
+V --> U : resultado
+@enduml

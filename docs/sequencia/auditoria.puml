@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Administrador" as U
+boundary "auditoria.xhtml" as V
+control "AuditoriaBean" as B
+participant "AuditoriaService" as S
+participant "AuditoriaDao" as DAO
+database "PostgreSQL" as DB
+
+U -> V : abre a auditoria e aplica\nfiltros de evento, autor e período
+V -> B : aplicarFiltros()
+B -> S : buscar(filtro, pagina, tamanho)
+S -> DAO : buscar(filtro, pagina, tamanho)
+DAO -> DB : SELECT eventos (acesso, revisao\ne tabelas *_aud)
+DB --> DAO : eventos
+loop para cada edição de avaliação
+  S -> DAO : alteracoesAvaliacao(id, revisao)
+  DAO -> DB : SELECT versões anteriores
+end
+S --> B : eventos com alterações
+B --> V : tabela de eventos
+V --> U : eventos paginados
+@enduml

@@ -16,6 +16,10 @@ import java.util.UUID;
 @ApplicationScoped
 public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
 
+    private static final String MAIS_RECENTE = "NOT EXISTS (SELECT b FROM Avaliacao b "
+            + "WHERE (b.ativo IS NULL OR b.ativo = true) AND b.material = a.material AND b.fabricante = a.fabricante "
+            + "AND ((b.marca IS NULL AND a.marca IS NULL) OR b.marca = a.marca) AND b.data > a.data) ";
+
     public AvaliacaoDao() {
         super(Avaliacao.class);
     }
@@ -105,16 +109,16 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
 
     public List<Avaliacao> buscarComFiltros(int pagina, int tamanhoPagina, CampoOrdenacao campoOrdenacao,
             String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas, LocalDate vencidasAntes) {
         if ((fabricantes != null && fabricantes.isEmpty()) || (marcas != null && marcas.isEmpty())) {
             return List.of();
         }
         TypedQuery<Avaliacao> query = entityManager.createQuery(
                 "SELECT a FROM Avaliacao a JOIN a.material m JOIN a.fabricante f LEFT JOIN a.marca ma " +
-                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas) +
+                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas, vencidasAntes) +
                         "ORDER BY " + campoOrdenacao.getCampoBanco(),
                 Avaliacao.class);
-        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas);
+        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas, vencidasAntes);
         return query
                 .setFirstResult(pagina * tamanhoPagina)
                 .setMaxResults(tamanhoPagina)
@@ -122,20 +126,20 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
     }
 
     public long contarComFiltros(String termoMaterial, List<UUID> fabricantes, LocalDate dataInicio,
-            LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
+            LocalDate dataFim, String codigoMaterial, List<UUID> marcas, LocalDate vencidasAntes) {
         if ((fabricantes != null && fabricantes.isEmpty()) || (marcas != null && marcas.isEmpty())) {
             return 0;
         }
         TypedQuery<Long> query = entityManager.createQuery(
                 "SELECT count(a) FROM Avaliacao a JOIN a.material m JOIN a.fabricante f LEFT JOIN a.marca ma " +
-                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas),
+                        filtrosMaterialFabricante(termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas, vencidasAntes),
                 Long.class);
-        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas);
+        aplicarFiltrosMaterialFabricante(query, termoMaterial, fabricantes, dataInicio, dataFim, codigoMaterial, marcas, vencidasAntes);
         return query.getSingleResult();
     }
 
     private String filtrosMaterialFabricante(String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas, LocalDate vencidasAntes) {
         StringBuilder where = new StringBuilder("WHERE (a.ativo IS NULL OR a.ativo = true) ");
         if (codigoMaterial != null && !codigoMaterial.isBlank()) {
             where.append("AND m.codigo = :codigoMaterial ");
@@ -155,11 +159,14 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
         if (dataFim != null) {
             where.append("AND a.data <= :dataFim ");
         }
+        if (vencidasAntes != null) {
+            where.append("AND a.data < :vencidasAntes AND ").append(MAIS_RECENTE);
+        }
         return where.toString();
     }
 
     private void aplicarFiltrosMaterialFabricante(TypedQuery<?> query, String termoMaterial, List<UUID> fabricantes,
-            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas) {
+            LocalDate dataInicio, LocalDate dataFim, String codigoMaterial, List<UUID> marcas, LocalDate vencidasAntes) {
         if (codigoMaterial != null && !codigoMaterial.isBlank()) {
             query.setParameter("codigoMaterial", codigoMaterial.trim());
         }
@@ -178,6 +185,18 @@ public class AvaliacaoDao extends AbstractDao<Avaliacao, UUID> {
         if (dataFim != null) {
             query.setParameter("dataFim", dataFim);
         }
+        if (vencidasAntes != null) {
+            query.setParameter("vencidasAntes", vencidasAntes);
+        }
+    }
+
+    public List<UUID> vencidas(List<UUID> ids, LocalDate limite) {
+        return entityManager.createQuery(
+                "SELECT a.id FROM Avaliacao a WHERE a.id IN :ids AND a.data < :limite AND " + MAIS_RECENTE,
+                UUID.class)
+                .setParameter("ids", ids)
+                .setParameter("limite", limite)
+                .getResultList();
     }
 
     private String filtros(String termo, String fabricante, ResultadoTecnico resultado) {

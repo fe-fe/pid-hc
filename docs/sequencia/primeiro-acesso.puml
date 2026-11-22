@@ -1,0 +1,34 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Responsável pela instalação" as U
+boundary "init.xhtml" as V
+control "PrimeiroAcessoBean" as B
+participant "PrimeiroAcessoService" as P
+participant "UsuarioService" as US
+database "PostgreSQL" as DB
+
+U -> V : informa código, nome,\ne-mail e senha
+V -> B : criar()
+B -> P : criarAdministrador(usuario, codigo)
+P -> US : existeAdministradorAtivo()
+US -> DB : SELECT count(usuario)
+DB --> US : 0
+P -> P : confere o código
+
+alt código válido
+  P -> US : cadastrarPrimeiroAdministrador(usuario)
+  US -> US : valida campos, e-mail e senha\ngera o hash PBKDF2
+  US -> DB : INSERT usuario (ADMINISTRADOR)
+  B --> V : redireciona para login.xhtml
+  V --> U : "Administrador criado. Entre com\no email e a senha cadastrados."
+else código inválido
+  P --> B : DomainException
+  B --> V : mensagem de erro
+  V --> U : "Código de primeiro acesso inválido"
+end
+@enduml

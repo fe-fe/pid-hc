@@ -73,6 +73,9 @@
                                     <span class="badge rounded-pill #{avaliacao.resultado.aprovado ? 'text-bg-success' : 'text-bg-danger'}">
                                         #{avaliacao.resultado.rotulo}
                                     </span>
+                                    <ui:fragment rendered="#{bean.vencida(avaliacao)}">
+                                        <span class="badge rounded-pill text-bg-warning ms-1">Vencida</span>
+                                    </ui:fragment>
                                 </td>
                                 <td class="text-nowrap">
                                     <h:outputText value="#{empty avaliacao.registroAnvisa ? '—' : avaliacao.registroAnvisa}" />

@@ -1,0 +1,34 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 200
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Administrador" as U
+boundary "configuracoes.xhtml" as V
+control "ConfiguracaoBean" as B
+participant "ParametroService" as S
+participant "ParametroDao" as DAO
+database "PostgreSQL" as DB
+
+U -> V : abre as configurações
+V -> B : init()
+B -> S : validade()
+S -> DAO : buscar(validade_avaliacao_meses)
+DAO -> DB : SELECT parametro
+S --> B : prazo atual (24 meses se não configurado)
+B --> V : formulário preenchido
+U -> V : informa o prazo e clica em "Salvar"
+V -> B : salvar()
+B -> S : alterarValidade(meses)
+alt prazo entre 1 e 120 meses
+  S -> DAO : salvar(validade_avaliacao_meses, meses)
+  DAO -> DB : INSERT/UPDATE parametro\n(revisão de auditoria)
+  B --> V : "Configurações salvas."
+else prazo inválido
+  S --> B : DomainException
+  B --> V : "O prazo de validade deve ficar\nentre 1 e 120 meses."
+end
+V --> U : resultado
+@enduml
