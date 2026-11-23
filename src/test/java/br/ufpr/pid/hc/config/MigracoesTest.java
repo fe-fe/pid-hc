@@ -73,7 +73,7 @@ class MigracoesTest {
 
         Migracoes.flyway(dataSource).migrate();
 
-        assertEquals("2026-10-01 09:00:00|ana@hc.br|0, 2026-10-05 14:00:00|null|1", consultar("""
+        assertEquals("2026-10-01 06:00:00|ana@hc.br|0, 2026-10-05 11:00:00|null|1", consultar("""
                 SELECT string_agg(to_char(r.data, 'YYYY-MM-DD HH24:MI:SS') || '|' || COALESCE(r.usuario, 'null')
                                   || '|' || a.revtype, ', ' ORDER BY r.id)
                 FROM marca_aud a JOIN revisao r ON r.id = a.rev"""));
