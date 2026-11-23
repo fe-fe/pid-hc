@@ -1,5 +1,8 @@
 @startuml
-skinparam monochrome true
+!theme plain
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 13
+skinparam ArrowColor black
 skinparam shadowing false
 skinparam dpi 200
 left to right direction
